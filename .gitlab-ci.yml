@@ -2,9 +2,7 @@ image:
   name: "registry.rnl.tecnico.ulisboa.pt/es/quizzes-tutor"
 
 stages:
-# Docker-in-Docker is broken on gitlab ATM
-# https://gitlab.com/gitlab-org/gitlab-runner/-/issues/29130
-#  - prepare
+  - prepare
   - build
 
 variables:
@@ -21,11 +19,14 @@ variables:
   cypress_psql_db_port: "5432"
 
 
+# Docker-in-Docker is broken on gitlab ATM
+# https://gitlab.com/gitlab-org/gitlab-runner/-/issues/29130
 gitlab-build-image:
   image: docker:stable
   services:
     - docker:dind
   stage: prepare
+  when: manual
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker build -t $CI_REGISTRY/es/quizzes-tutor .

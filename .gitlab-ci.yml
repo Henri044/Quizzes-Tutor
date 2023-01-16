@@ -1,5 +1,5 @@
 image:
-  name: "gitlab.rnl.tecnico.ulisboa.pt:5050/es/quizzes-tutor:latest"
+  name: "registry.rnl.tecnico.ulisboa.pt/es/quizzes-tutor"
 
 stages:
 # Docker-in-Docker is broken on gitlab ATM

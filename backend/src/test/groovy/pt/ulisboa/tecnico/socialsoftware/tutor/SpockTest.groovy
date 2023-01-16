@@ -82,8 +82,8 @@ class SpockTest extends Specification {
 
     public static final String COURSE_1_NAME = "Course 1 Name"
     public static final String COURSE_2_NAME = "Course 2 Name"
-    public static final String COURSE_1_ACADEMIC_TERM = "1º Semestre 2019/2020"
-    public static final String COURSE_2_ACADEMIC_TERM = "2º Semestre 2019/2020"
+    public static final String COURSE_1_ACADEMIC_TERM = "1 Semestre 2019/2020"
+    public static final String COURSE_2_ACADEMIC_TERM = "2 Semestre 2019/2020"
     public static final String COURSE_1_ACRONYM = "C12"
     public static final String COURSE_2_ACRONYM = "C22"
 

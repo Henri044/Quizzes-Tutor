@@ -32,6 +32,15 @@
               Management
               <v-icon>fas fa-file-alt</v-icon>
             </v-btn>
+            <v-btn
+                dark
+                data-cy="dashboardMenuButton"
+                text
+                to="/teacher/dashboard"
+            >
+              Dashboard
+              <v-icon>fas fa-user</v-icon>
+            </v-btn>
           </template>
           <v-list dense>
             <v-list-item
@@ -409,6 +418,13 @@
             <v-list-item-content>
               <v-list-item-title>Export</v-list-item-title>
             </v-list-item-content>
+          </v-list-item>
+
+          <v-list-item to="/teacher/dashboard">
+            <v-list-item-action>
+              <v-icon>fas fa-user</v-icon>
+            </v-list-item-action>
+            <v-list-item-title>Dashboard</v-list-item-title>
           </v-list-item>
         </v-list-group>
 

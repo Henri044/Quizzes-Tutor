@@ -25,7 +25,8 @@ import router from '@/router';
 import QuestionQuery from '@/models/management/QuestionQuery';
 import { FraudScores } from '@/models/management/fraud/FraudScores';
 import { QuizFraudInformation } from '@/models/management/fraud/QuizFraudInformation';
-import Dashboard from '@/models/dashboard/Dashboard';
+import StudentDashboard from '@/models/dashboard/StudentDashboard';
+import TeacherDashboard from '@/models/dashboard/TeacherDashboard';
 import DifficultQuestion from '@/models/dashboard/DifficultQuestion';
 import WeeklyScore from '@/models/dashboard/WeeklyScore';
 import FailedAnswer from '@/models/dashboard/FailedAnswer';
@@ -178,15 +179,28 @@ export default class RemoteServices {
       });
   }
 
-  // Dashboard and Statistics Controller
+  // StudentDashboard and Statistics Controller
 
-  static async getUserDashboard(): Promise<Dashboard> {
+  static async getTeacherDashboard(): Promise<TeacherDashboard> {
+    return httpClient
+        .get(
+            `/teachers/dashboards/executions/${Store.getters.getCurrentCourse.courseExecutionId}`
+        )
+        .then((response) => {
+          return new TeacherDashboard(response.data);
+        })
+        .catch(async (error) => {
+          throw Error(await this.errorMessage(error));
+        });
+  }
+
+  static async getUserDashboard(): Promise<StudentDashboard> {
     return httpClient
       .get(
         `/students/dashboards/executions/${Store.getters.getCurrentCourse.courseExecutionId}`
       )
       .then((response) => {
-        return new Dashboard(response.data);
+        return new StudentDashboard(response.data);
       })
       .catch(async (error) => {
         throw Error(await this.errorMessage(error));

@@ -19,7 +19,8 @@ import AvailableQuizzesView from '@/views/student/AvailableQuizzesView.vue';
 import SolvedQuizzesView from '@/views/student/SolvedQuizzesView.vue';
 import QuizView from '@/views/student/quiz/QuizView.vue';
 import ResultsView from '@/views/student/quiz/ResultsView.vue';
-import DashboardView from '@/views/student/dashboard/DashboardView.vue';
+import StudentDashboardView from '@/views/student/dashboard/StudentDashboardView.vue';
+import TeacherDashboardView from '@/views/teacher/dashboard/TeacherDashboardView.vue';
 import ScanView from '@/views/student/ScanView.vue';
 import CodeView from '@/views/student/CodeView.vue';
 
@@ -240,9 +241,9 @@ const router = new Router({
         {
           path: 'dashboard',
           name: 'dashboard',
-          component: DashboardView,
+          component: StudentDashboardView,
           meta: {
-            title: APP_NAME + ' - Dashboard',
+            title: APP_NAME + ' - StudentDashboard',
             requiredAuth: 'Student',
           },
         },
@@ -313,6 +314,15 @@ const router = new Router({
           },
         },
       ],
+    },
+    {
+      path: '/teacher/dashboard',
+      name: 'teacher-dashboard',
+      component: TeacherDashboardView,
+      meta: {
+        title: APP_NAME + ' - TeacherDashboard',
+        requiredAuth: 'Teacher',
+      },
     },
     {
       path: '/teacher/tournament',

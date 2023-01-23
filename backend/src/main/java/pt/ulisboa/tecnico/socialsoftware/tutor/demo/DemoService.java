@@ -9,7 +9,7 @@ import pt.ulisboa.tecnico.socialsoftware.tutor.answer.domain.QuizAnswer;
 import pt.ulisboa.tecnico.socialsoftware.tutor.answer.repository.QuestionAnswerItemRepository;
 import pt.ulisboa.tecnico.socialsoftware.tutor.answer.repository.QuizAnswerRepository;
 import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.domain.DifficultQuestion;
-import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.repository.DashboardRepository;
+import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.repository.StudentDashboardRepository;
 import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.repository.DifficultQuestionRepository;
 import pt.ulisboa.tecnico.socialsoftware.tutor.discussion.domain.Discussion;
 import pt.ulisboa.tecnico.socialsoftware.tutor.discussion.repository.DiscussionRepository;
@@ -91,7 +91,7 @@ public class DemoService {
     private UserRepository userRepository;
 
     @Autowired
-    private DashboardRepository dashboardRepository;
+    private StudentDashboardRepository studentDashboardRepository;
 
     @Autowired
     private DifficultQuestionRepository difficultQuestionRepository;
@@ -105,7 +105,7 @@ public class DemoService {
                 .flatMap(student -> student.getDashboards().stream())
                 .forEach(dashboard -> {
                     dashboard.remove();
-                    this.dashboardRepository.delete(dashboard);
+                    this.studentDashboardRepository.delete(dashboard);
                 });
 
         Set<DifficultQuestion> difficultQuestionsToRemove = courseExecutionRepository.findById(courseExecutionService.getDemoCourse().getCourseExecutionId()).stream()

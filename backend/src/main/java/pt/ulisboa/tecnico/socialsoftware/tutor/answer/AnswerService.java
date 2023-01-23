@@ -13,8 +13,8 @@ import pt.ulisboa.tecnico.socialsoftware.tutor.answer.repository.AnswerDetailsRe
 import pt.ulisboa.tecnico.socialsoftware.tutor.answer.repository.QuestionAnswerItemRepository;
 import pt.ulisboa.tecnico.socialsoftware.tutor.answer.repository.QuizAnswerItemRepository;
 import pt.ulisboa.tecnico.socialsoftware.tutor.answer.repository.QuizAnswerRepository;
-import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.domain.Dashboard;
-import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.repository.DashboardRepository;
+import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.domain.StudentDashboard;
+import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.repository.StudentDashboardRepository;
 import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.services.DifficultQuestionService;
 import pt.ulisboa.tecnico.socialsoftware.tutor.exceptions.TutorException;
 import pt.ulisboa.tecnico.socialsoftware.tutor.execution.CourseExecutionService;
@@ -81,7 +81,7 @@ public class AnswerService {
     private AssessmentRepository assessmentRepository;
 
     @Autowired
-    private DashboardRepository dashboardRepository;
+    private StudentDashboardRepository studentDashboardRepository;
 
     @Autowired
     private AnswersXmlImport xmlImporter;
@@ -188,12 +188,12 @@ public class AnswerService {
     }
 
     private void calculateDashboardStatistics(QuizAnswer quizAnswer) {
-        Dashboard dashboard = quizAnswer.getStudent().getCourseExecutionDashboard(quizAnswer.getQuiz().getCourseExecution());
-        if (dashboard == null) {
-            dashboard = new Dashboard(quizAnswer.getQuiz().getCourseExecution(), quizAnswer.getStudent());
-            dashboardRepository.save(dashboard);
+        StudentDashboard studentDashboard = quizAnswer.getStudent().getCourseExecutionDashboard(quizAnswer.getQuiz().getCourseExecution());
+        if (studentDashboard == null) {
+            studentDashboard = new StudentDashboard(quizAnswer.getQuiz().getCourseExecution(), quizAnswer.getStudent());
+            studentDashboardRepository.save(studentDashboard);
         }
-        dashboard.statistics(quizAnswer);
+        studentDashboard.statistics(quizAnswer);
     }
 
     private void fraudDetection(QuizAnswer quizAnswer, List<QuestionAnswerItem> questionAnswerItems) {

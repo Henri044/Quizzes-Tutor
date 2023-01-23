@@ -24,17 +24,17 @@ public class FailedAnswer implements DomainEntity {
     private QuestionAnswer questionAnswer;
 
     @ManyToOne
-    private Dashboard dashboard;
+    private StudentDashboard studentDashboard;
 
     public FailedAnswer() {
     }
 
-    public FailedAnswer(Dashboard dashboard, QuestionAnswer questionAnswer, LocalDateTime collected) {
-        if (dashboard.getCourseExecution() != questionAnswer.getQuizAnswer().getQuiz().getCourseExecution()) {
+    public FailedAnswer(StudentDashboard studentDashboard, QuestionAnswer questionAnswer, LocalDateTime collected) {
+        if (studentDashboard.getCourseExecution() != questionAnswer.getQuizAnswer().getQuiz().getCourseExecution()) {
             throw new TutorException(ErrorMessage.CANNOT_CREATE_FAILED_ANSWER);
         }
 
-        if (dashboard.getStudent() != questionAnswer.getQuizAnswer().getStudent()) {
+        if (studentDashboard.getStudent() != questionAnswer.getQuizAnswer().getStudent()) {
             throw new TutorException(ErrorMessage.CANNOT_CREATE_FAILED_ANSWER);
         }
 
@@ -45,12 +45,12 @@ public class FailedAnswer implements DomainEntity {
         setCollected(collected);
         setAnswered(questionAnswer.isAnswered());
         setQuestionAnswer(questionAnswer);
-        setDashboard(dashboard);
+        setDashboard(studentDashboard);
     }
 
     public void remove() {
-        dashboard.getFailedAnswers().remove(this);
-        dashboard = null;
+        studentDashboard.getFailedAnswers().remove(this);
+        studentDashboard = null;
     }
 
     public Integer getId() {
@@ -81,13 +81,13 @@ public class FailedAnswer implements DomainEntity {
         this.questionAnswer = questionAnswer;
     }
 
-    public Dashboard getDashboard() {
-        return dashboard;
+    public StudentDashboard getDashboard() {
+        return studentDashboard;
     }
 
-    public void setDashboard(Dashboard dashboard) {
-        this.dashboard = dashboard;
-        this.dashboard.addFailedAnswer(this);
+    public void setDashboard(StudentDashboard studentDashboard) {
+        this.studentDashboard = studentDashboard;
+        this.studentDashboard.addFailedAnswer(this);
     }
 
     @Override

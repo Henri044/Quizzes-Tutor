@@ -1,11 +1,11 @@
 import { ISOtoString } from '@/services/ConvertDateService';
 
-export default class Dashboard {
+export default class StudentDashboard {
   id!: number;
   lastCheckFailedAnswers!: string;
   lastCheckWeeklyScores!: string;
 
-  constructor(jsonObj?: Dashboard) {
+  constructor(jsonObj?: StudentDashboard) {
     if (jsonObj) {
       this.id = jsonObj.id;
       if (jsonObj.lastCheckFailedAnswers)

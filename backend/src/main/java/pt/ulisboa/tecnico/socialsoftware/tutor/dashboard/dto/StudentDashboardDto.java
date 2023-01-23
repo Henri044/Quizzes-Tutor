@@ -1,22 +1,22 @@
 package pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.dto;
 
-import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.domain.Dashboard;
+import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.domain.StudentDashboard;
 import pt.ulisboa.tecnico.socialsoftware.tutor.utils.DateHandler;
 
-public class DashboardDto {
+public class StudentDashboardDto {
     private Integer id;
 
     private String lastCheckFailedAnswers;
 
     private String lastCheckWeeklyScores;
 
-    public DashboardDto() {
+    public StudentDashboardDto() {
     }
 
-    public DashboardDto(Dashboard dashboard) {
-        id = dashboard.getId();
-        lastCheckFailedAnswers = DateHandler.toISOString(dashboard.getLastCheckFailedAnswers());
-        lastCheckWeeklyScores = DateHandler.toISOString(dashboard.getLastCheckWeeklyScores());
+    public StudentDashboardDto(StudentDashboard studentDashboard) {
+        id = studentDashboard.getId();
+        lastCheckFailedAnswers = DateHandler.toISOString(studentDashboard.getLastCheckFailedAnswers());
+        lastCheckWeeklyScores = DateHandler.toISOString(studentDashboard.getLastCheckWeeklyScores());
     }
 
     public Integer getId() {
@@ -45,7 +45,7 @@ public class DashboardDto {
 
     @Override
     public String toString() {
-        return "DashboardDto{" +
+        return "StudentDashboardDto{" +
                 "id=" + id +
                 ", lastCheckFailedAnswers=" + lastCheckFailedAnswers +
                 ", lastWeeklyStats=" + lastCheckWeeklyScores +

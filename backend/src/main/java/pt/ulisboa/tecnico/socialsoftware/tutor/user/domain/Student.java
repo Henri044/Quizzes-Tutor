@@ -2,7 +2,7 @@ package pt.ulisboa.tecnico.socialsoftware.tutor.user.domain;
 
 import pt.ulisboa.tecnico.socialsoftware.tutor.answer.domain.QuizAnswer;
 import pt.ulisboa.tecnico.socialsoftware.tutor.auth.domain.AuthUser;
-import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.domain.Dashboard;
+import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.domain.StudentDashboard;
 import pt.ulisboa.tecnico.socialsoftware.tutor.discussion.domain.Discussion;
 import pt.ulisboa.tecnico.socialsoftware.tutor.exceptions.TutorException;
 import pt.ulisboa.tecnico.socialsoftware.tutor.execution.domain.CourseExecution;
@@ -33,7 +33,7 @@ public class Student extends User {
     private Set<QuestionSubmission> questionSubmissions = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "student", orphanRemoval = true)
-    private Set<Dashboard> dashboards = new HashSet<>();
+    private Set<StudentDashboard> studentDashboards = new HashSet<>();
 
     public Student() {
     }
@@ -120,8 +120,8 @@ public class Student extends User {
             throw new TutorException(USER_HAS_DISCUSSIONS, getUsername());
         }
 
-        dashboards.forEach(Dashboard::remove);
-        dashboards.clear();
+        studentDashboards.forEach(StudentDashboard::remove);
+        studentDashboards.clear();
 
         super.remove();
     }
@@ -167,16 +167,16 @@ public class Student extends User {
         return questionSubmissions;
     }
 
-    public Set<Dashboard> getDashboards() {
-        return dashboards;
+    public Set<StudentDashboard> getDashboards() {
+        return studentDashboards;
     }
 
-    public void addDashboard(Dashboard dashboard) {
-        dashboards.add(dashboard);
+    public void addDashboard(StudentDashboard studentDashboard) {
+        studentDashboards.add(studentDashboard);
     }
 
-    public Dashboard getCourseExecutionDashboard(CourseExecution courseExecution) {
-        return dashboards.stream()
+    public StudentDashboard getCourseExecutionDashboard(CourseExecution courseExecution) {
+        return studentDashboards.stream()
                 .filter(dashboard -> dashboard.getCourseExecution() == courseExecution)
                 .findAny()
                 .orElse(null);

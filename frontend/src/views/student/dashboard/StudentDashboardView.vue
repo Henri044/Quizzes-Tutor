@@ -80,16 +80,16 @@ import FailedAnswersView from '@/views/student/dashboard/FailedAnswersView.vue';
     DifficultQuestionsView,
   },
 })
-export default class DashboardView extends Vue {
+export default class StudentDashboardView extends Vue {
   dashboardId: number | null = null;
   show: string | null = null;
 
   async created() {
     await this.$store.dispatch('loading');
     try {
-      let dashboard = await RemoteServices.getUserDashboard();
+      let studentDashboard = await RemoteServices.getUserDashboard();
 
-      this.dashboardId = dashboard.id;
+      this.dashboardId = studentDashboard.id;
       this.show = 'Global';
     } catch (error) {
       await this.$store.dispatch('error', error);

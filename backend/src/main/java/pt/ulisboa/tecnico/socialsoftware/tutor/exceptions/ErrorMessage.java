@@ -89,6 +89,7 @@ public enum ErrorMessage {
 
     DUPLICATE_TOURNAMENT_PARTICIPANT("Duplicate tournament participant: %s"),
     STUDENT_NO_COURSE_EXECUTION("Student has no matching course execution : %s"),
+    TEACHER_NO_COURSE_EXECUTION("Teacher has no matching course execution : %s"),
     TOURNAMENT_ALREADY_CLOSED("Tournament %s has already ended. You can not change it now"),
     TOURNAMENT_IS_OPEN("Tournament %s is live. You can not change it now"),
     TOURNAMENT_MUST_HAVE_ONE_TOPIC("Tournament must have at least one topic"),

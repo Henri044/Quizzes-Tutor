@@ -16,14 +16,14 @@ import java.util.Set;
 import static pt.ulisboa.tecnico.socialsoftware.tutor.exceptions.ErrorMessage.INVALID_QUESTION_TYPE;
 
 @Entity
-public class Dashboard implements DomainEntity {
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "dashboard", orphanRemoval = true)
+public class StudentDashboard implements DomainEntity {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "studentDashboard", orphanRemoval = true)
     private final Set<WeeklyScore> weeklyScores = new HashSet<>();
 
     @ElementCollection
     private final Set<RemovedDifficultQuestion> removedDifficultQuestions = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "dashboard", orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "studentDashboard", orphanRemoval = true)
     private final Set<FailedAnswer> failedAnswers = new HashSet<>();
 
     @Id
@@ -58,10 +58,10 @@ public class Dashboard implements DomainEntity {
     @ManyToOne
     private Student student;
 
-    public Dashboard() {
+    public StudentDashboard() {
     }
 
-    public Dashboard(CourseExecution courseExecution, Student student) {
+    public StudentDashboard(CourseExecution courseExecution, Student student) {
         setCourseExecution(courseExecution);
         setStudent(student);
     }

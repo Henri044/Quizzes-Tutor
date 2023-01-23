@@ -1,6 +1,6 @@
 package pt.ulisboa.tecnico.socialsoftware.tutor.user.dto;
 
-import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.domain.Dashboard;
+import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.domain.StudentDashboard;
 import pt.ulisboa.tecnico.socialsoftware.tutor.execution.domain.CourseExecution;
 import pt.ulisboa.tecnico.socialsoftware.tutor.user.domain.Student;
 
@@ -28,24 +28,24 @@ public class StudentDto extends UserDto implements Serializable {
     public StudentDto(Student student, CourseExecution courseExecution) {
         this(student);
 
-        Dashboard dashboard = student.getCourseExecutionDashboard(courseExecution);
+        StudentDashboard studentDashboard = student.getCourseExecutionDashboard(courseExecution);
 
-        if (dashboard != null) {
-            setNumberOfInClassQuizzes(dashboard.getNumberOfInClassQuizzes());
-            setNumberOfStudentQuizzes(dashboard.getNumberOfStudentQuizzes());
-            setNumberOfTeacherQuizzes(dashboard.getNumberOfTeacherQuizzes());
-            setNumberOfInClassAnswers(dashboard.getNumberOfInClassAnswers());
-            setNumberOfStudentAnswers(dashboard.getNumberOfStudentAnswers());
-            setNumberOfTeacherAnswers(dashboard.getNumberOfTeacherAnswers());
+        if (studentDashboard != null) {
+            setNumberOfInClassQuizzes(studentDashboard.getNumberOfInClassQuizzes());
+            setNumberOfStudentQuizzes(studentDashboard.getNumberOfStudentQuizzes());
+            setNumberOfTeacherQuizzes(studentDashboard.getNumberOfTeacherQuizzes());
+            setNumberOfInClassAnswers(studentDashboard.getNumberOfInClassAnswers());
+            setNumberOfStudentAnswers(studentDashboard.getNumberOfStudentAnswers());
+            setNumberOfTeacherAnswers(studentDashboard.getNumberOfTeacherAnswers());
             setNumberOfAnswers(getNumberOfTeacherAnswers() + getNumberOfInClassAnswers() + getNumberOfStudentAnswers());
             if (getNumberOfInClassAnswers() != 0)
-                setPercentageOfCorrectInClassAnswers(dashboard.getNumberOfCorrectInClassAnswers() * 100 / getNumberOfInClassAnswers());
+                setPercentageOfCorrectInClassAnswers(studentDashboard.getNumberOfCorrectInClassAnswers() * 100 / getNumberOfInClassAnswers());
             if (getNumberOfStudentAnswers() != 0)
-                setPercentageOfCorrectStudentAnswers(dashboard.getNumberOfCorrectStudentAnswers() * 100 / getNumberOfStudentAnswers());
+                setPercentageOfCorrectStudentAnswers(studentDashboard.getNumberOfCorrectStudentAnswers() * 100 / getNumberOfStudentAnswers());
             if (getNumberOfTeacherAnswers() != 0)
-                setPercentageOfCorrectTeacherAnswers(dashboard.getNumberOfCorrectTeacherAnswers() * 100 / getNumberOfTeacherAnswers());
+                setPercentageOfCorrectTeacherAnswers(studentDashboard.getNumberOfCorrectTeacherAnswers() * 100 / getNumberOfTeacherAnswers());
             if (getNumberOfAnswers() != 0)
-                setPercentageOfCorrectAnswers((dashboard.getNumberOfCorrectInClassAnswers() + dashboard.getNumberOfCorrectStudentAnswers() + dashboard.getNumberOfCorrectTeacherAnswers()) * 100 / getNumberOfAnswers());
+                setPercentageOfCorrectAnswers((studentDashboard.getNumberOfCorrectInClassAnswers() + studentDashboard.getNumberOfCorrectStudentAnswers() + studentDashboard.getNumberOfCorrectTeacherAnswers()) * 100 / getNumberOfAnswers());
         }
     }
 

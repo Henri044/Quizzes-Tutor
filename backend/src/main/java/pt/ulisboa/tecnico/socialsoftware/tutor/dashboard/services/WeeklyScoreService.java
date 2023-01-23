@@ -6,10 +6,10 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import pt.ulisboa.tecnico.socialsoftware.tutor.answer.domain.QuizAnswer;
 import pt.ulisboa.tecnico.socialsoftware.tutor.answer.repository.QuizAnswerRepository;
-import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.domain.Dashboard;
+import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.domain.StudentDashboard;
 import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.domain.WeeklyScore;
 import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.dto.WeeklyScoreDto;
-import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.repository.DashboardRepository;
+import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.repository.StudentDashboardRepository;
 import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.repository.WeeklyScoreRepository;
 import pt.ulisboa.tecnico.socialsoftware.tutor.exceptions.TutorException;
 import pt.ulisboa.tecnico.socialsoftware.tutor.utils.DateHandler;
@@ -34,7 +34,7 @@ public class WeeklyScoreService {
     private WeeklyScoreRepository weeklyScoreRepository;
 
     @Autowired
-    private DashboardRepository dashboardRepository;
+    private StudentDashboardRepository studentDashboardRepository;
 
     @Autowired
     private QuizAnswerRepository quizAnswerRepository;
@@ -45,79 +45,79 @@ public class WeeklyScoreService {
             throw new TutorException(DASHBOARD_NOT_FOUND);
         }
 
-        Dashboard dashboard = dashboardRepository.findById(dashboardId)
+        StudentDashboard studentDashboard = studentDashboardRepository.findById(dashboardId)
                 .orElseThrow(() -> new TutorException(DASHBOARD_NOT_FOUND, dashboardId));
 
         LocalDateTime now = DateHandler.now();
 
-        createMissingWeeklyScores(dashboard, now);
+        createMissingWeeklyScores(studentDashboard, now);
 
-        computeStatistics(dashboard);
+        computeStatistics(studentDashboard);
 
-        removeEmptyClosedWeeklyScores(dashboard);
+        removeEmptyClosedWeeklyScores(studentDashboard);
 
-        dashboard.setLastCheckWeeklyScores(now);
+        studentDashboard.setLastCheckWeeklyScores(now);
 
-        return dashboard.getWeeklyScores().stream()
+        return studentDashboard.getWeeklyScores().stream()
                 .sorted(Comparator.comparing(WeeklyScore::getWeek, Comparator.reverseOrder()))
                 .map(WeeklyScoreDto::new)
                 .collect(Collectors.toList());
     }
 
-    private void createMissingWeeklyScores(Dashboard dashboard, LocalDateTime now) {
+    private void createMissingWeeklyScores(StudentDashboard studentDashboard, LocalDateTime now) {
         TemporalAdjuster weekSunday = TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY);
         LocalDate currentWeek = now.with(weekSunday).toLocalDate();
 
-        if (dashboard.getLastCheckWeeklyScores() == null) {
-            WeeklyScore weeklyScore = new WeeklyScore(dashboard, currentWeek);
+        if (studentDashboard.getLastCheckWeeklyScores() == null) {
+            WeeklyScore weeklyScore = new WeeklyScore(studentDashboard, currentWeek);
             weeklyScoreRepository.save(weeklyScore);
         }
 
-        LocalDateTime lastCheckDate = getLastCheckDate(dashboard, now);
+        LocalDateTime lastCheckDate = getLastCheckDate(studentDashboard, now);
 
         while (lastCheckDate.isBefore(currentWeek.atStartOfDay())) {
             LocalDate week = lastCheckDate.with(weekSunday).toLocalDate();
 
-            WeeklyScore weeklyScore = new WeeklyScore(dashboard, week);
+            WeeklyScore weeklyScore = new WeeklyScore(studentDashboard, week);
             weeklyScoreRepository.save(weeklyScore);
 
             lastCheckDate = lastCheckDate.plusDays(7);
         }
     }
 
-    private LocalDateTime getLastCheckDate(Dashboard dashboard, LocalDateTime now) {
+    private LocalDateTime getLastCheckDate(StudentDashboard studentDashboard, LocalDateTime now) {
         LocalDateTime startCheckDate;
-        if (dashboard.getLastCheckWeeklyScores() == null) {
-            startCheckDate = dashboard.getStudent().getQuizAnswers().stream()
-                    .filter(quizAnswer -> quizAnswer.getQuiz().getCourseExecution() == dashboard.getCourseExecution())
+        if (studentDashboard.getLastCheckWeeklyScores() == null) {
+            startCheckDate = studentDashboard.getStudent().getQuizAnswers().stream()
+                    .filter(quizAnswer -> quizAnswer.getQuiz().getCourseExecution() == studentDashboard.getCourseExecution())
                     .filter(quizAnswer -> quizAnswer.getCreationDate() != null)
                     .map(QuizAnswer::getCreationDate)
                     .sorted()
                     .findFirst()
                     .orElse(now);
         } else {
-            startCheckDate = dashboard.getLastCheckWeeklyScores();
+            startCheckDate = studentDashboard.getLastCheckWeeklyScores();
         }
 
         return startCheckDate;
     }
 
-    private void computeStatistics(Dashboard dashboard) {
-        dashboard.getWeeklyScores().stream()
+    private void computeStatistics(StudentDashboard studentDashboard) {
+        studentDashboard.getWeeklyScores().stream()
                 .filter(Predicate.not(WeeklyScore::isClosed))
                 .forEach(weeklyScore -> {
                     LocalDateTime start = weeklyScore.getWeek().atStartOfDay();
                     LocalDateTime end = weeklyScore.getWeek().plusDays(7).atStartOfDay();
 
-                    Set<QuizAnswer> answers = quizAnswerRepository.findByStudentAndCourseExecutionInPeriod(dashboard.getStudent().getId(),
-                            dashboard.getCourseExecution().getId(), start, end);
+                    Set<QuizAnswer> answers = quizAnswerRepository.findByStudentAndCourseExecutionInPeriod(studentDashboard.getStudent().getId(),
+                            studentDashboard.getCourseExecution().getId(), start, end);
 
                     weeklyScore.computeStatistics(answers);
                 });
     }
 
-    private void removeEmptyClosedWeeklyScores(Dashboard dashboard) {
-        Set<WeeklyScore> weeklyScoresToDelete = dashboard.getWeeklyScores().stream()
+    private void removeEmptyClosedWeeklyScores(StudentDashboard studentDashboard) {
+        Set<WeeklyScore> weeklyScoresToDelete = studentDashboard.getWeeklyScores().stream()
                 .filter(weeklyScore -> weeklyScore.isClosed() && weeklyScore.getQuestionsAnswered() == 0)
                 .collect(Collectors.toSet());
 

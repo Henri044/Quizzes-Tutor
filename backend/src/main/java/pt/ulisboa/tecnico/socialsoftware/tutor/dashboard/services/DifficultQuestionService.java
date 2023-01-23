@@ -9,11 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 import pt.ulisboa.tecnico.socialsoftware.tutor.answer.domain.QuestionAnswer;
 import pt.ulisboa.tecnico.socialsoftware.tutor.answer.domain.QuizAnswer;
 import pt.ulisboa.tecnico.socialsoftware.tutor.answer.repository.QuizAnswerRepository;
-import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.domain.Dashboard;
+import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.domain.StudentDashboard;
 import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.domain.DifficultQuestion;
 import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.domain.RemovedDifficultQuestion;
 import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.dto.DifficultQuestionDto;
-import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.repository.DashboardRepository;
+import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.repository.StudentDashboardRepository;
 import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.repository.DifficultQuestionRepository;
 import pt.ulisboa.tecnico.socialsoftware.tutor.exceptions.ErrorMessage;
 import pt.ulisboa.tecnico.socialsoftware.tutor.exceptions.TutorException;
@@ -46,7 +46,7 @@ public class DifficultQuestionService {
     private StudentRepository studentRepository;
 
     @Autowired
-    private DashboardRepository dashboardRepository;
+    private StudentDashboardRepository studentDashboardRepository;
 
     @Autowired
     private DifficultQuestionRepository difficultQuestionRepository;
@@ -86,21 +86,21 @@ public class DifficultQuestionService {
             backoff = @Backoff(delay = 5000))
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public List<DifficultQuestionDto> updateDashboardDifficultQuestions(int dashboardId) {
-        Dashboard dashboard = dashboardRepository.findById(dashboardId).orElseThrow(() -> new TutorException(ErrorMessage.DASHBOARD_NOT_FOUND, dashboardId));
+        StudentDashboard studentDashboard = studentDashboardRepository.findById(dashboardId).orElseThrow(() -> new TutorException(ErrorMessage.DASHBOARD_NOT_FOUND, dashboardId));
 
         LocalDateTime now = DateHandler.now();
 
-        Set<RemovedDifficultQuestion> questionsToRemove = dashboard.getRemovedDifficultQuestions().stream()
+        Set<RemovedDifficultQuestion> questionsToRemove = studentDashboard.getRemovedDifficultQuestions().stream()
                 .filter(difficultQuestion -> difficultQuestion.getRemovedDate().plusDays(7).isBefore((now)))
                 .collect(Collectors.toSet());
 
-        questionsToRemove.forEach(dashboard::removeRemovedDifficultQuestion);
+        questionsToRemove.forEach(studentDashboard::removeRemovedDifficultQuestion);
 
-        Set<Integer> removedQuestionsIds = dashboard.getRemovedDifficultQuestions().stream()
+        Set<Integer> removedQuestionsIds = studentDashboard.getRemovedDifficultQuestions().stream()
                 .map(RemovedDifficultQuestion::getQuestionId)
                 .collect(Collectors.toSet());
 
-        return dashboard.getCourseExecution().getDifficultQuestions().stream()
+        return studentDashboard.getCourseExecution().getDifficultQuestions().stream()
                 .filter(difficultQuestion -> !removedQuestionsIds.contains(difficultQuestion.getQuestion().getId()))
                 .map(DifficultQuestionDto::new)
                 .collect(Collectors.toList());

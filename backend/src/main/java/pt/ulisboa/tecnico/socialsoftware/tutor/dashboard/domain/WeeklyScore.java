@@ -44,20 +44,20 @@ public class WeeklyScore implements DomainEntity {
     private boolean closed;
 
     @ManyToOne
-    private Dashboard dashboard;
+    private StudentDashboard studentDashboard;
 
     public WeeklyScore() {
     }
 
-    public WeeklyScore(Dashboard dashboard, LocalDate week) {
+    public WeeklyScore(StudentDashboard studentDashboard, LocalDate week) {
         setWeek(week);
         setClosed(false);
-        setDashboard(dashboard);
+        setDashboard(studentDashboard);
     }
 
     public void remove() {
-        this.dashboard.getWeeklyScores().remove(this);
-        this.dashboard = null;
+        this.studentDashboard.getWeeklyScores().remove(this);
+        this.studentDashboard = null;
     }
 
     public void computeStatistics(Set<QuizAnswer> weeklyQuizAnswers) {
@@ -164,13 +164,13 @@ public class WeeklyScore implements DomainEntity {
         this.closed = close;
     }
 
-    public Dashboard getDashboard() {
-        return dashboard;
+    public StudentDashboard getDashboard() {
+        return studentDashboard;
     }
 
-    public void setDashboard(Dashboard dashboard) {
-        this.dashboard = dashboard;
-        this.dashboard.addWeeklyScore(this);
+    public void setDashboard(StudentDashboard studentDashboard) {
+        this.studentDashboard = studentDashboard;
+        this.studentDashboard.addWeeklyScore(this);
     }
 
     public void accept(Visitor visitor) {
@@ -187,7 +187,7 @@ public class WeeklyScore implements DomainEntity {
                 ", percentageCorrect=" + percentageCorrect +
                 ", week=" + week +
                 ", closed=" + closed +
-                ", dashboard=" + dashboard +
+                ", dashboard=" + studentDashboard +
                 '}';
     }
 }

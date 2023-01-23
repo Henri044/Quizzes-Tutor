@@ -9,7 +9,7 @@ import pt.ulisboa.tecnico.socialsoftware.tutor.exceptions.TutorException
 import spock.lang.Unroll
 
 @DataJpaTest
-class GetDashboardTest extends SpockTest {
+class GetStudentDashboardTest extends SpockTest {
     def authUserDto
     def courseExecutionDto
 
@@ -20,7 +20,7 @@ class GetDashboardTest extends SpockTest {
 
     def "get a dashboard when dashboard does not exist"() {
         when: "getting a dashboard"
-        dashboardService.getDashboard(courseExecutionDto.getCourseExecutionId(), authUserDto.getId())
+        dashboardService.getStudentDashboard(courseExecutionDto.getCourseExecutionId(), authUserDto.getId())
 
         then: "an empty dashboard is created"
         dashboardRepository.count() == 1L
@@ -39,10 +39,10 @@ class GetDashboardTest extends SpockTest {
 
     def "get a dashboard and it already exists"() {
         given: "an empty dashboard for the student"
-        def dashboardDto = dashboardService.createDashboard(courseExecutionDto.getCourseExecutionId(), authUserDto.getId())
+        def dashboardDto = dashboardService.createStudentDashboard(courseExecutionDto.getCourseExecutionId(), authUserDto.getId())
 
         when: "a second dashboard is created"
-        def getDashboardDto = dashboardService.getDashboard(courseExecutionDto.getCourseExecutionId(), authUserDto.getId())
+        def getDashboardDto = dashboardService.getStudentDashboard(courseExecutionDto.getCourseExecutionId(), authUserDto.getId())
 
         then: "it is the same dashboard"
         dashboardDto.getId() == getDashboardDto.getId()
@@ -53,7 +53,7 @@ class GetDashboardTest extends SpockTest {
         createExternalCourseAndExecution()
 
         when: "get a dashboard"
-        dashboardService.getDashboard(externalCourseExecution.getId(), authUserDto.getId())
+        dashboardService.getStudentDashboard(externalCourseExecution.getId(), authUserDto.getId())
 
         then: "exception is thrown"
         def exception = thrown(TutorException)
@@ -63,7 +63,7 @@ class GetDashboardTest extends SpockTest {
     @Unroll
     def "cannot get a dashboard with invalid courseExecutionId=#courseExecutionId"() {
         when:
-        dashboardService.getDashboard(courseExecutionId, authUserDto.getId())
+        dashboardService.getStudentDashboard(courseExecutionId, authUserDto.getId())
 
         then: "an exception is thrown"
         def exception = thrown(TutorException)
@@ -76,7 +76,7 @@ class GetDashboardTest extends SpockTest {
     @Unroll
     def "cannot get a dashboard with invalid studentId=#studentId"() {
         when:
-        dashboardService.getDashboard(courseExecutionDto.getCourseExecutionId(), studentId)
+        dashboardService.getStudentDashboard(courseExecutionDto.getCourseExecutionId(), studentId)
 
         then: "an exception is thrown"
         def exception = thrown(TutorException)

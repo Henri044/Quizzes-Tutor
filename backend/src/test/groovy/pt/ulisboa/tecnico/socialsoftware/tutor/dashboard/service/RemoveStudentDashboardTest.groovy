@@ -6,15 +6,13 @@ import pt.ulisboa.tecnico.socialsoftware.tutor.BeanConfiguration
 import pt.ulisboa.tecnico.socialsoftware.tutor.SpockTest
 import pt.ulisboa.tecnico.socialsoftware.tutor.exceptions.ErrorMessage
 import pt.ulisboa.tecnico.socialsoftware.tutor.exceptions.TutorException
-import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.domain.Dashboard
+import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.domain.StudentDashboard
 import pt.ulisboa.tecnico.socialsoftware.tutor.user.domain.Student
-import pt.ulisboa.tecnico.socialsoftware.tutor.execution.domain.CourseExecution
-import spock.lang.Shared
 import spock.lang.Unroll
 
 
 @DataJpaTest
-class RemoveDashboardTest extends SpockTest {
+class RemoveStudentDashboardTest extends SpockTest {
 
     def student
     def dashboard
@@ -27,7 +25,7 @@ class RemoveDashboardTest extends SpockTest {
     }
 
     def createDashboard() {
-        dashboard = new Dashboard(externalCourseExecution, student)
+        dashboard = new StudentDashboard(externalCourseExecution, student)
         dashboardRepository.save(dashboard)
     }
 

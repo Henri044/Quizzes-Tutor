@@ -8,9 +8,9 @@ import pt.ulisboa.tecnico.socialsoftware.tutor.answer.domain.MultipleChoiceAnswe
 import pt.ulisboa.tecnico.socialsoftware.tutor.answer.domain.QuestionAnswer
 import pt.ulisboa.tecnico.socialsoftware.tutor.answer.domain.QuizAnswer
 import pt.ulisboa.tecnico.socialsoftware.tutor.auth.domain.AuthUser
-import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.domain.Dashboard
 import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.domain.DifficultQuestion
 import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.domain.RemovedDifficultQuestion
+import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.domain.StudentDashboard
 import pt.ulisboa.tecnico.socialsoftware.tutor.exceptions.TutorException
 import pt.ulisboa.tecnico.socialsoftware.tutor.execution.domain.Assessment
 import pt.ulisboa.tecnico.socialsoftware.tutor.execution.domain.TopicConjunction
@@ -106,7 +106,7 @@ class UpdateDifficultQuestionsTest extends SpockTest {
         quizQuestion.setQuestion(question)
         quizQuestionRepository.save(quizQuestion)
         and:
-        dashboard = new Dashboard(externalCourseExecution, student)
+        dashboard = new StudentDashboard(externalCourseExecution, student)
         dashboardRepository.save(dashboard)
     }
 

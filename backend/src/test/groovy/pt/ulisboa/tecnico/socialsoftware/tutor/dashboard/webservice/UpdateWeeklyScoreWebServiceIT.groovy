@@ -26,7 +26,7 @@ class UpdateWeeklyScoreWebServiceIT extends SpockTestIT {
         and:
         courseExecutionDto = courseService.getDemoCourse()
         authUserDto = authUserService.demoStudentAuth(false).getUser()
-        dashboardDto = dashboardService.getDashboard(courseExecutionDto.getCourseExecutionId(), authUserDto.getId())
+        dashboardDto = dashboardService.getStudentDashboard(courseExecutionDto.getCourseExecutionId(), authUserDto.getId())
     }
 
     def "demo student gets its weekly scores"() {

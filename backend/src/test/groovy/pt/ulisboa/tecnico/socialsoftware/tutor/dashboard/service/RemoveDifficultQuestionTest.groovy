@@ -5,7 +5,7 @@ import org.springframework.boot.test.context.TestConfiguration
 import pt.ulisboa.tecnico.socialsoftware.tutor.BeanConfiguration
 import pt.ulisboa.tecnico.socialsoftware.tutor.SpockTest
 import pt.ulisboa.tecnico.socialsoftware.tutor.auth.domain.AuthUser
-import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.domain.Dashboard
+import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.domain.StudentDashboard
 import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.domain.DifficultQuestion
 import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.domain.RemovedDifficultQuestion
 import pt.ulisboa.tecnico.socialsoftware.tutor.exceptions.TutorException
@@ -60,7 +60,7 @@ class RemoveDifficultQuestionTest extends SpockTest {
         optionKO.setQuestionDetails(questionDetails)
         optionRepository.save(optionKO)
 
-        dashboard = new Dashboard(externalCourseExecution, student)
+        dashboard = new StudentDashboard(externalCourseExecution, student)
         dashboardRepository.save(dashboard)
     }
 

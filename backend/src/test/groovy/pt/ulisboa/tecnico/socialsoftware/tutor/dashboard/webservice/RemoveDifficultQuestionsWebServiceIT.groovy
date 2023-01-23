@@ -7,8 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
 import pt.ulisboa.tecnico.socialsoftware.tutor.SpockTestIT
 import pt.ulisboa.tecnico.socialsoftware.tutor.auth.domain.AuthUser
-import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.domain.Dashboard
 import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.domain.DifficultQuestion
+import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.domain.StudentDashboard
 import pt.ulisboa.tecnico.socialsoftware.tutor.question.domain.MultipleChoiceQuestion
 import pt.ulisboa.tecnico.socialsoftware.tutor.question.domain.Option
 import pt.ulisboa.tecnico.socialsoftware.tutor.question.domain.Question
@@ -67,7 +67,7 @@ class RemoveDifficultQuestionsWebServiceIT extends SpockTestIT {
         optionKO.setQuestionDetails(questionDetails)
         optionRepository.save(optionKO)
         and:
-        dashboard = new Dashboard(externalCourseExecution, student)
+        dashboard = new StudentDashboard(externalCourseExecution, student)
         dashboardRepository.save(dashboard)
         and:
         difficultQuestion = new DifficultQuestion(externalCourseExecution, question, 24)

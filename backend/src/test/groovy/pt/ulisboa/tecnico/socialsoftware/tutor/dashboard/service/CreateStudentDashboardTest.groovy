@@ -10,7 +10,7 @@ import pt.ulisboa.tecnico.socialsoftware.tutor.user.domain.Student
 import spock.lang.Unroll
 
 @DataJpaTest
-    class CreateDashboardTest extends SpockTest {
+    class CreateStudentDashboardTest extends SpockTest {
     def student
 
     def setup() {
@@ -25,7 +25,7 @@ import spock.lang.Unroll
         student.addCourse(externalCourseExecution)
 
         when: "a dashboard is created"
-        dashboardService.createDashboard(externalCourseExecution.getId(), student.getId())
+        dashboardService.createStudentDashboard(externalCourseExecution.getId(), student.getId())
 
         then: "an empty dashboard is created"
         dashboardRepository.count() == 1L
@@ -46,10 +46,10 @@ import spock.lang.Unroll
         student.addCourse(externalCourseExecution)
 
         and: "an empty dashboard for the student"
-        dashboardService.createDashboard(externalCourseExecution.getId(), student.getId())
+        dashboardService.createStudentDashboard(externalCourseExecution.getId(), student.getId())
 
         when: "a second dashboard is created"
-        dashboardService.createDashboard(externalCourseExecution.getId(), student.getId())
+        dashboardService.createStudentDashboard(externalCourseExecution.getId(), student.getId())
 
         then: "exception is thrown"        
         def exception = thrown(TutorException)
@@ -58,7 +58,7 @@ import spock.lang.Unroll
 
     def "cannot create a dashboard for a user that does not belong to the course execution"() {
         when: "a dashboard is created"
-        dashboardService.createDashboard(externalCourseExecution.getId(), student.getId())
+        dashboardService.createStudentDashboard(externalCourseExecution.getId(), student.getId())
 
         then: "exception is thrown"        
         def exception = thrown(TutorException)
@@ -68,7 +68,7 @@ import spock.lang.Unroll
     @Unroll
     def "cannot create a dashboard with courseExecutionId=#courseExecutionId"() {
         when: "a dashboard is created"
-        dashboardService.createDashboard(courseExecutionId, student.getId())
+        dashboardService.createStudentDashboard(courseExecutionId, student.getId())
 
         then: "an exception is thrown"
         def exception = thrown(TutorException)
@@ -81,7 +81,7 @@ import spock.lang.Unroll
     @Unroll
     def "cannot create a dashboard with studentId=#studentId"() {
         when: "a dashboard is created"
-        dashboardService.createDashboard(externalCourseExecution.getId(), studentId)
+        dashboardService.createStudentDashboard(externalCourseExecution.getId(), studentId)
 
         then: "an exception is thrown"
         def exception = thrown(TutorException)

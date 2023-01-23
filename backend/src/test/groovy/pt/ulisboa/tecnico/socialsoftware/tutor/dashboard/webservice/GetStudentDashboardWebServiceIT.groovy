@@ -8,7 +8,7 @@ import org.springframework.boot.test.web.server.LocalServerPort
 import pt.ulisboa.tecnico.socialsoftware.tutor.SpockTestIT
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class GetDashboardWebServiceIT extends SpockTestIT {
+class GetStudentDashboardWebServiceIT extends SpockTestIT {
     @LocalServerPort
     private int port
 
@@ -51,7 +51,7 @@ class GetDashboardWebServiceIT extends SpockTestIT {
         demoStudentLogin()
         and:
         def student = authUserService.demoStudentAuth(false).getUser()
-        def dashboardDto = dashboardService.createDashboard(courseExecutionDto.getCourseExecutionId(), student.getId())
+        def dashboardDto = dashboardService.createStudentDashboard(courseExecutionDto.getCourseExecutionId(), student.getId())
 
         when:
         response = restClient.get(

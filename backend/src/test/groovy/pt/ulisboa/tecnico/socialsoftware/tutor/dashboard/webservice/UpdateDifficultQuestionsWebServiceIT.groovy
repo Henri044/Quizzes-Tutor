@@ -9,7 +9,7 @@ import pt.ulisboa.tecnico.socialsoftware.tutor.SpockTestIT
 import pt.ulisboa.tecnico.socialsoftware.tutor.answer.domain.QuestionAnswer
 import pt.ulisboa.tecnico.socialsoftware.tutor.answer.domain.QuizAnswer
 import pt.ulisboa.tecnico.socialsoftware.tutor.auth.domain.AuthUser
-import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.domain.Dashboard
+import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.domain.StudentDashboard
 import pt.ulisboa.tecnico.socialsoftware.tutor.execution.dto.AssessmentDto
 import pt.ulisboa.tecnico.socialsoftware.tutor.execution.dto.TopicConjunctionDto
 import pt.ulisboa.tecnico.socialsoftware.tutor.question.domain.MultipleChoiceQuestion
@@ -114,7 +114,7 @@ class UpdateDifficultQuestionsWebServiceIT extends SpockTestIT {
         questionAnswer.setQuizAnswer(quizAnswer)
         questionAnswerRepository.save(questionAnswer)
         and:
-        dashboard = new Dashboard(externalCourseExecution, student)
+        dashboard = new StudentDashboard(externalCourseExecution, student)
         dashboardRepository.save(dashboard)
         and:
         difficultQuestionService.updateCourseExecutionWeekDifficultQuestions(externalCourseExecution.id)

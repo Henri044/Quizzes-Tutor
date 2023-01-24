@@ -4,50 +4,49 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.context.TestConfiguration
 import pt.ulisboa.tecnico.socialsoftware.tutor.BeanConfiguration
 import pt.ulisboa.tecnico.socialsoftware.tutor.SpockTest
+import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.domain.TeacherDashboard
 import pt.ulisboa.tecnico.socialsoftware.tutor.exceptions.ErrorMessage
 import pt.ulisboa.tecnico.socialsoftware.tutor.exceptions.TutorException
-import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.domain.StudentDashboard
-import pt.ulisboa.tecnico.socialsoftware.tutor.user.domain.Student
+import pt.ulisboa.tecnico.socialsoftware.tutor.user.domain.Teacher
 import spock.lang.Unroll
 
-
 @DataJpaTest
-class RemoveStudentDashboardTest extends SpockTest {
+class RemoveTeacherDashboardTest extends SpockTest {
 
-    def student
+    def teacher
     def dashboard
 
     def setup() {
         createExternalCourseAndExecution()
 
-        student = new Student(USER_1_NAME, false)
-        userRepository.save(student)
+        teacher = new Teacher(USER_1_NAME, false)
+        userRepository.save(teacher)
     }
 
-    def createDashboard() {
-        dashboard = new StudentDashboard(externalCourseExecution, student)
-        studentDashboardRepository.save(dashboard)
+    def createTeacherDashboard() {
+        dashboard = new TeacherDashboard(externalCourseExecution, teacher)
+        teacherDashboardRepository.save(dashboard)
     }
 
     def "remove a dashboard"() {
         given: "a dashboard"
-        createDashboard()
+        createTeacherDashboard()
 
         when: "the user removes the dashboard"
-        dashboardService.removeStudentDashboard(dashboard.getId())
+        dashboardService.removeTeacherDashboard(dashboard.getId())
 
         then: "the dashboard is removed"
-        studentDashboardRepository.findAll().size() == 0L
-        student.getDashboards().size() == 0
+        teacherDashboardRepository.findAll().size() == 0L
+        teacher.getDashboards().size() == 0
     }
 
     def "cannot remove a dashboard twice"() {
         given: "a removed dashboard"
-        createDashboard()
-        dashboardService.removeStudentDashboard(dashboard.getId())
+        createTeacherDashboard()
+        dashboardService.removeTeacherDashboard(dashboard.getId())
 
         when: "the dashboard is removed for the second time"
-        dashboardService.removeStudentDashboard(dashboard.getId())
+        dashboardService.removeTeacherDashboard(dashboard.getId())
 
         then: "an exception is thrown"        
         def exception = thrown(TutorException)
@@ -57,7 +56,7 @@ class RemoveStudentDashboardTest extends SpockTest {
     @Unroll
     def "cannot remove a dashboard that doesn't exist with the dashboardId=#dashboardId"() {
         when: "an incorrect dashboard id is removed"
-        dashboardService.removeStudentDashboard(dashboardId)
+        dashboardService.removeTeacherDashboard(dashboardId)
 
         then: "an exception is thrown"        
         def exception = thrown(TutorException)

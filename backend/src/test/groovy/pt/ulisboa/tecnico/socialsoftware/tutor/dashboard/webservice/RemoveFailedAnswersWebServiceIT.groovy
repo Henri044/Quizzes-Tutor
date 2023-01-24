@@ -36,7 +36,7 @@ class RemoveFailedAnswersWebServiceIT extends FailedAnswersSpockTest {
         userRepository.save(student)
         and:
         dashboard = new StudentDashboard(externalCourseExecution, student)
-        dashboardRepository.save(dashboard)
+        studentDashboardRepository.save(dashboard)
         and:
         def question = createQuestion()
         quiz = createQuiz()
@@ -98,7 +98,7 @@ class RemoveFailedAnswersWebServiceIT extends FailedAnswersSpockTest {
 
     def cleanup() {
         failedAnswerRepository.deleteAll()
-        dashboardRepository.deleteAll()
+        studentDashboardRepository.deleteAll()
         userRepository.deleteAll()
         courseRepository.deleteAll()
     }

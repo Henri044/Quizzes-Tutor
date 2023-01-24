@@ -27,7 +27,7 @@ class CreateFailedAnswerTest extends FailedAnswersSpockTest {
         userRepository.save(student)
 
         dashboard = new StudentDashboard(externalCourseExecution, student)
-        dashboardRepository.save(dashboard)
+        studentDashboardRepository.save(dashboard)
 
         question = createQuestion()
         quiz = createQuiz()
@@ -51,7 +51,7 @@ class CreateFailedAnswerTest extends FailedAnswersSpockTest {
         result.getCollected().isAfter(DateHandler.now().minusMinutes(1))
         result.getAnswered() == answered
         and:
-        def dashboard = dashboardRepository.getById(dashboard.getId())
+        def dashboard = studentDashboardRepository.getById(dashboard.getId())
         dashboard.getFailedAnswers().contains(result)
 
         where:
@@ -105,7 +105,7 @@ class CreateFailedAnswerTest extends FailedAnswersSpockTest {
         result2.getCollected().isAfter(DateHandler.now().minusMinutes(1))
         result2.getAnswered()
         and:
-        def dashboard = dashboardRepository.getById(dashboard.getId())
+        def dashboard = studentDashboardRepository.getById(dashboard.getId())
         dashboard.getFailedAnswers().contains(result)
     }
 

@@ -49,7 +49,7 @@ class UpdateWeeklyScoreTest extends SpockTest {
         now = week.atStartOfDay().plusMinutes(10)
 
         dashboard = new StudentDashboard(externalCourseExecution, student)
-        dashboardRepository.save(dashboard)
+        studentDashboardRepository.save(dashboard)
 
         Question question = new Question()
         question.setKey(1)

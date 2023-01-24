@@ -40,10 +40,10 @@ class GetStudentDashboardWebServiceIT extends SpockTestIT {
         and:
         response.data.id != null
         and:
-        dashboardRepository.findAll().size() == 1
+        studentDashboardRepository.findAll().size() == 1
 
         cleanup:
-        dashboardRepository.deleteAll()
+        studentDashboardRepository.deleteAll()
     }
 
     def "demo student gets existing dashboard"() {
@@ -64,10 +64,10 @@ class GetStudentDashboardWebServiceIT extends SpockTestIT {
         and:
         response.data.id == dashboardDto.id
         and:
-        dashboardRepository.findAll().size() == 1
+        studentDashboardRepository.findAll().size() == 1
 
         cleanup:
-        dashboardRepository.deleteAll()
+        studentDashboardRepository.deleteAll()
     }
 
     def "demo teacher does not have access"() {
@@ -84,10 +84,10 @@ class GetStudentDashboardWebServiceIT extends SpockTestIT {
         def error = thrown(HttpResponseException)
         error.response.status == HttpStatus.SC_FORBIDDEN
         and:
-        dashboardRepository.findAll().size() == 0
+        studentDashboardRepository.findAll().size() == 0
 
         cleanup:
-        dashboardRepository.deleteAll()
+        studentDashboardRepository.deleteAll()
     }
 
 }

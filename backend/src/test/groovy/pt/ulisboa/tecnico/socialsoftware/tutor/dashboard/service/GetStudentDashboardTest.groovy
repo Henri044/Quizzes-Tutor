@@ -23,8 +23,8 @@ class GetStudentDashboardTest extends SpockTest {
         dashboardService.getStudentDashboard(courseExecutionDto.getCourseExecutionId(), authUserDto.getId())
 
         then: "an empty dashboard is created"
-        dashboardRepository.count() == 1L
-        def result = dashboardRepository.findAll().get(0)
+        studentDashboardRepository.count() == 1L
+        def result = studentDashboardRepository.findAll().get(0)
         result.getId() != 0
         result.getLastCheckFailedAnswers() == null
         result.getLastCheckWeeklyScores() == null

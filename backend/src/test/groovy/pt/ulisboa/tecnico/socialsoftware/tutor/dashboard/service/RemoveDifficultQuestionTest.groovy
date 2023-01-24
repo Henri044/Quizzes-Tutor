@@ -61,7 +61,7 @@ class RemoveDifficultQuestionTest extends SpockTest {
         optionRepository.save(optionKO)
 
         dashboard = new StudentDashboard(externalCourseExecution, student)
-        dashboardRepository.save(dashboard)
+        studentDashboardRepository.save(dashboard)
     }
 
     def "student removes a difficult question"() {
@@ -75,7 +75,7 @@ class RemoveDifficultQuestionTest extends SpockTest {
         then:
         difficultQuestionRepository.count() == 1
         and:
-        def resultDashboard = dashboardRepository.getById(dashboard.id)
+        def resultDashboard = studentDashboardRepository.getById(dashboard.id)
         resultDashboard.getRemovedDifficultQuestions().size() == 1
         def list = new ArrayList<>(resultDashboard.getRemovedDifficultQuestions())
         def removedDifficultQuestion = list.get(0)
@@ -102,7 +102,7 @@ class RemoveDifficultQuestionTest extends SpockTest {
         and:
         difficultQuestionRepository.count() == 1
         and:
-        def resultDashboard = dashboardRepository.getById(dashboard.id)
+        def resultDashboard = studentDashboardRepository.getById(dashboard.id)
         resultDashboard.getRemovedDifficultQuestions().size() == 1
     }
 

@@ -53,7 +53,7 @@ class UpdateWeeklyScoreWebServiceIT extends SpockTestIT {
 
         cleanup:
         weeklyScoreRepository.deleteAll()
-        dashboardRepository.deleteAll()
+        studentDashboardRepository.deleteAll()
     }
 
     def "demo teacher does not have access"() {
@@ -74,7 +74,7 @@ class UpdateWeeklyScoreWebServiceIT extends SpockTestIT {
 
         cleanup:
         weeklyScoreRepository.deleteAll()
-        dashboardRepository.deleteAll()
+        studentDashboardRepository.deleteAll()
     }
 
     def "student cant update another students failed answers"() {
@@ -95,7 +95,7 @@ class UpdateWeeklyScoreWebServiceIT extends SpockTestIT {
 
         cleanup:
         weeklyScoreRepository.deleteAll()
-        dashboardRepository.deleteAll()
+        studentDashboardRepository.deleteAll()
     }
 
 }

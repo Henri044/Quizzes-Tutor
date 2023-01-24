@@ -22,7 +22,7 @@ class RemoveFailedAnswerTest extends FailedAnswersSpockTest {
         userRepository.save(student)
 
         dashboard = new StudentDashboard(externalCourseExecution, student)
-        dashboardRepository.save(dashboard)
+        studentDashboardRepository.save(dashboard)
     }
 
     @Unroll
@@ -40,7 +40,7 @@ class RemoveFailedAnswerTest extends FailedAnswersSpockTest {
         then:
         failedAnswerRepository.findAll().size() == 0L
         and:
-        def dashboard = dashboardRepository.findById(dashboard.getId()).get()
+        def dashboard = studentDashboardRepository.findById(dashboard.getId()).get()
         dashboard.getStudent().getId() === student.getId()
         dashboard.getCourseExecution().getId() === externalCourseExecution.getId()
         dashboard.getFailedAnswers().findAll().size() == 0L

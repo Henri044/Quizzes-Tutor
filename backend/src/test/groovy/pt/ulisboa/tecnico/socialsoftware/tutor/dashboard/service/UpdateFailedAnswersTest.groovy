@@ -28,7 +28,7 @@ class UpdateFailedAnswersTest extends FailedAnswersSpockTest {
         userRepository.save(student)
 
         dashboard = new StudentDashboard(externalCourseExecution, student)
-        dashboardRepository.save(dashboard)
+        studentDashboardRepository.save(dashboard)
 
         question = createQuestion()
         quiz = createQuiz()
@@ -58,7 +58,7 @@ class UpdateFailedAnswersTest extends FailedAnswersSpockTest {
         failedAnswer.getCollected().isAfter(DateHandler.now().minusMinutes(1))
         failedAnswer.getAnswered() == answered
         and:
-        def dashboard = dashboardRepository.getById(dashboard.getId())
+        def dashboard = studentDashboardRepository.getById(dashboard.getId())
         dashboard.getFailedAnswers().contains(failedAnswer)
         dashboard.getLastCheckFailedAnswers().isAfter(DateHandler.now().minusSeconds(1))
 
@@ -98,7 +98,7 @@ class UpdateFailedAnswersTest extends FailedAnswersSpockTest {
         and:
         failedAnswerRepository.findAll().size() == 0L
         and:
-        def dashboard = dashboardRepository.getById(dashboard.getId())
+        def dashboard = studentDashboardRepository.getById(dashboard.getId())
         dashboard.getLastCheckFailedAnswers().isEqual(questionAnswer.getQuizAnswer().getCreationDate().minusSeconds(1))
     }
 
@@ -138,7 +138,7 @@ class UpdateFailedAnswersTest extends FailedAnswersSpockTest {
         questionAnswers.contains(questionAnswer1)
         questionAnswers.contains(questionAnswer2)
         and:
-        def dashboard = dashboardRepository.getById(dashboard.getId())
+        def dashboard = studentDashboardRepository.getById(dashboard.getId())
         dashboard.getFailedAnswers().size() == 2
         dashboard.getLastCheckFailedAnswers().isAfter(DateHandler.now().minusSeconds(1))
     }
@@ -158,7 +158,7 @@ class UpdateFailedAnswersTest extends FailedAnswersSpockTest {
         and:
         failedAnswerRepository.count() == 1L
         and:
-        def dashboard = dashboardRepository.getById(dashboard.getId())
+        def dashboard = studentDashboardRepository.getById(dashboard.getId())
         dashboard.getFailedAnswers().size() == 1
     }
 
@@ -175,7 +175,7 @@ class UpdateFailedAnswersTest extends FailedAnswersSpockTest {
         and:
         failedAnswerRepository.count() == 1L
         and:
-        def dashboard = dashboardRepository.getById(dashboard.getId())
+        def dashboard = studentDashboardRepository.getById(dashboard.getId())
         dashboard.getFailedAnswers().size() == 1
         dashboard.getFailedAnswers().contains(failedAnswer)
     }
@@ -198,7 +198,7 @@ class UpdateFailedAnswersTest extends FailedAnswersSpockTest {
         and:
         failedAnswerRepository.findAll().size() == 0L
         and: "the student dashboard's failed answers is empty"
-        def dashboard = dashboardRepository.findById(dashboard.getId()).get()
+        def dashboard = studentDashboardRepository.findById(dashboard.getId()).get()
         dashboard.getStudent().getId() === otherStudent.getId()
         dashboard.getCourseExecution().getId() === externalCourseExecution.getId()
         dashboard.getFailedAnswers().findAll().size() == 0L
@@ -220,7 +220,7 @@ class UpdateFailedAnswersTest extends FailedAnswersSpockTest {
         then: "no failed answer is updated in the database"
         failedAnswerRepository.findAll().size() == 0L
         and: "the student dashboard's failed answers is empty"
-        def dashboard = dashboardRepository.findById(dashboard.getId()).get()
+        def dashboard = studentDashboardRepository.findById(dashboard.getId()).get()
         dashboard.getStudent().getId() === student.getId()
         dashboard.getCourseExecution().getId() === otherExternalCourseExecution.getId()
         dashboard.getFailedAnswers().findAll().size() == 0L

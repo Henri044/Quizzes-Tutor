@@ -107,7 +107,7 @@ class UpdateDifficultQuestionsTest extends SpockTest {
         quizQuestionRepository.save(quizQuestion)
         and:
         dashboard = new StudentDashboard(externalCourseExecution, student)
-        dashboardRepository.save(dashboard)
+        studentDashboardRepository.save(dashboard)
     }
 
     def "create one difficult question that does not exist"() {
@@ -142,7 +142,7 @@ class UpdateDifficultQuestionsTest extends SpockTest {
         difficultQuestion.getQuestion() == question
         difficultQuestion.getPercentage() == 0
         and:
-        def resultDashboard = dashboardRepository.getById(dashboard.id)
+        def resultDashboard = studentDashboardRepository.getById(dashboard.id)
         resultDashboard.getRemovedDifficultQuestions().size() == 0
     }
 
@@ -158,7 +158,7 @@ class UpdateDifficultQuestionsTest extends SpockTest {
         and:
         difficultQuestionRepository.count() == 0L
         and:
-        def resultDashboard = dashboardRepository.getById(dashboard.id)
+        def resultDashboard = studentDashboardRepository.getById(dashboard.id)
         resultDashboard.getRemovedDifficultQuestions().size() == 0
     }
 
@@ -177,7 +177,7 @@ class UpdateDifficultQuestionsTest extends SpockTest {
         and:
         difficultQuestionRepository.count() == 0L
         and:
-        def resultDashboard = dashboardRepository.getById(dashboard.id)
+        def resultDashboard = studentDashboardRepository.getById(dashboard.id)
         resultDashboard.getRemovedDifficultQuestions().size() == 0
     }
 
@@ -212,7 +212,7 @@ class UpdateDifficultQuestionsTest extends SpockTest {
         resultDifficultQuestion.getQuestion() == question
         resultDifficultQuestion.getPercentage() == 0
         and:
-        def resultDashboard = dashboardRepository.getById(dashboard.id)
+        def resultDashboard = studentDashboardRepository.getById(dashboard.id)
         resultDashboard.getRemovedDifficultQuestions().size() == 0
     }
 
@@ -231,7 +231,7 @@ class UpdateDifficultQuestionsTest extends SpockTest {
         and:
         difficultQuestionRepository.count() == 0L
         and:
-        def resultDashboard = dashboardRepository.getById(dashboard.id)
+        def resultDashboard = studentDashboardRepository.getById(dashboard.id)
         resultDashboard.getRemovedDifficultQuestions().size() == 0
     }
 
@@ -251,7 +251,7 @@ class UpdateDifficultQuestionsTest extends SpockTest {
         and:
         difficultQuestionRepository.count() == 0
         and:
-        def dashboardResult = dashboardRepository.getById(dashboard.id)
+        def dashboardResult = studentDashboardRepository.getById(dashboard.id)
         dashboardResult.getRemovedDifficultQuestions().size() == 1
 
         where:
@@ -285,7 +285,7 @@ class UpdateDifficultQuestionsTest extends SpockTest {
         and:
         difficultQuestionRepository.count() == 1
         and:
-        def dashboardResult = dashboardRepository.getById(dashboard.getId())
+        def dashboardResult = studentDashboardRepository.getById(dashboard.getId())
         dashboardResult.getRemovedDifficultQuestions().size() == 1
         def list = new ArrayList<>(dashboardResult.getRemovedDifficultQuestions())
         list.get(0).getQuestionId() == question.getId()
@@ -308,7 +308,7 @@ class UpdateDifficultQuestionsTest extends SpockTest {
         and:
         difficultQuestionRepository.count() == 0L
         and:
-        def resultDashboard = dashboardRepository.getById(dashboard.id)
+        def resultDashboard = studentDashboardRepository.getById(dashboard.id)
         resultDashboard.getRemovedDifficultQuestions().size() == 0
 
         where:
@@ -346,7 +346,7 @@ class UpdateDifficultQuestionsTest extends SpockTest {
         resultDifficultQuestion.getQuestion() == question
         resultDifficultQuestion.getPercentage() == 0
         and:
-        def resultDashboard = dashboardRepository.getById(dashboard.id)
+        def resultDashboard = studentDashboardRepository.getById(dashboard.id)
         resultDashboard.getRemovedDifficultQuestions().size() == 0
     }
 
@@ -368,7 +368,7 @@ class UpdateDifficultQuestionsTest extends SpockTest {
         and:
         difficultQuestionRepository.count() == 0L
         and:
-        def resultDashboard = dashboardRepository.getById(dashboard.id)
+        def resultDashboard = studentDashboardRepository.getById(dashboard.id)
         resultDashboard.getRemovedDifficultQuestions().size() == 0
 
         where:
@@ -397,7 +397,7 @@ class UpdateDifficultQuestionsTest extends SpockTest {
         resultDifficultQuestion.getQuestion() == question
         resultDifficultQuestion.getPercentage() == 20
         and:
-        def resultDashboard = dashboardRepository.getById(dashboard.id)
+        def resultDashboard = studentDashboardRepository.getById(dashboard.id)
         resultDashboard.getRemovedDifficultQuestions().size() == 0
     }
 

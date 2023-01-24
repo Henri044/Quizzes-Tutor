@@ -26,7 +26,7 @@ class RemoveStudentDashboardTest extends SpockTest {
 
     def createDashboard() {
         dashboard = new StudentDashboard(externalCourseExecution, student)
-        dashboardRepository.save(dashboard)
+        studentDashboardRepository.save(dashboard)
     }
 
     def "remove a dashboard"() {
@@ -37,7 +37,7 @@ class RemoveStudentDashboardTest extends SpockTest {
         dashboardService.removeDashboard(dashboard.getId())
 
         then: "the dashboard is removed"
-        dashboardRepository.findAll().size() == 0L
+        studentDashboardRepository.findAll().size() == 0L
         student.getDashboards().size() == 0
     }
 

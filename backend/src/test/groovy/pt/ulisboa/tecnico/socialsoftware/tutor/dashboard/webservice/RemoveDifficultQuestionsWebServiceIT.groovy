@@ -68,7 +68,7 @@ class RemoveDifficultQuestionsWebServiceIT extends SpockTestIT {
         optionRepository.save(optionKO)
         and:
         dashboard = new StudentDashboard(externalCourseExecution, student)
-        dashboardRepository.save(dashboard)
+        studentDashboardRepository.save(dashboard)
         and:
         difficultQuestion = new DifficultQuestion(externalCourseExecution, question, 24)
         difficultQuestionRepository.save(difficultQuestion)
@@ -130,7 +130,7 @@ class RemoveDifficultQuestionsWebServiceIT extends SpockTestIT {
 
     def cleanup() {
         difficultQuestionRepository.deleteAll()
-        dashboardRepository.deleteAll()
+        studentDashboardRepository.deleteAll()
         userRepository.deleteAll()
         courseRepository.deleteAll()
     }

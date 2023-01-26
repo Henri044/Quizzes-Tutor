@@ -24,7 +24,7 @@ import TeacherDashboard from '@/models/dashboard/TeacherDashboard';
   components: { AnimatedNumber },
 })
 
-export default class GlobalStatsView extends Vue {
+export default class TeacherStatsView extends Vue {
   @Prop() readonly dashboardId!: number;
   teacherDashboard: TeacherDashboard | null = null;
 

@@ -3,7 +3,7 @@
     <h1>Teacher Dashboard</h1>
 
     <div v-if="show === 'Global'" class="stats-container">
-      <global-stats-view :dashboardId="dashboardId"></global-stats-view>
+      <teacher-stats-view :dashboardId="dashboardId"></teacher-stats-view>
     </div>
   </div>
 </template>
@@ -11,11 +11,11 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import RemoteServices from '@/services/RemoteServices';
-import GlobalStatsView from '@/views/teacher/dashboard/TeacherStatsView.vue';
+import TeacherStatsView from '@/views/teacher/dashboard/TeacherStatsView.vue';
 
 @Component({
   components: {
-    GlobalStatsView
+    TeacherStatsView
   },
 })
 export default class TeacherDashboardView extends Vue {

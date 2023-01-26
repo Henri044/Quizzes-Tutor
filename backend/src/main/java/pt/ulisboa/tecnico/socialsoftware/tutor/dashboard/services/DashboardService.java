@@ -83,11 +83,9 @@ public class DashboardService {
                 .filter(dashboard -> dashboard.getCourseExecution().getId().equals(courseExecutionId))
                 .findAny();
 
-        int numberOfStudents = (int) studentRepository.findAll().stream().filter(student -> student.getCourseExecutions().contains(courseExecution)).count();
-
         return dashboardOptional.
-                map(teacherDashboard -> { teacherDashboard.setNumberOfStudents(numberOfStudents); return new TeacherDashboardDto(teacherDashboard); }).
-                orElseGet(() -> createAndReturnTeacherDashboardDto(courseExecution, teacher, numberOfStudents));
+                map(TeacherDashboardDto::new).
+                orElseGet(() -> createAndReturnTeacherDashboardDto(courseExecution, teacher));
     }
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
@@ -136,9 +134,7 @@ public class DashboardService {
         if (!teacher.getCourseExecutions().contains(courseExecution))
             throw new TutorException(TEACHER_NO_COURSE_EXECUTION);
 
-        int numberOfStudents = (int) studentRepository.findAll().stream().filter(student -> student.getCourseExecutions().contains(courseExecution)).count();
-
-        return createAndReturnTeacherDashboardDto(courseExecution, teacher, numberOfStudents);
+        return createAndReturnTeacherDashboardDto(courseExecution, teacher);
     }
 
     private StudentDashboardDto createAndReturnStudentDashboardDto(CourseExecution courseExecution, Student student) {
@@ -148,9 +144,8 @@ public class DashboardService {
         return new StudentDashboardDto(studentDashboard);
     }
 
-    private TeacherDashboardDto createAndReturnTeacherDashboardDto(CourseExecution courseExecution, Teacher teacher, Integer numberOfStudents) {
+    private TeacherDashboardDto createAndReturnTeacherDashboardDto(CourseExecution courseExecution, Teacher teacher) {
         TeacherDashboard teacherDashboard = new TeacherDashboard(courseExecution, teacher);
-        teacherDashboard.setNumberOfStudents(numberOfStudents);
         teacherDashboardRepository.save(teacherDashboard);
 
         return new TeacherDashboardDto(teacherDashboard);

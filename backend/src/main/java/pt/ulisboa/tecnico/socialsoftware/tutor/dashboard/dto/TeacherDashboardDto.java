@@ -10,8 +10,9 @@ public class TeacherDashboardDto {
     }
 
     public TeacherDashboardDto(TeacherDashboard teacherDashboard) {
-        id = teacherDashboard.getId();
-        numberOfStudents = teacherDashboard.getNumberOfStudents();
+        this.id = teacherDashboard.getId();
+        // For the number of students, we consider only active students
+        this.numberOfStudents = teacherDashboard.getCourseExecution().getNumberOfActiveStudents();
     }
 
     public Integer getId() {

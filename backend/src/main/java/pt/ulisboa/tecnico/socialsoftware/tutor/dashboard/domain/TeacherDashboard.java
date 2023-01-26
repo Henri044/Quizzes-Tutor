@@ -15,7 +15,6 @@ public class TeacherDashboard implements DomainEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private int numberOfStudents = 0;
     @ManyToOne
     private CourseExecution courseExecution;
 
@@ -37,14 +36,6 @@ public class TeacherDashboard implements DomainEntity {
 
     public Integer getId() {
         return id;
-    }
-
-    public int getNumberOfStudents() {
-        return numberOfStudents;
-    }
-
-    public void setNumberOfStudents(int numberOfStudents) {
-        this.numberOfStudents = numberOfStudents;
     }
 
     public CourseExecution getCourseExecution() {
@@ -72,7 +63,6 @@ public class TeacherDashboard implements DomainEntity {
     public String toString() {
         return "Dashboard{" +
                 "id=" + id +
-                ", numberOfStudents=" + numberOfStudents +
                 ", courseExecution=" + courseExecution +
                 ", teacher=" + teacher +
                 '}';

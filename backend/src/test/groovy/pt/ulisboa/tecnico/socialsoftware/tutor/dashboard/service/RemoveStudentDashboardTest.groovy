@@ -15,7 +15,6 @@ import spock.lang.Unroll
 class RemoveStudentDashboardTest extends SpockTest {
 
     def student
-    def dashboard
 
     def setup() {
         createExternalCourseAndExecution()
@@ -25,13 +24,14 @@ class RemoveStudentDashboardTest extends SpockTest {
     }
 
     def createDashboard() {
-        dashboard = new StudentDashboard(externalCourseExecution, student)
+        def dashboard = new StudentDashboard(externalCourseExecution, student)
         studentDashboardRepository.save(dashboard)
+        return dashboard
     }
 
     def "remove a dashboard"() {
         given: "a dashboard"
-        createDashboard()
+        def dashboard = createDashboard()
 
         when: "the user removes the dashboard"
         dashboardService.removeStudentDashboard(dashboard.getId())
@@ -43,7 +43,7 @@ class RemoveStudentDashboardTest extends SpockTest {
 
     def "cannot remove a dashboard twice"() {
         given: "a removed dashboard"
-        createDashboard()
+        def dashboard = createDashboard()
         dashboardService.removeStudentDashboard(dashboard.getId())
 
         when: "the dashboard is removed for the second time"

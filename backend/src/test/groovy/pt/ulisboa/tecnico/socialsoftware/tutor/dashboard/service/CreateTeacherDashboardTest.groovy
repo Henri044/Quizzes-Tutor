@@ -49,7 +49,10 @@ import spock.lang.Unroll
         when: "a second dashboard is created"
         dashboardService.createTeacherDashboard(externalCourseExecution.getId(), teacher.getId())
 
-        then: "exception is thrown"        
+        then: "there is only one dashboard"
+        teacherDashboardRepository.count() == 1L
+
+        and: "exception is thrown"
         def exception = thrown(TutorException)
         exception.getErrorMessage() == ErrorMessage.TEACHER_ALREADY_HAS_DASHBOARD
     }

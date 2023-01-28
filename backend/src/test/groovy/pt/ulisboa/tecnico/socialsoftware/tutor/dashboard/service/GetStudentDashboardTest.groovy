@@ -41,7 +41,7 @@ class GetStudentDashboardTest extends SpockTest {
         given: "an empty dashboard for the student"
         def dashboardDto = dashboardService.createStudentDashboard(courseExecutionDto.getCourseExecutionId(), authUserDto.getId())
 
-        when: "a second dashboard is created"
+        when: "the student's dashboard is retrieved"
         def getDashboardDto = dashboardService.getStudentDashboard(courseExecutionDto.getCourseExecutionId(), authUserDto.getId())
 
         then: "it is the same dashboard"

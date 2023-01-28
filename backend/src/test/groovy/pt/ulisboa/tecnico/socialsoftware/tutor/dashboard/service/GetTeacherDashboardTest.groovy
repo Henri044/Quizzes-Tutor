@@ -36,10 +36,10 @@ class GetTeacherDashboardTest extends SpockTest {
     }
 
     def "get a dashboard and it already exists"() {
-        given: "an empty dashboard for the student"
+        given: "an empty dashboard for the teacher"
         def dashboardDto = dashboardService.createTeacherDashboard(courseExecutionDto.getCourseExecutionId(), authUserDto.getId())
 
-        when: "a second dashboard is created"
+        when: "the teacher's dashboard is retrieved"
         def getDashboardDto = dashboardService.getTeacherDashboard(courseExecutionDto.getCourseExecutionId(), authUserDto.getId())
 
         then: "it is the same dashboard"

@@ -1,7 +1,7 @@
 package pt.ulisboa.tecnico.socialsoftware.tutor.user.domain;
 
 import pt.ulisboa.tecnico.socialsoftware.tutor.auth.domain.AuthUser;
-import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.domain.TeacherDashboard;
+import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.TeacherDashboard;
 import pt.ulisboa.tecnico.socialsoftware.tutor.execution.domain.CourseExecution;
 
 import javax.persistence.CascadeType;

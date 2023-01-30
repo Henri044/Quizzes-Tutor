@@ -11,10 +11,10 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import pt.ulisboa.tecnico.socialsoftware.tutor.admin.AdminService
 import pt.ulisboa.tecnico.socialsoftware.tutor.answer.AnswerService
 import pt.ulisboa.tecnico.socialsoftware.tutor.auth.AuthUserService
-import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.services.DashboardService
-import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.services.DifficultQuestionService
-import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.services.FailedAnswerService
-import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.services.WeeklyScoreService
+import pt.ulisboa.tecnico.socialsoftware.tutor.studentdashboard.services.StudentDashboardService
+import pt.ulisboa.tecnico.socialsoftware.tutor.studentdashboard.services.DifficultQuestionService
+import pt.ulisboa.tecnico.socialsoftware.tutor.studentdashboard.services.FailedAnswerService
+import pt.ulisboa.tecnico.socialsoftware.tutor.studentdashboard.services.WeeklyScoreService
 import pt.ulisboa.tecnico.socialsoftware.tutor.demo.DemoService
 import pt.ulisboa.tecnico.socialsoftware.tutor.demo.DemoUtils
 import pt.ulisboa.tecnico.socialsoftware.tutor.discussion.DiscussionService
@@ -25,6 +25,7 @@ import pt.ulisboa.tecnico.socialsoftware.tutor.question.QuestionService
 import pt.ulisboa.tecnico.socialsoftware.tutor.question.TopicService
 import pt.ulisboa.tecnico.socialsoftware.tutor.questionsubmission.QuestionSubmissionService
 import pt.ulisboa.tecnico.socialsoftware.tutor.quiz.QuizService
+import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.services.TeacherDashboardService
 import pt.ulisboa.tecnico.socialsoftware.tutor.tournament.TournamentService
 import pt.ulisboa.tecnico.socialsoftware.tutor.user.UserApplicationalService
 import pt.ulisboa.tecnico.socialsoftware.tutor.user.UserService
@@ -134,8 +135,8 @@ class BeanConfiguration {
     }
 
     @Bean
-    DashboardService dashboardService() {
-        return new DashboardService()
+    StudentDashboardService studentDashboardService() {
+        return new StudentDashboardService()
     }
 
     @Bean
@@ -152,6 +153,12 @@ class BeanConfiguration {
     FailedAnswerService failedAnswerService() {
         return new FailedAnswerService()
     }
+
+    @Bean
+    TeacherDashboardService teacherDashboardService() {
+        return new TeacherDashboardService()
+    }
+
 
     @Bean
     DemoService demoService() {

@@ -1,6 +1,6 @@
 package pt.ulisboa.tecnico.socialsoftware.tutor.user.dto;
 
-import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.domain.StudentDashboard;
+import pt.ulisboa.tecnico.socialsoftware.tutor.studentdashboard.domain.StudentDashboard;
 import pt.ulisboa.tecnico.socialsoftware.tutor.execution.domain.CourseExecution;
 import pt.ulisboa.tecnico.socialsoftware.tutor.user.domain.Student;
 

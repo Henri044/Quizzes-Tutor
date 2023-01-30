@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import pt.ulisboa.tecnico.socialsoftware.tutor.answer.AnswerService;
-import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.services.DifficultQuestionService;
+import pt.ulisboa.tecnico.socialsoftware.tutor.studentdashboard.services.DifficultQuestionService;
 import pt.ulisboa.tecnico.socialsoftware.tutor.demo.DemoUtils;
 import pt.ulisboa.tecnico.socialsoftware.tutor.execution.domain.CourseExecution;
 import pt.ulisboa.tecnico.socialsoftware.tutor.execution.repository.CourseExecutionRepository;

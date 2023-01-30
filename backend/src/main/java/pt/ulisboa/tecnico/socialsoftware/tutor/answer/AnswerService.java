@@ -13,9 +13,9 @@ import pt.ulisboa.tecnico.socialsoftware.tutor.answer.repository.AnswerDetailsRe
 import pt.ulisboa.tecnico.socialsoftware.tutor.answer.repository.QuestionAnswerItemRepository;
 import pt.ulisboa.tecnico.socialsoftware.tutor.answer.repository.QuizAnswerItemRepository;
 import pt.ulisboa.tecnico.socialsoftware.tutor.answer.repository.QuizAnswerRepository;
-import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.domain.StudentDashboard;
-import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.repository.StudentDashboardRepository;
-import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.services.DifficultQuestionService;
+import pt.ulisboa.tecnico.socialsoftware.tutor.studentdashboard.domain.StudentDashboard;
+import pt.ulisboa.tecnico.socialsoftware.tutor.studentdashboard.repository.StudentDashboardRepository;
+import pt.ulisboa.tecnico.socialsoftware.tutor.studentdashboard.services.DifficultQuestionService;
 import pt.ulisboa.tecnico.socialsoftware.tutor.exceptions.TutorException;
 import pt.ulisboa.tecnico.socialsoftware.tutor.execution.CourseExecutionService;
 import pt.ulisboa.tecnico.socialsoftware.tutor.execution.domain.Assessment;

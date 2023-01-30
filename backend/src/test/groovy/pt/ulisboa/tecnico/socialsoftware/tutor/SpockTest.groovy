@@ -11,15 +11,16 @@ import pt.ulisboa.tecnico.socialsoftware.tutor.answer.repository.*
 import pt.ulisboa.tecnico.socialsoftware.tutor.auth.AuthUserService
 import pt.ulisboa.tecnico.socialsoftware.tutor.auth.dto.AuthPasswordDto
 import pt.ulisboa.tecnico.socialsoftware.tutor.auth.repository.AuthUserRepository
-import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.repository.StudentDashboardRepository
-import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.repository.TeacherDashboardRepository
-import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.repository.DifficultQuestionRepository
-import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.repository.FailedAnswerRepository
-import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.repository.WeeklyScoreRepository
-import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.services.DashboardService
-import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.services.DifficultQuestionService
-import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.services.FailedAnswerService
-import pt.ulisboa.tecnico.socialsoftware.tutor.dashboard.services.WeeklyScoreService
+import pt.ulisboa.tecnico.socialsoftware.tutor.studentdashboard.repository.StudentDashboardRepository
+import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.repository.TeacherDashboardRepository
+import pt.ulisboa.tecnico.socialsoftware.tutor.studentdashboard.repository.DifficultQuestionRepository
+import pt.ulisboa.tecnico.socialsoftware.tutor.studentdashboard.repository.FailedAnswerRepository
+import pt.ulisboa.tecnico.socialsoftware.tutor.studentdashboard.repository.WeeklyScoreRepository
+import pt.ulisboa.tecnico.socialsoftware.tutor.studentdashboard.services.StudentDashboardService
+import pt.ulisboa.tecnico.socialsoftware.tutor.studentdashboard.services.DifficultQuestionService
+import pt.ulisboa.tecnico.socialsoftware.tutor.studentdashboard.services.FailedAnswerService
+import pt.ulisboa.tecnico.socialsoftware.tutor.studentdashboard.services.WeeklyScoreService
+import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.services.TeacherDashboardService
 import pt.ulisboa.tecnico.socialsoftware.tutor.demo.DemoService
 import pt.ulisboa.tecnico.socialsoftware.tutor.demo.DemoUtils
 import pt.ulisboa.tecnico.socialsoftware.tutor.discussion.DiscussionService
@@ -174,7 +175,10 @@ class SpockTest extends Specification {
     CourseExecutionService courseService
 
     @Autowired
-    DashboardService dashboardService
+    StudentDashboardService studentDashboardService
+
+    @Autowired
+    TeacherDashboardService teacherDashboardService
 
     @Autowired
     StudentDashboardRepository studentDashboardRepository

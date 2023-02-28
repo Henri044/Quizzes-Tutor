@@ -10,7 +10,7 @@ public class QuizStats implements DomainEntity {
     private float averageQuizzesSolved;
     private CourseExecution courseExecution;
 
-    public QuizStats(Integer numQuizzes, Integer uniqueQuizzesSolved, float averageQuizzesSolved, courseExecution){
+    public QuizStats(int numQuizzes, int uniqueQuizzesSolved, float averageQuizzesSolved, courseExecution){
         setNumQuizzes(numQuizzes);
         setUniqueQuizzesSolved(uniqueQuizzesSolved);
         setAverageQuizzesSolved(averageQuizzesSolved);
@@ -27,13 +27,13 @@ public class QuizStats implements DomainEntity {
 
     public void setAverageQuizzesSolved(float averageQuizzesSolved){ this.averageQuizzesSolved = averageQuizzesSolved; }
 
-    public Integer getNumQuizzes(){ return numQuizzes; }
+    public int getNumQuizzes(){ return numQuizzes; }
 
-    public void setNumQuizzes(Integer numQuizzes){ this.numQuizzes = numQuizzes; }
+    public void setNumQuizzes(int numQuizzes){ this.numQuizzes = numQuizzes; }
 
-    public Integer getUniqueQuizzesSolved(){ return uniqueQuizzesSolved; }
+    public int getUniqueQuizzesSolved(){ return uniqueQuizzesSolved; }
 
-    public void setUniqueQuizzesSolved(Integer uniqueQuizzesSolved){ this.uniqueQuizzesSolved = uniqueQuizzesSolved; }
+    public void setUniqueQuizzesSolved(int uniqueQuizzesSolved){ this.uniqueQuizzesSolved = uniqueQuizzesSolved; }
 
     public void accept(Visitor visitor) {
         // Only used for XML generation

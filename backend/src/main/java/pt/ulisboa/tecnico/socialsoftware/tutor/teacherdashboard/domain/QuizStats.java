@@ -5,12 +5,23 @@ import pt.ulisboa.tecnico.socialsoftware.tutor.impexp.domain.DomainEntity;
 import pt.ulisboa.tecnico.socialsoftware.tutor.impexp.domain.Visitor;
 
 public class QuizStats implements DomainEntity {
-    private Integer numQuizzes;
-    private Integer uniqueQuizzesSolved;
+    private int numQuizzes;
+    private int uniqueQuizzesSolved;
     private float averageQuizzesSolved;
+    private CourseExecution courseExecution;
 
-    public QuizStats(){
+    public QuizStats(Integer numQuizzes, Integer uniqueQuizzesSolved, float averageQuizzesSolved, courseExecution){
+        setNumQuizzes(numQuizzes);
+        setUniqueQuizzesSolved(uniqueQuizzesSolved);
+        setAverageQuizzesSolved(averageQuizzesSolved);
+        setCourseExecution(courseExecution);
     }
+
+    public CourseExecution getCourseExecution() {
+        return courseExecution;
+    }
+
+    public void setCourseExecution(CourseExecution courseExecution) { this.courseExecution = courseExecution; }
 
     public float getAverageQuizzesSolved(){ return averageQuizzesSolved; }
 

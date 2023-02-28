@@ -10,7 +10,7 @@ public class QuizStats implements DomainEntity {
     private float averageQuizzesSolved;
     private CourseExecution courseExecution;
 
-    public QuizStats(int numQuizzes, int uniqueQuizzesSolved, float averageQuizzesSolved, courseExecution){
+    public QuizStats(int numQuizzes, int uniqueQuizzesSolved, float averageQuizzesSolved, CourseExecution courseExecution){
         setNumQuizzes(numQuizzes);
         setUniqueQuizzesSolved(uniqueQuizzesSolved);
         setAverageQuizzesSolved(averageQuizzesSolved);

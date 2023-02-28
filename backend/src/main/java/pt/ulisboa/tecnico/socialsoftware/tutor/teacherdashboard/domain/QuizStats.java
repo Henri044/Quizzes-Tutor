@@ -12,9 +12,9 @@ public class QuizStats implements DomainEntity {
     public QuizStats(){
     }
 
-    public Integer getAverageQuizzesSolved(){ return averageQuizzesSolved; }
+    public float getAverageQuizzesSolved(){ return averageQuizzesSolved; }
 
-    public void setAverageQuizzesSolved(Integer averageQuizzesSolved){ this.averageQuizzesSolved = averageQuizzesSolved; }
+    public void setAverageQuizzesSolved(float averageQuizzesSolved){ this.averageQuizzesSolved = averageQuizzesSolved; }
 
     public void accept(Visitor visitor) {
         // Only used for XML generation

@@ -3,17 +3,26 @@ package pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain;
 import pt.ulisboa.tecnico.socialsoftware.tutor.execution.domain.CourseExecution;
 import pt.ulisboa.tecnico.socialsoftware.tutor.impexp.domain.DomainEntity;
 import pt.ulisboa.tecnico.socialsoftware.tutor.impexp.domain.Visitor;
+import pt.ulisboa.tecnico.socialsoftware.tutor.quiz.QuizService;
 
+import javax.persistence.*;
+
+@Entity
 public class QuizStats implements DomainEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @ManyToOne
+    private TeacherDashboard teacherDashboard;
+
     private int numQuizzes;
     private int uniqueQuizzesSolved;
     private float averageQuizzesSolved;
+    @OneToOne
     private CourseExecution courseExecution;
-
-    public QuizStats(int numQuizzes, int uniqueQuizzesSolved, float averageQuizzesSolved, CourseExecution courseExecution){
-        setNumQuizzes(numQuizzes);
-        setUniqueQuizzesSolved(uniqueQuizzesSolved);
-        setAverageQuizzesSolved(averageQuizzesSolved);
+    public QuizStats(){
+    }
+    public QuizStats(CourseExecution courseExecution){
         setCourseExecution(courseExecution);
     }
 
@@ -22,6 +31,12 @@ public class QuizStats implements DomainEntity {
     }
 
     public void setCourseExecution(CourseExecution courseExecution) { this.courseExecution = courseExecution; }
+   public void remove() {
+
+    }
+    public Integer getId() {
+        return id;
+    }
 
     public float getAverageQuizzesSolved(){ return averageQuizzesSolved; }
 

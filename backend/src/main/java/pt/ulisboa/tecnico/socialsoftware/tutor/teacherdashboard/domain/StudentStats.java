@@ -10,6 +10,7 @@ import pt.ulisboa.tecnico.socialsoftware.tutor.question.domain.Question;
 import pt.ulisboa.tecnico.socialsoftware.tutor.quiz.domain.Quiz;
 
 import javax.persistence.*;
+import java.util.*;
 
 
 @Entity
@@ -48,15 +49,15 @@ public class StudentStats implements DomainEntity{
         this.courseExecution = courseExecution;
     }
 
-    public int getnumStudents(){ return numStudents; }
+    public int getNumStudents(){ return numStudents; }
     
-    public void setnumStudents(int num){
+    public void setNumStudents(int num){
       this.numStudents = num;
     }
 
-    public int getnumMore75CorrectQuestions(){ return numMore75CorrectQuestions; }
+    public int getNumMore75CorrectQuestions(){ return numMore75CorrectQuestions; }
     
-    public void setnumMore75CorrectQuestions(int num){
+    public void setNumMore75CorrectQuestions(int num){
       this.numMore75CorrectQuestions = num;
     }
     
@@ -70,16 +71,16 @@ public class StudentStats implements DomainEntity{
 
     public void update() {
 
-        int numIterator;
-        int numIterator2;
+        int numIterator = 0;
+        int numIterator2 = 0;
         int totalQuestions;
-        int correctQuestions;
+        int correctQuestions = 0;
 
-        Set<Student> students = new Set<Student>();
+        Set<Student> students = new HashSet<Student>();
         students = this.getCourseExecution().getStudents();
 
         
-        this.setnumStudents(students.size());
+        this.setNumStudents(students.size());
 
         for (Student st : students){
             totalQuestions = st.getQuestionSubmissions().size();
@@ -93,14 +94,14 @@ public class StudentStats implements DomainEntity{
             }
             correctQuestions = 0;
         }
-        this.setnumMore75CorrectQuestions(numIterator2);
+        this.setNumMore75CorrectQuestions(numIterator2);
 
         for (Student st : students){
             if ((st.getQuizAnswers().size()) >= 3){
                 numIterator += 1;
             }
         }
-        this.setnumAtLeast3Quizzes(numIterator);
+        this.setNumAtLeast3Quizzes(numIterator);
     }
 
     public void remove() {

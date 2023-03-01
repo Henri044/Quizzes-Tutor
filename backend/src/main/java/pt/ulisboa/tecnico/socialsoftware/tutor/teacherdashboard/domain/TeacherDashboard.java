@@ -7,6 +7,7 @@ import pt.ulisboa.tecnico.socialsoftware.tutor.user.domain.Teacher;
 
 import javax.persistence.*;
 
+import java.util.*;  
 
 @Entity
 public class TeacherDashboard implements DomainEntity {
@@ -20,6 +21,9 @@ public class TeacherDashboard implements DomainEntity {
 
     @ManyToOne
     private Teacher teacher;
+
+    @OneToMany
+    private Set<StudentStats> studentsStats = new HashSet<StudentStats>();
 
     public TeacherDashboard() {
     }
@@ -54,6 +58,16 @@ public class TeacherDashboard implements DomainEntity {
         this.teacher = teacher;
         this.teacher.addDashboard(this);
     }
+
+    public boolean addstudentStats(StudentStats studentStats) {
+        return this.studentsStats.add(studentStats);
+    }
+
+    public boolean removestudentStats(StudentStats studentStats) {
+        return this.studentsStats.remove(studentStats);
+    }
+
+    public Set<StudentStats> getStudentStats() {return this.studentsStats;}
 
     public void accept(Visitor visitor) {
         // Only used for XML generation

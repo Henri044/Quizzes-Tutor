@@ -21,9 +21,55 @@ public class QuestionStats implements DomainEntity {
     @ManyToOne
     private TeacherDashboard teacherDashboard;
 
+    public QuestionStats(){
+    }
+
+    public QuestionStats(CourseExecution courseExecution){
+        setCourseExecution(courseExecution);
+    }
 
     // Methods
     public void accept(Visitor visitor) {
         // Only used for XML generation
+    }
+
+    public CourseExecution getCourseExecution() {
+        return courseExecution;
+    }
+
+    public void setCourseExecution(CourseExecution courseExecution){
+        this.courseExecution = courseExecution;
+    }
+
+    public int getNumAvailable(){
+        return numAvailable;
+    }
+
+   public void setNumAvailable(int numAvailable){
+        this.numAvailable = numAvailable;
+   }
+
+    public int getAnsweredQuestionUnique() {
+        return answeredQuestionUnique;
+    }
+
+    public void setAnsweredQuestionUnique(int answeredQuestionUnique) {
+        this.answeredQuestionUnique = answeredQuestionUnique;
+    }
+
+    public int getAverageQuestionsAnswered(){
+        return averageQuestionsAnswered;
+    }
+
+    public void setAverageQuestionsAnswered(int averageQuestionsAnswered){
+        this.averageQuestionsAnswered = averageQuestionsAnswered;
+    }
+
+    public String toString(){
+        return "QuestionStats{" +
+                "Numero questoes disponiveis=" + numAvailable +
+                "Questoes unicas respondidas=" + answeredQuestionUnique +
+                "Media questoes respondidas=" + averageQuestionsAnswered +
+                '}';
     }
 }

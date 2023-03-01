@@ -6,6 +6,8 @@ import pt.ulisboa.tecnico.socialsoftware.tutor.impexp.domain.Visitor;
 import pt.ulisboa.tecnico.socialsoftware.tutor.quiz.QuizService;
 
 import javax.persistence.*;
+import java.util.Set;
+import java.util.HashSet;
 
 @Entity
 public class QuizStats implements DomainEntity {
@@ -49,6 +51,31 @@ public class QuizStats implements DomainEntity {
     public int getUniqueQuizzesSolved(){ return uniqueQuizzesSolved; }
 
     public void setUniqueQuizzesSolved(int uniqueQuizzesSolved){ this.uniqueQuizzesSolved = uniqueQuizzesSolved; }
+
+    public void update(){
+        this.setNumQuizzes(this.getCourseExecution().getNumberOfQuizzes());
+        Set<Student> students = new HashSet<>(this.getCourseExecution().getStudents());
+        Set<Quiz> quizzes = new HashSet<>();
+
+        for (Student s: students) {
+            Set<QuizAnswer> quizAnswers = new HashSet<>(s.getQuizAnswers());
+            for (QuizAnswer qa: quizAnswers){
+                quizzes.add(qa.getQuiz());
+            }
+        }
+
+        for (Quiz q1: quizzes){
+            for(Quiz q2: quizzes){
+                if (q1.getId() != q2.getId()){
+                    quizzes.remove(q2);
+                }
+            }
+        }
+
+        this.setUniqueQuizzesSolved(quizzes.size());
+
+        this.getUniqueQuizzesSolved() / students.size();
+    }
 
     public void accept(Visitor visitor) {
         // Only used for XML generation

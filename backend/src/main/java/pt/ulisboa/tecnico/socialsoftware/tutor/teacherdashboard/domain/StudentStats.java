@@ -55,10 +55,22 @@ public class StudentStats implements DomainEntity{
       this.numMore75CorrectQuestions = num;
     }
     
+    public int getNumAtLeast3Quizzes(){
+        return setnumAtLeast3Quizzes;
+    }
+
+    public void setNumAtLeast3Quizzes(int num){
+        this.setnumAtLeast3Quizzes = num;
+    }
+
     public void update() {
   		//TO D0
     }
 
+    public void remove() {
+        teacherdashboard.getStudentStats().remove(this);
+    }
+    
 	public void accept(Visitor visitor) {
         // Only used for XML generation
 	}

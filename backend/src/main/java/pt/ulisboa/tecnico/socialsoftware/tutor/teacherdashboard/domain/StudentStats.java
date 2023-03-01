@@ -3,6 +3,11 @@ package pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain;
 import pt.ulisboa.tecnico.socialsoftware.tutor.execution.domain.CourseExecution;
 import pt.ulisboa.tecnico.socialsoftware.tutor.impexp.domain.DomainEntity;
 import pt.ulisboa.tecnico.socialsoftware.tutor.impexp.domain.Visitor;
+import pt.ulisboa.tecnico.socialsoftware.tutor.user.domain.Student;
+import pt.ulisboa.tecnico.socialsoftware.tutor.questionsubmission.domain.QuestionSubmission;
+import pt.ulisboa.tecnico.socialsoftware.tutor.answer.domain.QuizAnswer;
+import pt.ulisboa.tecnico.socialsoftware.tutor.question.domain.Question;
+import pt.ulisboa.tecnico.socialsoftware.tutor.quiz.domain.Quiz;
 
 import javax.persistence.*;
 
@@ -56,21 +61,52 @@ public class StudentStats implements DomainEntity{
     }
     
     public int getNumAtLeast3Quizzes(){
-        return setnumAtLeast3Quizzes;
+        return numAtLeast3Quizzes;
     }
 
     public void setNumAtLeast3Quizzes(int num){
-        this.setnumAtLeast3Quizzes = num;
+        this.numAtLeast3Quizzes = num;
     }
 
     public void update() {
-  		//TO D0
+
+        int numIterator;
+        int numIterator2;
+        int totalQuestions;
+        int correctQuestions;
+
+        Set<Student> students = new Set<Student>();
+        students = this.getCourseExecution().getStudents()
+
+        
+        this.setnumStudents(students.size());
+
+        for (Student st : students){
+            totalQuestions = st.getQuestionSubmissions().size();
+            for (QuestionSubmission qs : st.getQuestionSubmissions()){
+                if ((qs.getQuestion().getNumberOfCorrect()) == 1){
+                    correctQuestions +=1;
+                }
+            }
+            if (correctQuestions/totalQuestions > 0.75){
+                numIterator2 += 1;
+            }
+            correctQuestions = 0;
+        }
+        this.setnumMore75CorrectQuestions(numIterator2);
+
+        for (Student st : students){
+            if ((st.getQuizAnswers().size() >= 3){
+                numIterator += 1;
+            }
+        }
+        this.setnumAtLeast3Quizzes(numIterator);
     }
 
     public void remove() {
-        teacherdashboard.getStudentStats().remove(this);
+        teacherDashboard.getStudentStats().remove(this);
     }
-    
+
 	public void accept(Visitor visitor) {
         // Only used for XML generation
 	}

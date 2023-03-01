@@ -43,6 +43,18 @@ public class StudentStats implements DomainEntity{
         this.courseExecution = courseExecution;
     }
 
+    public int getnumStudents(){ return numStudents; }
+    
+    public void setnumStudents(int num){
+      this.numStudents = num;
+    }
+
+    public int getnumMore75CorrectQuestions(){ return numMore75CorrectQuestions; }
+    
+    public void setnumMore75CorrectQuestions(int num){
+      this.numMore75CorrectQuestions = num;
+    }
+    
     public void update() {
   		//TO D0
     }

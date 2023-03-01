@@ -6,6 +6,8 @@ import pt.ulisboa.tecnico.socialsoftware.tutor.impexp.domain.Visitor;
 import pt.ulisboa.tecnico.socialsoftware.tutor.user.domain.Teacher;
 
 import javax.persistence.*;
+import java.util.Set;
+import java.util.HashSet;
 
 
 @Entity
@@ -20,6 +22,8 @@ public class TeacherDashboard implements DomainEntity {
 
     @ManyToOne
     private Teacher teacher;
+    @OneToMany
+    private Set<QuestionStats> question = new HashSet<QuestionStats>();
 
     public TeacherDashboard() {
     }

@@ -28,12 +28,15 @@ public class QuizStats implements DomainEntity {
         setCourseExecution(courseExecution);
     }
 
-    public CourseExecution getCourseExecution() {
-        return courseExecution;
-    }
+    public CourseExecution getCourseExecution() { return courseExecution; }
 
     public void setCourseExecution(CourseExecution courseExecution) { this.courseExecution = courseExecution; }
-   public void remove() {
+
+    public TeacherDashboard getTeacherDashboard() { return TeacherDashboard; }
+
+    public void setTeacherDashboard(TeacherDashboard teacherDashboard) { this.teacherDashboard = teacherDashboard; }
+
+    public void remove() {
 
     }
     public Integer getId() {
@@ -74,7 +77,7 @@ public class QuizStats implements DomainEntity {
 
         this.setUniqueQuizzesSolved(quizzes.size());
 
-        this.getUniqueQuizzesSolved() / students.size();
+        this.setAverageQuizzesSolved() = getUniqueQuizzesSolved() / students.size();
     }
 
     public void accept(Visitor visitor) {

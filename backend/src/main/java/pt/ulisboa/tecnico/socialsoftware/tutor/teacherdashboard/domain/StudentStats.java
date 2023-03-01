@@ -76,7 +76,7 @@ public class StudentStats implements DomainEntity{
         int correctQuestions;
 
         Set<Student> students = new Set<Student>();
-        students = this.getCourseExecution().getStudents()
+        students = this.getCourseExecution().getStudents();
 
         
         this.setnumStudents(students.size());
@@ -96,7 +96,7 @@ public class StudentStats implements DomainEntity{
         this.setnumMore75CorrectQuestions(numIterator2);
 
         for (Student st : students){
-            if ((st.getQuizAnswers().size() >= 3){
+            if ((st.getQuizAnswers().size()) >= 3){
                 numIterator += 1;
             }
         }

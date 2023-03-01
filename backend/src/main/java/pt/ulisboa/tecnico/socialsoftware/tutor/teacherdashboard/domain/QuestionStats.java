@@ -57,11 +57,11 @@ public class QuestionStats implements DomainEntity {
         this.answeredQuestionUnique = answeredQuestionUnique;
     }
 
-    public int getAverageQuestionsAnswered(){
+    public float getAverageQuestionsAnswered(){
         return averageQuestionsAnswered;
     }
 
-    public void setAverageQuestionsAnswered(int averageQuestionsAnswered){
+    public void setAverageQuestionsAnswered(float averageQuestionsAnswered){
         this.averageQuestionsAnswered = averageQuestionsAnswered;
     }
 

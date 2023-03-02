@@ -88,6 +88,7 @@ class CreateQuizStatsTest extends SpockTest {
         then: "the number of quizzes must be 4"
         def result = quizStatsRepository.findAll().get(0)
         result.getNumQuizzes() == quizStats.getNumQuizzes()
+        result.getNumQuizzes() == 4
 
     }
 
@@ -99,6 +100,7 @@ class CreateQuizStatsTest extends SpockTest {
         then: "the number of unique quizzes solved must be 4"
         def result = quizStatsRepository.findAll().get(0)
         result.getUniqueQuizzesSolved() == quizStats.getUniqueQuizzesSolved()
+        result.getUniqueQuizzesSolved() == 4
 
     }
 
@@ -110,6 +112,7 @@ class CreateQuizStatsTest extends SpockTest {
         then: "the number of quizzes must be 4"
         def result = quizStatsRepository.findAll().get(0)
         result.getAverageQuizzesSolved() == quizStats.getAverageQuizzesSolved()
+        result.getAverageQuizzesSolved() == 4
     }
 
     def "toString test"(){

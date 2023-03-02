@@ -28,8 +28,9 @@ public class QuestionStats implements DomainEntity {
     public QuestionStats(){
     }
 
-    public QuestionStats(CourseExecution courseExecution){
+    public QuestionStats(CourseExecution courseExecution, TeacherDashboard teacherDashboard){
         setCourseExecution(courseExecution);
+        setTeacherDashboard(teacherDashboard);
     }
 
     // Methods
@@ -43,6 +44,12 @@ public class QuestionStats implements DomainEntity {
 
     public void setCourseExecution(CourseExecution courseExecution){
         this.courseExecution = courseExecution;
+    }
+
+    public TeacherDashboard getTeacherDashboard() { return teacherDashboard; }
+
+    public void setTeacherDashboard(TeacherDashboard teacherDashboard) {
+        this.teacherDashboard = teacherDashboard;
     }
 
     public int getNumAvailable(){

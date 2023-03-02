@@ -38,6 +38,10 @@ public class QuestionStats implements DomainEntity {
         // Only used for XML generation
     }
 
+    public Integer getId() {
+        return id;
+    }
+
     public CourseExecution getCourseExecution() {
         return courseExecution;
     }

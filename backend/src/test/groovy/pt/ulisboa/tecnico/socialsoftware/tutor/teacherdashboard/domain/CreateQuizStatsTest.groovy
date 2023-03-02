@@ -121,7 +121,6 @@ class CreateQuizStatsTest extends SpockTest {
         def result = quizStatsRepository.findAll().get(0)
         result.toString().equals(quizStats.toString()) == true
     }
-    def ""
 
     @TestConfiguration
     static class LocalBeanConfiguration extends BeanConfiguration {}

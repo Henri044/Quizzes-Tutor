@@ -28,6 +28,12 @@ class CreateQuizStatsTest extends SpockTest {
         quizStatsRepository.save(quizStats)
         return quizStats
     }
+    def setandgetnumQuizzes() {
+        def quizStats = new QuizStats(externalCourseExecution, teacherDashboard)
+        quizStats.setNumQuizzes(4)
+        quizStatsRepository.save(quizStats)
+        return quizStats
+    }
 
     def "create an empty quizStats"() {
 
@@ -48,6 +54,17 @@ class CreateQuizStatsTest extends SpockTest {
         and: "the dashboard has a reference for the QuizStats"
         teacherDashboard.getQuizStats().size() == 1
         teacherDashboard.getQuizStats().contains(result)
+
+    }
+
+    def "set and get attribute of number of Quizzes"(){
+
+        when: "a new Quiz Stats is created"
+        quizStats = setandgetnumQuizzes()
+
+        then: "the number of quizzes must be 4"
+        def result = quizStatsRepository.findAll().get(0)
+        result.getNumQuizzes() == quizStats.getNumQuizzes()
 
     }
 

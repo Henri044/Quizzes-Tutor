@@ -18,16 +18,22 @@ public class QuizStats implements DomainEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @ManyToOne
     private TeacherDashboard teacherDashboard;
 
     private int numQuizzes;
+
     private int uniqueQuizzesSolved;
+
     private float averageQuizzesSolved;
+
     @OneToOne
     private CourseExecution courseExecution;
+
     public QuizStats(){
     }
+
     public QuizStats(CourseExecution courseExecution, TeacherDashboard teacherDashboard){
         setCourseExecution(courseExecution);
         setTeacherDashboard(teacherDashboard);
@@ -44,6 +50,7 @@ public class QuizStats implements DomainEntity {
     public void remove() {
         teacherDashboard.getQuizStats().remove(this);
     }
+
     public Integer getId() {
         return id;
     }
@@ -61,8 +68,7 @@ public class QuizStats implements DomainEntity {
     public void setUniqueQuizzesSolved(int uniqueQuizzesSolved){ this.uniqueQuizzesSolved = uniqueQuizzesSolved; }
 
     public void update(){
-        this.setNumQuizzes(this.getCourseExecution().getNumberOfQuizzes());
-        Set<Student> students = new HashSet<>(this.getCourseExecution().getStudents());
+        Set<Student> students = new HashSet<>(getCourseExecution().getStudents());
         Set<Quiz> quizzes = new HashSet<>();
 
         for (Student s: students) {
@@ -80,14 +86,15 @@ public class QuizStats implements DomainEntity {
             }
         }
 
-        this.setUniqueQuizzesSolved(quizzes.size());
-
-        this.setAverageQuizzesSolved(getUniqueQuizzesSolved() / students.size());
+        setNumQuizzes(getCourseExecution().getNumberOfQuizzes());
+        setUniqueQuizzesSolved(quizzes.size());
+        setAverageQuizzesSolved(getUniqueQuizzesSolved() / students.size());
     }
 
     public void accept(Visitor visitor) {
         // Only used for XML generation
     }
+
     @Override
     public String toString() {
         return "QuizStats{" +

@@ -49,6 +49,7 @@ public class TeacherDashboard implements DomainEntity {
     public CourseExecution getCourseExecution() {
         return courseExecution;
     }
+
     public Set<QuizStats> getQuizStats(){ return quizStats; }
 
     public void setCourseExecution(CourseExecution courseExecution) {
@@ -62,6 +63,12 @@ public class TeacherDashboard implements DomainEntity {
     public void setTeacher(Teacher teacher) {
         this.teacher = teacher;
         this.teacher.addDashboard(this);
+    }
+
+    public void update(){
+        for (QuizStats qs: getQuizStats()){
+            qs.update();
+        }
     }
 
     public void accept(Visitor visitor) {

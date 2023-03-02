@@ -28,8 +28,9 @@ public class QuizStats implements DomainEntity {
     private CourseExecution courseExecution;
     public QuizStats(){
     }
-    public QuizStats(CourseExecution courseExecution){
+    public QuizStats(CourseExecution courseExecution, TeacherDashboard teacherDashboard){
         setCourseExecution(courseExecution);
+        setTeacherDashboard(teacherDashboard);
     }
 
     public CourseExecution getCourseExecution() { return courseExecution; }

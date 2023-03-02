@@ -33,8 +33,9 @@ public class StudentStats implements DomainEntity{
     public StudentStats() {
     }
 
-    public StudentStats(CourseExecution courseExecution) {
+    public StudentStats(CourseExecution courseExecution, TeacherDashboard teacherDashboard) {
         setCourseExecution(courseExecution);
+        setTeacherDashboard(teacherDashboard);
     }
 
     public Integer getId() {
@@ -47,6 +48,14 @@ public class StudentStats implements DomainEntity{
 
     public void setCourseExecution(CourseExecution courseExecution) {
         this.courseExecution = courseExecution;
+    }
+
+    public TeacherDashboard getTeacherDashboard() {
+        return teacherDashboard;
+    }
+
+    public void setTeacherDashboard(TeacherDashboard teacherDashboard) {
+        this.teacherDashboard = teacherDashboard;
     }
 
     public int getNumStudents(){ return numStudents; }

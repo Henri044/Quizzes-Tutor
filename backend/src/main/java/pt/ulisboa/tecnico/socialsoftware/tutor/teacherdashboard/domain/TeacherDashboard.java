@@ -23,7 +23,7 @@ public class TeacherDashboard implements DomainEntity {
     private Teacher teacher;
 
     @OneToMany
-    private Set<StudentStats> studentsStats = new HashSet<StudentStats>();
+    private Set<StudentStats> studentStats = new HashSet<StudentStats>();
 
     public TeacherDashboard() {
     }
@@ -59,15 +59,21 @@ public class TeacherDashboard implements DomainEntity {
         this.teacher.addDashboard(this);
     }
 
-    public boolean addstudentStats(StudentStats studentStats) {
-        return this.studentsStats.add(studentStats);
+    public boolean addStudentStats(StudentStats studentsStats) {
+        return this.studentStats.add(studentsStats);
     }
 
-    public boolean removestudentStats(StudentStats studentStats) {
-        return this.studentsStats.remove(studentStats);
+    public boolean removeStudentStats(StudentStats studentsStats) {
+        return this.studentStats.remove(studentsStats);
     }
 
-    public Set<StudentStats> getStudentStats() {return this.studentsStats;}
+    public Set<StudentStats> getStudentStats() {return this.studentStats;}
+
+    public void update(){
+        for (StudentStats st: studentstats){
+            st.update()
+        }
+    }
 
     public void accept(Visitor visitor) {
         // Only used for XML generation

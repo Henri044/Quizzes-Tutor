@@ -57,6 +57,15 @@ class CreateQuizStatsTest extends SpockTest {
         quizStatsRepository.save(quizStats)
         return quizStats
     }
+    def setAllRemoved() {
+        def quizStats = new QuizStats(externalCourseExecution, teacherDashboard)
+        quizStats.setAverageQuizzesSolved(4)
+        quizStats.setUniqueQuizzesSolved(4)
+        quizStats.setNumQuizzes(5)
+        quizStats.remove()
+        quizStatsRepository.save(quizStats)
+        return quizStats
+    }
 
     def "create an empty quizStats"() {
 
@@ -123,6 +132,15 @@ class CreateQuizStatsTest extends SpockTest {
         then: "the number of quizzes must be 4"
         def result = quizStatsRepository.findAll().get(0)
         result.toString().equals(quizStats.toString()) == true
+    }
+    def "remove test"(){
+        when: "a new Quiz Stats is created, and set variables, and then removed"
+        quizStats = setAllRemoved()
+
+        then: "the quizz stat is removed"
+        def result = teacherDashboardRepository.findAll().get(0)
+        teacherDashboard.getQuizStats() == result.getQuizStats()
+        teacherDashboard.getQuizStats() == new HashSet<QuizStats>()
     }
 
     @TestConfiguration

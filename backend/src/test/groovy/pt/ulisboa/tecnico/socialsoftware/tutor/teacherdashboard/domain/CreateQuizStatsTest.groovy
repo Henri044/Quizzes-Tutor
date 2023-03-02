@@ -49,6 +49,15 @@ class CreateQuizStatsTest extends SpockTest {
         return quizStats
     }
 
+    def setAll() {
+        def quizStats = new QuizStats(externalCourseExecution, teacherDashboard)
+        quizStats.setAverageQuizzesSolved(4)
+        quizStats.setUniqueQuizzesSolved(4)
+        quizStats.setNumQuizzes(4)
+        quizStatsRepository.save(quizStats)
+        return quizStats
+    }
+
     def "create an empty quizStats"() {
 
         when: "a new Quiz Stats is created"
@@ -102,6 +111,17 @@ class CreateQuizStatsTest extends SpockTest {
         def result = quizStatsRepository.findAll().get(0)
         result.getAverageQuizzesSolved() == quizStats.getAverageQuizzesSolved()
     }
+
+    def "toString test"(){
+
+        when: "a new Quiz Stats is created, and set variables, to see String "
+        quizStats = setAll()
+
+        then: "the number of quizzes must be 4"
+        def result = quizStatsRepository.findAll().get(0)
+        result.toString().equals(quizStats.toString()) == true
+    }
+    def ""
 
     @TestConfiguration
     static class LocalBeanConfiguration extends BeanConfiguration {}

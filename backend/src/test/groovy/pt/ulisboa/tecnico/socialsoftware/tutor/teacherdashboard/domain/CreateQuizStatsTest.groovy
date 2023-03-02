@@ -42,6 +42,13 @@ class CreateQuizStatsTest extends SpockTest {
         return quizStats
     }
 
+    def setAverageQuizzesSolved() {
+        def quizStats = new QuizStats(externalCourseExecution, teacherDashboard)
+        quizStats.setAverageQuizzesSolved(4)
+        quizStatsRepository.save(quizStats)
+        return quizStats
+    }
+
     def "create an empty quizStats"() {
 
         when: "a new Quiz Stats is created"
@@ -84,6 +91,16 @@ class CreateQuizStatsTest extends SpockTest {
         def result = quizStatsRepository.findAll().get(0)
         result.getUniqueQuizzesSolved() == quizStats.getUniqueQuizzesSolved()
 
+    }
+
+    def "set and get for averageQuizzesSolved"(){
+
+        when: "a new Quiz Stats is created and averageQuizzesSolved is set to 4"
+        quizStats = setAverageQuizzesSolved()
+
+        then: "the number of quizzes must be 4"
+        def result = quizStatsRepository.findAll().get(0)
+        result.getAverageQuizzesSolved() == quizStats.getAverageQuizzesSolved()
     }
 
     @TestConfiguration

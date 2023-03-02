@@ -71,7 +71,7 @@ public class TeacherDashboard implements DomainEntity {
 
     public void update(){
         for (StudentStats st: studentstats){
-            st.update()
+            st.update();
         }
     }
 

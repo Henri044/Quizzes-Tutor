@@ -70,7 +70,7 @@ public class TeacherDashboard implements DomainEntity {
     public Set<StudentStats> getStudentStats() {return this.studentStats;}
 
     public void update(){
-        for (StudentStats st: studentstats){
+        for (StudentStats st: studentStats){
             st.update();
         }
     }

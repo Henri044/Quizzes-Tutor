@@ -41,7 +41,7 @@ public class TeacherDashboard implements DomainEntity {
         teacher.getDashboards().remove(this);
         teacher = null;
     }
-
+    public void addQuizStats(QuizStats quizStat) { quizStats.add(quizStat); }
     public Integer getId() {
         return id;
     }

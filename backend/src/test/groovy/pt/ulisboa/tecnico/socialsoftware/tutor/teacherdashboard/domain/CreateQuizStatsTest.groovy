@@ -45,9 +45,10 @@ class CreateQuizStatsTest extends SpockTest {
         teacher.getDashboards().size() == 1
         teacher.getDashboards().contains(teacherDashboard)
 
-        and: "the dashboard has areference for the QuizStats"
+        and: "the dashboard has a reference for the QuizStats"
         teacherDashboard.getQuizStats().size() == 1
         teacherDashboard.getQuizStats().contains(result)
+
     }
 
     @TestConfiguration

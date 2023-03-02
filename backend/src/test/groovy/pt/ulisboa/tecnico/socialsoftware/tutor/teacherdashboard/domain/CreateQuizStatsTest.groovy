@@ -28,9 +28,16 @@ class CreateQuizStatsTest extends SpockTest {
         quizStatsRepository.save(quizStats)
         return quizStats
     }
-    def setandgetnumQuizzes() {
+    def setNumQuizzes() {
         def quizStats = new QuizStats(externalCourseExecution, teacherDashboard)
         quizStats.setNumQuizzes(4)
+        quizStatsRepository.save(quizStats)
+        return quizStats
+    }
+
+    def setUniqueQuizzesSolved() {
+        def quizStats = new QuizStats(externalCourseExecution, teacherDashboard)
+        quizStats.setUniqueQuizzesSolved(4)
         quizStatsRepository.save(quizStats)
         return quizStats
     }
@@ -60,11 +67,22 @@ class CreateQuizStatsTest extends SpockTest {
     def "set and get attribute of number of Quizzes"(){
 
         when: "a new Quiz Stats is created"
-        quizStats = setandgetnumQuizzes()
+        quizStats = setNumQuizzes()
 
         then: "the number of quizzes must be 4"
         def result = quizStatsRepository.findAll().get(0)
         result.getNumQuizzes() == quizStats.getNumQuizzes()
+
+    }
+
+    def "set and get attribute of number of Unique quizzes Solved"(){
+
+        when: "a new Quiz Stats is created"
+        quizStats = setUniqueQuizzesSolved()
+
+        then: "the number of unique quizzes solved must be 4"
+        def result = quizStatsRepository.findAll().get(0)
+        result.getUniqueQuizzesSolved() == quizStats.getUniqueQuizzesSolved()
 
     }
 

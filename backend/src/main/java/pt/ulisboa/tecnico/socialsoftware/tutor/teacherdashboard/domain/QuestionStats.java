@@ -69,6 +69,8 @@ public class QuestionStats implements DomainEntity {
         this.averageQuestionsAnswered = averageQuestionsAnswered;
     }
 
+    public void remove() { teacherDashboard.getQuestionStats().remove(this); }
+
     public String toString(){
         return "QuestionStats{" +
                 "Numero questoes disponiveis=" + numAvailable +

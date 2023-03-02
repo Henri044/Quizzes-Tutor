@@ -131,6 +131,9 @@ class CreateQuizStatsTest extends SpockTest {
 
         then: "the number of quizzes must be 4"
         def result = quizStatsRepository.findAll().get(0)
+        def auxString = "QuizStats{" + "id=" + quizStats.getId() +", numQuizzes=4, uniqueQuizzesSolved=4, averaqeQuizzesSolved=4.0}"
+
+        quizStats.toString().equals(auxString) == true
         result.toString().equals(quizStats.toString()) == true
     }
     def "remove test"(){

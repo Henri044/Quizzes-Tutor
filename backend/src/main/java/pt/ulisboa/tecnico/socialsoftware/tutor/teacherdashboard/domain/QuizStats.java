@@ -100,8 +100,8 @@ public class QuizStats implements DomainEntity {
 
     @Override
     public String toString() {
-        return "QuizStats{" +
-                "numQuizzes=" + numQuizzes +
+        return "QuizStats{" + "id=" + id +
+                ", numQuizzes=" + numQuizzes +
                 ", uniqueQuizzesSolved=" + uniqueQuizzesSolved +
                 ", averaqeQuizzesSolved=" + averageQuizzesSolved +
                 '}';

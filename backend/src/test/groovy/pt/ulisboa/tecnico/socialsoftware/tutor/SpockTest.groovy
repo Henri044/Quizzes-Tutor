@@ -13,6 +13,7 @@ import pt.ulisboa.tecnico.socialsoftware.tutor.auth.dto.AuthPasswordDto
 import pt.ulisboa.tecnico.socialsoftware.tutor.auth.repository.AuthUserRepository
 import pt.ulisboa.tecnico.socialsoftware.tutor.studentdashboard.repository.StudentDashboardRepository
 import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.repository.TeacherDashboardRepository
+import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.repository.QuizStatsRepository
 import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.repository.StudentStatsRepository
 import pt.ulisboa.tecnico.socialsoftware.tutor.studentdashboard.repository.DifficultQuestionRepository
 import pt.ulisboa.tecnico.socialsoftware.tutor.studentdashboard.repository.FailedAnswerRepository
@@ -54,6 +55,8 @@ import pt.ulisboa.tecnico.socialsoftware.tutor.utils.DateHandler
 import pt.ulisboa.tecnico.socialsoftware.tutor.utils.Mailer
 import spock.lang.Shared
 import spock.lang.Specification
+import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.repository.QuestionStatsRepository
+
 
 import java.time.LocalDateTime
 
@@ -188,6 +191,9 @@ class SpockTest extends Specification {
     TeacherDashboardRepository teacherDashboardRepository
 
     @Autowired
+    QuizStatsRepository quizStatsRepository
+
+    @Autowired
     StudentStatsRepository studentStatsRepository
 
     @Autowired
@@ -300,6 +306,9 @@ class SpockTest extends Specification {
 
     @Autowired
     DemoService demoService
+
+    @Autowired
+    QuestionStatsRepository questionStatsRepository
 
     Course externalCourse
     @Shared

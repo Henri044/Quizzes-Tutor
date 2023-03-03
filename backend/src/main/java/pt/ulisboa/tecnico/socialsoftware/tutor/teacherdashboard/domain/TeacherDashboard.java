@@ -86,10 +86,10 @@ public class TeacherDashboard implements DomainEntity {
 
     public void update() {
         for (QuestionStats qts : question) {
-            qs.update();
+            qts.update();
         }
         for (QuizStats qzs: getQuizStats()){
-            qs.update();
+            qzs.update();
         }
     }
 

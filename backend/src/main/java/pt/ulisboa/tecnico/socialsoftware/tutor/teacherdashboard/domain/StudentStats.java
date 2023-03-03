@@ -5,7 +5,9 @@ import pt.ulisboa.tecnico.socialsoftware.tutor.impexp.domain.DomainEntity;
 import pt.ulisboa.tecnico.socialsoftware.tutor.impexp.domain.Visitor;
 import pt.ulisboa.tecnico.socialsoftware.tutor.user.domain.Student;
 import pt.ulisboa.tecnico.socialsoftware.tutor.questionsubmission.domain.QuestionSubmission;
-
+import pt.ulisboa.tecnico.socialsoftware.tutor.answer.domain.QuizAnswer;
+import pt.ulisboa.tecnico.socialsoftware.tutor.question.domain.Question;
+import pt.ulisboa.tecnico.socialsoftware.tutor.quiz.domain.Quiz;
 
 import javax.persistence.*;
 import java.util.*;
@@ -97,8 +99,10 @@ public class StudentStats implements DomainEntity{
                     correctQuestions +=1;
                 }
             }
-            if (correctQuestions/totalQuestions > 0.75){
+            if (totalQuestions != 0) {
+                if (correctQuestions/totalQuestions > 0.75){
                 numIterator2 += 1;
+                }
             }
             correctQuestions = 0;
         }

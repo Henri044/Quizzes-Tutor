@@ -100,7 +100,6 @@ class CreateStudentStatsTest extends SpockTest {
 
         when: "creates and add a studentsStats to a teacherDashboard"
     	def studentsStats = createStudentStats()
-    	teacherDashboard.addStudentStats(studentsStats)
 
     	then: "checks if the studentsStats has a teacherDashboard and viceversa"
     	studentStatsRepository.count() == 1L

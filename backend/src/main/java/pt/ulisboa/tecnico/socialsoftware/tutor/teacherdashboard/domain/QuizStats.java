@@ -72,16 +72,14 @@ public class QuizStats implements DomainEntity {
 
     public void update(){
         Set<Student> students = new HashSet<>(getCourseExecution().getStudents());
-        Set<Quiz> quizzesDuplicates = new HashSet<>();
+        Set<Quiz> quizzes = new HashSet<>();
 
         for (Student s: students) {
             Set<QuizAnswer> quizAnswers = new HashSet<>(s.getQuizAnswers());
             for (QuizAnswer qa: quizAnswers){
-                quizzesDuplicates.add(qa.getQuiz());
+                quizzes.add(qa.getQuiz());
             }
         }
-
-        Set<Quiz> quizzesFinal = new HashSet<>(quizzesDuplicates);
 
         setNumQuizzes(getCourseExecution().getNumberOfQuizzes());
         setUniqueQuizzesSolved(quizzesFinal.size());

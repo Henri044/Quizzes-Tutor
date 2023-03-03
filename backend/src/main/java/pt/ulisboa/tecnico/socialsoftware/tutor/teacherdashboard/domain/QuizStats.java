@@ -82,7 +82,7 @@ public class QuizStats implements DomainEntity {
         }
 
         setNumQuizzes(getCourseExecution().getNumberOfQuizzes());
-        setUniqueQuizzesSolved(quizzesFinal.size());
+        setUniqueQuizzesSolved(quizzes.size());
         setAverageQuizzesSolved(getUniqueQuizzesSolved() / students.size());
     }
 

@@ -190,10 +190,9 @@ class QuizStatsTest extends SpockTest {
         quizAnswer2.setAnswerDate(DateHandler.now())
         quizAnswer2.setStudent(student2)
         quizAnswer2.setQuiz(quiz2)
-        quizAnswerRepository.save(quizAnswer1)
+        quizAnswerRepository.save(quizAnswer2)
 
-
-        when: "we change the statistics and call the update method"
+        when: "we change the statistics"
         externalCourseExecution.addUser(student1)
         externalCourseExecution.addUser(student2)
         externalCourseExecution.addQuiz(quiz1)
@@ -202,9 +201,7 @@ class QuizStatsTest extends SpockTest {
         UserRepository.findAll().get(1).addQuizAnswer(quizAnswer1)
         UserRepository.findAll().get(2).addQuizAnswer(quizAnswer2)
 
-
-
-        then: "the stats should be stored in QuizStats"
+        then: "the stats should be stored in QuizStats after we call the update method"
         quizStats.update()
         def result = quizStatsRepository.findAll().get(0)
         result.getNumQuizzes() == quizStats.getNumQuizzes()
@@ -213,6 +210,7 @@ class QuizStatsTest extends SpockTest {
         result.getUniqueQuizzesSolved() == 2
         result.getAverageQuizzesSolved() == quizStats.getAverageQuizzesSolved()
         result.getAverageQuizzesSolved() == 1
+        result.getAverageQuizzesSolved() == quizStats.getUniqueQuizzesSolved() / 2
     }
 
     @TestConfiguration

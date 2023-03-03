@@ -7,13 +7,26 @@ import pt.ulisboa.tecnico.socialsoftware.tutor.SpockTest
 import pt.ulisboa.tecnico.socialsoftware.tutor.exceptions.ErrorMessage
 import pt.ulisboa.tecnico.socialsoftware.tutor.exceptions.TutorException
 import pt.ulisboa.tecnico.socialsoftware.tutor.user.domain.Teacher
+import pt.ulisboa.tecnico.socialsoftware.tutor.utils.DateHandler
+import pt.ulisboa.tecnico.socialsoftware.tutor.answer.domain.QuizAnswer
+import pt.ulisboa.tecnico.socialsoftware.tutor.quiz.domain.Quiz
+import pt.ulisboa.tecnico.socialsoftware.tutor.user.domain.Student
+import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.QuizStats
+import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.TeacherDashboard
+import pt.ulisboa.tecnico.socialsoftware.tutor.auth.domain.AuthUser
 import spock.lang.Unroll
 
 @DataJpaTest
-class CreateQuizStatsTest extends SpockTest {
+class QuizStatsTest extends SpockTest {
     def teacher
     def teacherDashboard
     def quizStats
+    def student1
+    def student2
+    def quiz1
+    def quiz2
+    def quizAnswer1
+    def quizAnswer2
 
     def setup() {
         createExternalCourseAndExecution()
@@ -144,6 +157,62 @@ class CreateQuizStatsTest extends SpockTest {
         def result = teacherDashboardRepository.findAll().get(0)
         teacherDashboard.getQuizStats() == result.getQuizStats()
         teacherDashboard.getQuizStats() == new HashSet<QuizStats>()
+    }
+
+    def "update test"(){
+        given: "all classes needed and a new QuizStats"
+        def quizStats = createQuizStatsAndPersist()
+
+        student1 = new Student(USER_2_NAME, USER_2_USERNAME, USER_2_EMAIL, false, AuthUser.Type.TECNICO)
+        student1.addCourse(externalCourseExecution)
+        userRepository.save(student1)
+        student2 = new Student(USER_3_NAME, USER_3_USERNAME, USER_3_EMAIL, false, AuthUser.Type.TECNICO)
+        student2.addCourse(externalCourseExecution)
+        userRepository.save(student2)
+
+        quiz1 = new Quiz()
+        quiz1.setKey(1)
+        quiz1.setCourseExecution(externalCourseExecution)
+        quizRepository.save(quiz1)
+        quiz2 = new Quiz()
+        quiz2.setKey(2)
+        quiz2.setCourseExecution(externalCourseExecution)
+        quizRepository.save(quiz2)
+
+        quizAnswer1 = new QuizAnswer()
+        quizAnswer1.setCreationDate(DateHandler.now())
+        quizAnswer1.setAnswerDate(DateHandler.now())
+        quizAnswer1.setStudent(student1)
+        quizAnswer1.setQuiz(quiz1)
+        quizAnswerRepository.save(quizAnswer1)
+        quizAnswer2 = new QuizAnswer()
+        quizAnswer2.setCreationDate(DateHandler.now())
+        quizAnswer2.setAnswerDate(DateHandler.now())
+        quizAnswer2.setStudent(student2)
+        quizAnswer2.setQuiz(quiz2)
+        quizAnswerRepository.save(quizAnswer1)
+
+
+        when: "we change the statistics and call the update method"
+        externalCourseExecution.addUser(student1)
+        externalCourseExecution.addUser(student2)
+        externalCourseExecution.addQuiz(quiz1)
+        externalCourseExecution.addQuiz(quiz2)
+
+        UserRepository.findAll().get(1).addQuizAnswer(quizAnswer1)
+        UserRepository.findAll().get(2).addQuizAnswer(quizAnswer2)
+
+
+
+        then: "the stats should be stored in QuizStats"
+        quizStats.update()
+        def result = quizStatsRepository.findAll().get(0)
+        result.getNumQuizzes() == quizStats.getNumQuizzes()
+        result.getNumQuizzes() == 2
+        result.getUniqueQuizzesSolved() == quizStats.getUniqueQuizzesSolved()
+        result.getUniqueQuizzesSolved() == 2
+        result.getAverageQuizzesSolved() == quizStats.getAverageQuizzesSolved()
+        result.getAverageQuizzesSolved() == 1
     }
 
     @TestConfiguration

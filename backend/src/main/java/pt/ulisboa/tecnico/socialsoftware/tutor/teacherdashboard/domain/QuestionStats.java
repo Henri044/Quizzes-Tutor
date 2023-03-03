@@ -82,11 +82,13 @@ public class QuestionStats implements DomainEntity {
 
     public void remove() { teacherDashboard.getQuestionStats().remove(this); }
 
+
     public String toString(){
         return "QuestionStats{" +
-                "Numero questoes disponiveis=" + numAvailable +
-                "Questoes unicas respondidas=" + answeredQuestionUnique +
-                "Media questoes respondidas=" + averageQuestionsAnswered +
+                "id = " + id +
+                ", Numero questoes disponiveis = " + numAvailable +
+                ", Questoes unicas respondidas = " + answeredQuestionUnique +
+                ", Media questoes respondidas = " + averageQuestionsAnswered +
                 '}';
     }
 

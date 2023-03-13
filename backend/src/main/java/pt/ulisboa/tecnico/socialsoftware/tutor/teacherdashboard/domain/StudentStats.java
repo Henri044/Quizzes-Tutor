@@ -1,53 +1,80 @@
 package pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain;
 
-import pt.ulisboa.tecnico.socialsoftware.tutor.execution.domain.CourseExecution;
-import pt.ulisboa.tecnico.socialsoftware.tutor.impexp.domain.DomainEntity;
+import java.util.Set;
+import java.util.stream.Stream;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+
 import pt.ulisboa.tecnico.socialsoftware.tutor.impexp.domain.Visitor;
-import pt.ulisboa.tecnico.socialsoftware.tutor.user.domain.Student;
-import pt.ulisboa.tecnico.socialsoftware.tutor.questionsubmission.domain.QuestionSubmission;
 import pt.ulisboa.tecnico.socialsoftware.tutor.answer.domain.QuizAnswer;
-import pt.ulisboa.tecnico.socialsoftware.tutor.question.domain.Question;
-import pt.ulisboa.tecnico.socialsoftware.tutor.quiz.domain.Quiz;
-
-import javax.persistence.*;
-import java.util.*;
-
+import pt.ulisboa.tecnico.socialsoftware.tutor.execution.domain.CourseExecution;
+import pt.ulisboa.tecnico.socialsoftware.tutor.user.domain.Student;
 
 @Entity
-public class StudentStats implements DomainEntity{
+public class StudentStats {
 
-	@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private int numStudents;
-    private int numMore75CorrectQuestions;
-    private int numAtLeast3Quizzes;
-
-    @OneToOne
-    private CourseExecution courseExecution;
+    
+    private int numStudents = 0;
+    private int numMore75CorrectQuestions = 0;
+    private int numAtLeast3Quizzes = 0;
 
     @ManyToOne
     private TeacherDashboard teacherDashboard;
+    
+    @OneToOne
+    private CourseExecution courseExecution;
 
     public StudentStats() {
+
     }
 
-    public StudentStats(CourseExecution courseExecution, TeacherDashboard teacherDashboard) {
-        setCourseExecution(courseExecution);
+    public StudentStats(TeacherDashboard teacherDashboard, CourseExecution courseExecution) {
         setTeacherDashboard(teacherDashboard);
+        setCourseExecution(courseExecution);
+    }
+
+    public void remove() {
+        teacherDashboard.getStudentStats().remove(this);
+        courseExecution = null;
+        teacherDashboard = null;
     }
 
     public Integer getId() {
         return id;
     }
 
-    public CourseExecution getCourseExecution() {
-        return courseExecution;
+    public int getNumStudents() {
+        return numStudents;
     }
 
-    public void setCourseExecution(CourseExecution courseExecution) {
-        this.courseExecution = courseExecution;
+    public void setNumStudents(int numStudents) {
+        this.numStudents = numStudents;
+    }
+
+    public int getNumMore75CorrectQuestions() {
+        return numMore75CorrectQuestions;
+    }
+
+    public void setNumMore75CorrectQuestions(int numMore75CorrectQuestions) {
+        this.numMore75CorrectQuestions = numMore75CorrectQuestions;
+    }
+
+    public int getNumAtLeast3Quizzes() {
+        return numAtLeast3Quizzes;
+    }
+
+    public void setNumAtLeast3Quizzes(int numAtLeast3Quizzes) {
+        this.numAtLeast3Quizzes = numAtLeast3Quizzes;
     }
 
     public TeacherDashboard getTeacherDashboard() {
@@ -59,79 +86,54 @@ public class StudentStats implements DomainEntity{
         this.teacherDashboard.addStudentStats(this);
     }
 
-    public int getNumStudents(){ return numStudents; }
-    
-    public void setNumStudents(int num){
-      this.numStudents = num;
+    public CourseExecution getCourseExecution() {
+        return this.courseExecution;
     }
 
-    public int getNumMore75CorrectQuestions(){ return numMore75CorrectQuestions; }
-    
-    public void setNumMore75CorrectQuestions(int num){
-      this.numMore75CorrectQuestions = num;
-    }
-    
-    public int getNumAtLeast3Quizzes(){
-        return numAtLeast3Quizzes;
+    public void setCourseExecution(CourseExecution courseExecution) {
+        this.courseExecution = courseExecution;
     }
 
-    public void setNumAtLeast3Quizzes(int num){
-        this.numAtLeast3Quizzes = num;
+    private Stream<QuizAnswer> getCompletedQuizAnswersForCourse(Student student, CourseExecution courseExecution) {
+        return student.getQuizAnswers().stream()
+                .filter(QuizAnswer::isCompleted)
+                .filter(quizAnswer -> quizAnswer.getQuiz().getCourseExecution() == courseExecution);
     }
+    
 
     public void update() {
+        Set<Student> students = courseExecution.getStudents();
 
-        int numIterator = 0;
-        int numIterator2 = 0;
-        int totalQuestions;
-        int correctQuestions = 0;
+        numStudents = students.size();
 
-        Set<Student> students = new HashSet<Student>();
-        students = this.getCourseExecution().getStudents();
+        numMore75CorrectQuestions = (int) students.stream()
+        .filter(student -> getCompletedQuizAnswersForCourse(student, courseExecution)
+                .mapToLong(QuizAnswer::getNumberOfCorrectAnswers)
+                .sum() / (double) getCompletedQuizAnswersForCourse(student, courseExecution)
+                .mapToInt(quizAnswer -> quizAnswer.getQuiz().getQuizQuestionsNumber())
+                .sum() > 0.75)
+        .count();
 
-        
-        this.setNumStudents(students.size());
-
-        for (Student st : students){
-            totalQuestions = st.getQuestionSubmissions().size();
-            for (QuestionSubmission qs : st.getQuestionSubmissions()){
-                if ((qs.getQuestion().getNumberOfCorrect()) == 1){
-                    correctQuestions +=1;
-                }
-            }
-            if (totalQuestions != 0) {
-                if (correctQuestions/totalQuestions > 0.75){
-                numIterator2 += 1;
-                }
-            }
-            correctQuestions = 0;
-        }
-        this.setNumMore75CorrectQuestions(numIterator2);
-
-        for (Student st : students){
-            if ((st.getQuizAnswers().size()) >= 3){
-                numIterator += 1;
-            }
-        }
-        this.setNumAtLeast3Quizzes(numIterator);
+        numAtLeast3Quizzes = (int) students.stream()
+                .filter(student -> getCompletedQuizAnswersForCourse(student, courseExecution)
+                        .map(QuizAnswer::getQuiz)
+                        .distinct()
+                        .count() >= 3)
+                .count();
     }
 
-    public void remove() {
-        teacherDashboard.getStudentStats().remove(this);
+    public void accept(Visitor visitor) {
+        // only used for XML generation
     }
 
-	public void accept(Visitor visitor) {
-        // Only used for XML generation
-	}
-
-	@Override
     public String toString() {
         return "StudentStats{" +
                 "id=" + id +
+                ", teacherDashboard=" + teacherDashboard.getId() +
+                ", courseExecution=" + courseExecution.getId() +
                 ", numStudents=" + numStudents +
                 ", numMore75CorrectQuestions=" + numMore75CorrectQuestions +
                 ", numAtLeast3Quizzes=" + numAtLeast3Quizzes +
                 '}';
     }
-
 }

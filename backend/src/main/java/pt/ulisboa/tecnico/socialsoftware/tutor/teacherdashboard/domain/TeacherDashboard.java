@@ -1,17 +1,15 @@
 package pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain;
 
+import java.util.*;
+
 import pt.ulisboa.tecnico.socialsoftware.tutor.execution.domain.CourseExecution;
 import pt.ulisboa.tecnico.socialsoftware.tutor.impexp.domain.DomainEntity;
 import pt.ulisboa.tecnico.socialsoftware.tutor.impexp.domain.Visitor;
-import pt.ulisboa.tecnico.socialsoftware.tutor.quiz.domain.Quiz;
 import pt.ulisboa.tecnico.socialsoftware.tutor.user.domain.Teacher;
-import java.util.List;
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.*;
-import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.QuizStats;
-import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.QuestionStats;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.*;
 
 @Entity
 public class TeacherDashboard implements DomainEntity {
@@ -27,13 +25,13 @@ public class TeacherDashboard implements DomainEntity {
     private Teacher teacher;
 
     @OneToMany
-    private Set<QuestionStats> question = new HashSet<QuestionStats>();
+    private List<QuizStats> quizStats = new ArrayList<>();
 
     @OneToMany
-    private Set<QuizStats> quizStats = new HashSet<QuizStats>() ;
+    private List<StudentStats> studentStats = new ArrayList<>();
 
     @OneToMany
-    private Set<StudentStats> studentStats = new HashSet<StudentStats>();
+    private List<QuestionStats> questionStats = new ArrayList<>();
 
     public TeacherDashboard() {
     }
@@ -43,13 +41,6 @@ public class TeacherDashboard implements DomainEntity {
         setTeacher(teacher);
     }
 
-    public void remove() {
-        teacher.getDashboards().remove(this);
-        teacher = null;
-    }
-
-    public void addQuizStats(QuizStats quizStat) { quizStats.add(quizStat); }
-
     public Integer getId() {
         return id;
     }
@@ -57,8 +48,6 @@ public class TeacherDashboard implements DomainEntity {
     public CourseExecution getCourseExecution() {
         return courseExecution;
     }
-
-    public Set<QuizStats> getQuizStats(){ return quizStats; }
 
     public void setCourseExecution(CourseExecution courseExecution) {
         this.courseExecution = courseExecution;
@@ -73,36 +62,53 @@ public class TeacherDashboard implements DomainEntity {
         this.teacher.addDashboard(this);
     }
 
-    public Set<QuestionStats> getQuestionStats() { return question; }
-
-    public boolean addQuestionStats(QuestionStats questionStats) {
-        return question.add(questionStats);
+    public List<QuizStats> getQuizStats() {
+        return quizStats;
     }
 
-    public boolean removeQuestionStats(QuestionStats questionStats) {
-        return question.remove(questionStats);
+    public void setQuizStats(List<QuizStats> stats) {
+        this.quizStats = stats;
     }
 
-    public boolean addStudentStats(StudentStats studentsStats) {
-        return this.studentStats.add(studentsStats);
+    public void addQuizStats(QuizStats quizStats) {
+        this.quizStats.add(quizStats);
     }
 
-    public boolean removeStudentStats(StudentStats studentsStats) {
-        return this.studentStats.remove(studentsStats);
+    public List<StudentStats> getStudentStats() {
+        return studentStats;
     }
 
-    public Set<StudentStats> getStudentStats() {return this.studentStats;}
+    public void setStudentStats(List<StudentStats> stats) {
+        this.studentStats = stats;
+    }
 
-    public void update(){
-        for (QuestionStats qts : question) {
-            qts.update();
-        }
-        for (QuizStats qzs: getQuizStats()){
-            qzs.update();
-        }
-        for (StudentStats st: studentStats){
-            st.update();
-        }
+    public void addStudentStats(StudentStats studentStat) {
+        this.studentStats.add(studentStat);
+    }
+
+    public List<QuestionStats> getQuestionStats () {
+        return questionStats;
+    }
+
+    public void setQuestionStats(List<QuestionStats> stats) {
+        this.questionStats = stats;
+    }
+
+    public void addQuestionStats(QuestionStats stats) {
+        questionStats.add(stats);
+    }
+
+    public void update() {
+        this.quizStats.forEach(QuizStats::update);
+        this.studentStats.forEach(StudentStats::update);
+        this.questionStats.forEach(QuestionStats::update);
+    }
+    public void remove() {
+        teacher.getDashboards().remove(this);
+        teacher = null;
+        quizStats = null;
+        studentStats = null;
+        questionStats = null;
     }
 
     public void accept(Visitor visitor) {
@@ -115,7 +121,9 @@ public class TeacherDashboard implements DomainEntity {
                 "id=" + id +
                 ", courseExecution=" + courseExecution +
                 ", teacher=" + teacher +
+                ", quizStats=" + quizStats +
+                ", studentStats=" + studentStats +
+                ", questionStats=" + questionStats +
                 '}';
     }
-
 }

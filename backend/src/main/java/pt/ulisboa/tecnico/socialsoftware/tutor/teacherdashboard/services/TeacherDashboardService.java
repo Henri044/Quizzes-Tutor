@@ -81,4 +81,13 @@ public class TeacherDashboardService {
         teacherDashboardRepository.delete(teacherDashboard);
     }
 
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    public void updateTeacherDashboard(Integer dashboardId) {
+        if (dashboardId == null)
+            throw new TutorException(DASHBOARD_NOT_FOUND, -1);
+
+        TeacherDashboard teacherDashboard = teacherDashboardRepository.findById(dashboardId).orElseThrow(() -> new TutorException(DASHBOARD_NOT_FOUND, dashboardId));
+        teacherDashboard.update();
+        teacherDashboardRepository.save(teacherDashboard);
+    }
 }

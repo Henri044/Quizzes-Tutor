@@ -91,4 +91,13 @@ public class TeacherDashboardService {
         teacherDashboardRepository.delete(teacherDashboard);
     }
 
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    public void updateAllTeacherDashboards() {
+        List<TeacherDashboard> allTeacherDashboards = teacherDashboardRepository.findAll();
+        allTeacherDashboards.forEach(teacherDashboard -> {
+            teacherDashboard.update();
+            teacherDashboardRepository.save(teacherDashboard);
+        });
+    }
+
 }

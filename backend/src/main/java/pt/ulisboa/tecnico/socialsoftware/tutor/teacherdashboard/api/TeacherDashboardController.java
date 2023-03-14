@@ -5,6 +5,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pt.ulisboa.tecnico.socialsoftware.tutor.auth.domain.AuthUser;
 import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.dto.TeacherDashboardDto;
@@ -27,6 +28,13 @@ public class TeacherDashboardController {
         int teacherId = ((AuthUser) ((Authentication) principal).getPrincipal()).getUser().getId();
 
         return teacherDashboardService.getTeacherDashboard(courseExecutionId, teacherId);
+    }
+
+    @PutMapping("/teachers/dashboards/update-teacherdashboard")
+    @PreAuthorize("hasRole('ROLE_TEACHER')")
+    public void updateTeacherDashboard(Principal principal) {
+        int teacherId = ((AuthUser) ((Authentication) principal).getPrincipal()).getUser().getId();
+        teacherDashboardService.updateTeacherDashboard(teacherId);
     }
 
 }

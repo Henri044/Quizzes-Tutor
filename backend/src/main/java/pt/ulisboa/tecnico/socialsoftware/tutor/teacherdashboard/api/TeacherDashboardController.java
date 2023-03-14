@@ -31,7 +31,7 @@ public class TeacherDashboardController {
     }
 
     @DeleteMapping("/teachers/dashboards/remove-teacherdashboard")
-    @PreAuthorize("hasRole('ROLE_TEACHER') and hasPermission(#dashboardId, 'DASHBOARD.ACCESS)")
+    @PreAuthorize("hasRole('ROLE_TEACHER') and hasPermission(#dashboardId, 'DASHBOARD.ACCESS')")
     public void removeTeacherDashboard(Principal principal, @PathVariable int dashboardId) {
         teacherDashboardService.removeTeacherDashboard(dashboardId);
     }

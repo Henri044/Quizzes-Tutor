@@ -13,7 +13,7 @@ import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.repository.Teach
 import pt.ulisboa.tecnico.socialsoftware.tutor.user.domain.Teacher;
 import pt.ulisboa.tecnico.socialsoftware.tutor.user.repository.TeacherRepository;
 
-import java.util.*;
+import java.util.*;import java.util.stream.Collectors;
 
 import static pt.ulisboa.tecnico.socialsoftware.tutor.exceptions.ErrorMessage.*;
 
@@ -67,6 +67,10 @@ public class TeacherDashboardService {
     private TeacherDashboardDto createAndReturnTeacherDashboardDto(CourseExecution courseExecution, Teacher teacher) {
         TeacherDashboard teacherDashboard = new TeacherDashboard(courseExecution, teacher);
         teacherDashboardRepository.save(teacherDashboard);
+        List<CourseExecution> allCourseexecutions = courseExecution.getCourse().getCourseExecutions().stream()
+                .filter(ce -> ce.getEndDate() != null)
+                .sorted((p1, p2)->p1.getEndDate().compareTo(p2.getEndDate()))
+                .collect(Collectors.toList());
 
         return new TeacherDashboardDto(teacherDashboard);
     }

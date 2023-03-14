@@ -1,10 +1,11 @@
 package pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.dto;
 
-import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.TeacherDashboard;
+import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.TeacherDashboard;import pt.ulisboa.tecnico.socialsoftware.tutor.user.dto.UserDto;import java.util.List;
 
 public class TeacherDashboardDto {
     private Integer id;
     private Integer numberOfStudents;
+    private List<QuizStatsDto> courseExecutionQuizStats;
 
     public TeacherDashboardDto() {
     }
@@ -23,6 +24,7 @@ public class TeacherDashboardDto {
         this.id = id;
     }
 
+
     public Integer getNumberOfStudents() {
         return numberOfStudents;
     }
@@ -31,8 +33,16 @@ public class TeacherDashboardDto {
         this.numberOfStudents = numberOfStudents;
     }
 
-    @Override
-    public String toString() {
+    public List<QuizStatsDto> getCourseExecutionQuizStats() {
+        return courseExecutionQuizStats;
+    }
+
+    public void setCourseExecutionQuizStats(List<QuizStatsDto> courseExecutionQuizStats) {
+        this.courseExecutionQuizStats = courseExecutionQuizStats;
+    }
+
+  @Override
+  public String toString() {
         return "TeacherDashboardDto{" +
                 "id=" + id +
                 ", numberOfStudents=" + this.getNumberOfStudents() +

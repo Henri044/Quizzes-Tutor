@@ -36,5 +36,4 @@ public class TeacherDashboardController {
         int teacherId = ((AuthUser) ((Authentication) principal).getPrincipal()).getUser().getId();
         teacherDashboardService.updateTeacherDashboard(teacherId);
     }
-
 }

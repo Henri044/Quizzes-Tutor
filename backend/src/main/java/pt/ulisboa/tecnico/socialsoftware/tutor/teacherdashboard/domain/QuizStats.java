@@ -1,102 +1,128 @@
 package pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain;
 
-import pt.ulisboa.tecnico.socialsoftware.tutor.execution.domain.CourseExecution;
-import pt.ulisboa.tecnico.socialsoftware.tutor.impexp.domain.DomainEntity;
-import pt.ulisboa.tecnico.socialsoftware.tutor.impexp.domain.Visitor;
-import pt.ulisboa.tecnico.socialsoftware.tutor.quiz.QuizService;
-import pt.ulisboa.tecnico.socialsoftware.tutor.user.domain.Student;
-import pt.ulisboa.tecnico.socialsoftware.tutor.quiz.domain.Quiz;
-import pt.ulisboa.tecnico.socialsoftware.tutor.answer.domain.QuizAnswer;
-import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.TeacherDashboard;
-
 import javax.persistence.*;
-import java.util.Set;
-import java.util.HashSet;
+
+import pt.ulisboa.tecnico.socialsoftware.tutor.answer.domain.QuizAnswer;
+import pt.ulisboa.tecnico.socialsoftware.tutor.execution.domain.*;
+import pt.ulisboa.tecnico.socialsoftware.tutor.impexp.domain.*;
+import java.util.stream.Collectors;
 
 @Entity
 public class QuizStats implements DomainEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @OneToOne
+    private CourseExecution courseExecution;
 
     @ManyToOne
     private TeacherDashboard teacherDashboard;
 
     private int numQuizzes;
 
-    private int uniqueQuizzesSolved;
+    private int numUniqueAnsweredQuizzes;
 
     private float averageQuizzesSolved;
 
-    @OneToOne
-    private CourseExecution courseExecution;
-
-    public QuizStats(){
+    public QuizStats() {
     }
 
-    public QuizStats(CourseExecution courseExecution, TeacherDashboard teacherDashboard){
+    public QuizStats(TeacherDashboard teacherDashboard, CourseExecution courseExecution) {
         setCourseExecution(courseExecution);
         setTeacherDashboard(teacherDashboard);
     }
 
-    public CourseExecution getCourseExecution() { return courseExecution; }
-
-    public void setCourseExecution(CourseExecution courseExecution) { this.courseExecution = courseExecution; }
-
-    public TeacherDashboard getTeacherDashboard() { return teacherDashboard; }
-
-    public void setTeacherDashboard(TeacherDashboard teacherDashboard) {
-        this.teacherDashboard = teacherDashboard;
-        this.teacherDashboard.addQuizStats(this);
-    }
-
     public void remove() {
         teacherDashboard.getQuizStats().remove(this);
+        courseExecution = null;
+        teacherDashboard = null;
     }
 
     public Integer getId() {
         return id;
     }
 
-    public float getAverageQuizzesSolved(){ return averageQuizzesSolved; }
+    public CourseExecution getCourseExecution() {
+        return courseExecution;
+    }
 
-    public void setAverageQuizzesSolved(float averageQuizzesSolved){ this.averageQuizzesSolved = averageQuizzesSolved; }
+    public void setCourseExecution(CourseExecution courseExecution) {
+        this.courseExecution = courseExecution;
+    }
 
-    public int getNumQuizzes(){ return numQuizzes; }
+    public TeacherDashboard getTeacherDashboard() {
+        return teacherDashboard;
+    }
 
-    public void setNumQuizzes(int numQuizzes){ this.numQuizzes = numQuizzes; }
+    public void setTeacherDashboard(TeacherDashboard teacherDashboard) {
+        this.teacherDashboard = teacherDashboard;
+        this.teacherDashboard.addQuizStats(this);
+    }
 
-    public int getUniqueQuizzesSolved(){ return uniqueQuizzesSolved; }
+    public int getNumQuizzes() {
+        return numQuizzes;
+    }
 
-    public void setUniqueQuizzesSolved(int uniqueQuizzesSolved){ this.uniqueQuizzesSolved = uniqueQuizzesSolved; }
+    public int getNumUniqueAnsweredQuizzes() {
+        return numUniqueAnsweredQuizzes;
+    }
 
-    public void update(){
-        Set<Student> students = new HashSet<>(getCourseExecution().getStudents());
-        Set<Quiz> quizzes = new HashSet<>();
+    public void setNumQuizzes(int numQuizzes) {
+        this.numQuizzes = numQuizzes;
+    }
 
-        for (Student s: students) {
-            Set<QuizAnswer> quizAnswers = new HashSet<>(s.getQuizAnswers());
-            for (QuizAnswer qa: quizAnswers){
-                quizzes.add(qa.getQuiz());
-            }
-        }
+    public void setNumUniqueAnsweredQuizzes(int numUniqueAnsweredQuizzes) {
+        this.numUniqueAnsweredQuizzes = numUniqueAnsweredQuizzes;
+    }
 
-        setNumQuizzes(getCourseExecution().getNumberOfQuizzes());
-        setUniqueQuizzesSolved(quizzes.size());
-        setAverageQuizzesSolved(getUniqueQuizzesSolved() / students.size());
+    public float getAverageQuizzesSolved() {
+        return averageQuizzesSolved;
+    }
+
+    public void setAverageQuizzesSolved(float averageQuizzesSolved) {
+        this.averageQuizzesSolved = averageQuizzesSolved;
+    }
+
+    public void update() {
+        int quizzesCount = courseExecution.getNumberOfQuizzes();
+        this.setNumQuizzes(quizzesCount);
+
+        int uniqueAnsweredQuizzes = (int) courseExecution.getQuizzes().stream()
+                .distinct()
+                .map(q -> q.getQuizAnswers().stream()
+                        .filter(QuizAnswer::isCompleted).collect(Collectors.toSet()))
+                .filter(qa -> !qa.isEmpty())
+                .count();
+        this.setNumUniqueAnsweredQuizzes(uniqueAnsweredQuizzes);
+
+        int totalUniqueSolvedQuizzes = courseExecution.getQuizzes().stream()
+                .distinct()
+                .mapToInt(q -> q.getQuizAnswers().stream()
+                        .filter(QuizAnswer::isCompleted).collect(Collectors.toSet()).size())
+                .sum();
+
+        int students = courseExecution.getStudents().size();
+        float averageQuizzesSolved = students > 0 ? (float) totalUniqueSolvedQuizzes / students : 0.0f;
+        this.setAverageQuizzesSolved(averageQuizzesSolved);
+
     }
 
     public void accept(Visitor visitor) {
-        // Only used for XML generation
+        // only used for XML generation
     }
 
     @Override
     public String toString() {
-        return "QuizStats{" + "id=" + id +
+        return "QuizStats{" +
+                "id=" + id +
+                ", courseExecutionId=" + courseExecution.getId() +
+                ", teacherDashboardId=" + teacherDashboard.getId() +
                 ", numQuizzes=" + numQuizzes +
-                ", uniqueQuizzesSolved=" + uniqueQuizzesSolved +
-                ", averaqeQuizzesSolved=" + averageQuizzesSolved +
-                '}';
+                ", numUniqueAnsweredQuizzes=" + numUniqueAnsweredQuizzes +
+                ", averageQuizzesSolved=" + averageQuizzesSolved +
+                "}";
     }
 
 }

@@ -14,7 +14,7 @@ public class TeacherDashboardDto {
         this.id = teacherDashboard.getId();
         // For the number of students, we consider only active students
         this.numberOfStudents = teacherDashboard.getCourseExecution().getNumberOfActiveStudents();
-        for (int i = 0; i< teacherDashboard.getQuizStats().size();){
+        for (int i = 0; i< teacherDashboard.getQuizStats().size();i++){
             QuizStatsDto quizStatsDto1 = new QuizStatsDto(teacherDashboard.getQuizStats().get(i));
             courseExecutionQuizStats.add(quizStatsDto1);
         }

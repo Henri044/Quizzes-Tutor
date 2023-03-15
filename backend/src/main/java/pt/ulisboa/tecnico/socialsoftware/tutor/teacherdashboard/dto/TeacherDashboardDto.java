@@ -1,6 +1,6 @@
 package pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.dto;
 
-import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.TeacherDashboard;import pt.ulisboa.tecnico.socialsoftware.tutor.user.dto.UserDto;import java.util.List;
+import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.TeacherDashboard;import pt.ulisboa.tecnico.socialsoftware.tutor.user.dto.UserDto;import java.util.ArrayList;import java.util.List;
 
 public class TeacherDashboardDto {
     private Integer id;
@@ -14,6 +14,10 @@ public class TeacherDashboardDto {
         this.id = teacherDashboard.getId();
         // For the number of students, we consider only active students
         this.numberOfStudents = teacherDashboard.getCourseExecution().getNumberOfActiveStudents();
+        for (int i = 0; i< teacherDashboard.getQuizStats().size();){
+            QuizStatsDto quizStatsDto1 = new QuizStatsDto(teacherDashboard.getQuizStats().get(i));
+            courseExecutionQuizStats.add(quizStatsDto1);
+        }
     }
 
     public Integer getId() {

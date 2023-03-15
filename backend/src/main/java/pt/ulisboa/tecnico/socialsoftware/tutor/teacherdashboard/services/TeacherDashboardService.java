@@ -7,6 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import pt.ulisboa.tecnico.socialsoftware.tutor.exceptions.TutorException;
 import pt.ulisboa.tecnico.socialsoftware.tutor.execution.domain.CourseExecution;
 import pt.ulisboa.tecnico.socialsoftware.tutor.execution.repository.CourseExecutionRepository;
+import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.QuestionStats;
+import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.StudentStats;
 import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.TeacherDashboard;
 import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.QuizStats;
 import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.dto.TeacherDashboardDto;
@@ -14,6 +16,8 @@ import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.repository.Teach
 import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.repository.QuizStatsRepository;
 import pt.ulisboa.tecnico.socialsoftware.tutor.user.domain.Teacher;
 import pt.ulisboa.tecnico.socialsoftware.tutor.user.repository.TeacherRepository;
+import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.repository.QuestionStatsRepository;
+import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.repository.StudentStatsRepository;
 
 import java.util.*;import java.util.stream.Collectors;
 
@@ -31,7 +35,12 @@ public class TeacherDashboardService {
     @Autowired
     private TeacherDashboardRepository teacherDashboardRepository;
 
+    @Autowired
     private QuizStatsRepository quizStatsRepository;
+    @Autowired
+    private QuestionStatsRepository questionStatsRepository;
+    @Autowired
+    private StudentStatsRepository studentStatsRepository;
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public TeacherDashboardDto getTeacherDashboard(int courseExecutionId, int teacherId) {
@@ -70,11 +79,34 @@ public class TeacherDashboardService {
 
     private TeacherDashboardDto createAndReturnTeacherDashboardDto(CourseExecution courseExecution, Teacher teacher) {
         TeacherDashboard teacherDashboard = new TeacherDashboard(courseExecution, teacher);
-        teacherDashboardRepository.save(teacherDashboard);
-        List<CourseExecution> allCourseexecutions = courseExecution.getCourse().getCourseExecutions().stream()
+        //teacherDashboardRepository.save(teacherDashboard);
+        List<CourseExecution> threelastCourseexecutions = courseExecution.getCourse().getCourseExecutions().stream()
                 .filter(ce -> ce.getEndDate() != null)
-                .sorted((p1, p2)->p1.getEndDate().compareTo(p2.getEndDate()))
+                .sorted(Comparator.comparing(CourseExecution::getEndDate)).limit(3)
                 .collect(Collectors.toList());
+        for (int i = 0;i<=2;i++){
+            QuizStats quizStats1 = new QuizStats(teacherDashboard, threelastCourseexecutions.get(i));
+            teacherDashboard.addQuizStats(quizStats1);
+        }
+        for (int i = 0;i<=2;i++){
+            QuestionStats questionStats1 = new QuestionStats(teacherDashboard, threelastCourseexecutions.get(i));
+            teacherDashboard.addQuestionStats(questionStats1);
+        }
+        for (int i = 0;i<=2;i++){
+            StudentStats studentStats1 = new StudentStats(teacherDashboard, threelastCourseexecutions.get(i));
+            teacherDashboard.addStudentStats(studentStats1);
+        }
+        teacherDashboard.update();
+        teacherDashboardRepository.save(teacherDashboard);
+        for (int i = 0;i<=2;i++){
+            quizStatsRepository.save(teacherDashboard.getQuizStats().get(i));
+        }
+        for (int i = 0;i<=2;i++){
+            questionStatsRepository.save(teacherDashboard.getQuestionStats().get(i));
+        }
+        for (int i = 0;i<=2;i++){
+            studentStatsRepository.save(teacherDashboard.getStudentStats().get(i));
+        }
 
         return new TeacherDashboardDto(teacherDashboard);
     }

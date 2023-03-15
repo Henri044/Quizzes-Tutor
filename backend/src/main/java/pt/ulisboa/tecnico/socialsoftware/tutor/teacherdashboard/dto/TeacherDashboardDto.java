@@ -2,6 +2,7 @@ package pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.dto;
 
 import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.QuestionStats;
 import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.QuizStats;
+import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.StudentStats;
 import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.TeacherDashboard;
 
 import java.util.ArrayList;
@@ -13,6 +14,8 @@ public class TeacherDashboardDto {
 
     private List<QuestionStatsDto> questionStatsDtoList = new ArrayList<>();
 
+    private List<StudentStatsDto> studentStats = new ArrayList<>();
+
     public TeacherDashboardDto() {
     }
 
@@ -23,6 +26,10 @@ public class TeacherDashboardDto {
         List<QuestionStats> auxQuestionStats = teacherDashboard.getQuestionStats();
         for(QuestionStats x: auxQuestionStats) {
             this.questionStatsDtoList.add(new QuestionStatsDto(x));
+        }
+        List<StudentStats> aux_studentStats = teacherDashboard.getStudentStats();
+        for(StudentStats x : aux_studentStats){
+            this.studentStats.add(new StudentStatsDto(x));
         }
     }
 
@@ -48,6 +55,14 @@ public class TeacherDashboardDto {
 
     public void setQuestionStats(List<QuestionStatsDto> stats) {
         this.questionStatsDtoList = stats;
+    }
+
+    public List<StudentStatsDto> getStudentStats() {
+        return studentStats;
+    }
+
+    public void setStudentStats(List<StudentStatsDto> stats) {
+        this.studentStats = stats;
     }
 
     @Override

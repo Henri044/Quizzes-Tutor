@@ -109,11 +109,7 @@ public class TeacherDashboardService {
 
         TeacherDashboard teacherDashboard = teacherDashboardRepository.findById(dashboardId).orElseThrow(() -> new TutorException(DASHBOARD_NOT_FOUND, dashboardId));
 
-        List<QuizStats> quizStatsList = teacherDashboard.getQuizStats();
-        for (QuizStats qs: quizStatsList){
-            qs.remove();
-            quizStatsRepository.delete(qs);
-        }
+        quizStatsRepository.deleteAll(teacherDashboard.getQuizStats());
 
         List<QuestionStats> questionStats = teacherDashboard.getQuestionStats();
         for (QuestionStats stats: questionStats) {

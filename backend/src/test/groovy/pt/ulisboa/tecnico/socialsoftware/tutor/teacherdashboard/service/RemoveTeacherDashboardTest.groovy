@@ -9,6 +9,7 @@ import pt.ulisboa.tecnico.socialsoftware.tutor.exceptions.ErrorMessage
 import pt.ulisboa.tecnico.socialsoftware.tutor.exceptions.TutorException
 import pt.ulisboa.tecnico.socialsoftware.tutor.user.domain.Teacher
 import spock.lang.Unroll
+import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.QuizStats;
 
 @DataJpaTest
 class RemoveTeacherDashboardTest extends SpockTest {
@@ -20,6 +21,12 @@ class RemoveTeacherDashboardTest extends SpockTest {
 
         teacher = new Teacher(USER_1_NAME, false)
         userRepository.save(teacher)
+    }
+
+    def createQuizStats(TeacherDashboard teacherDashboard) {
+        def quizStats = new QuizStats(teacherDashboard, externalCourseExecution)
+        QuizStatsRepository.save(quizStats)
+        return quizStats
     }
 
     def createTeacherDashboard() {
@@ -64,6 +71,18 @@ class RemoveTeacherDashboardTest extends SpockTest {
 
         where:
         dashboardId << [null, 10, -1]
+    }
+
+    def "testing the removal of a dashboard that has associated statistics"(){
+        given: "dashboard with a quizStat"
+        def dashboard = createTeacherDashboard()
+        def quizStats = createQuizStats(dashboard)
+
+        when: "the user removes the dashboard"
+        teacherDashboardService.removeTeacherDashboard(dashboard.getId())
+
+        then: "the quizStat is also removed"
+        quizStatsRepository.findAll().size() == 0L
     }
 
     @TestConfiguration

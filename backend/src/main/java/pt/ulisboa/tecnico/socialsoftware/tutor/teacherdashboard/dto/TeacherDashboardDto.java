@@ -14,7 +14,7 @@ public class TeacherDashboardDto {
 
     private Integer numberOfStudents;
 
-    private List<QuizStatsDto> courseExecutionQuizStats;
+  private List<QuizStatsDto> courseExecutionQuizStats = new ArrayList<>();
 
     private List<QuestionStatsDto> questionStatsDtoList = new ArrayList<>();
 

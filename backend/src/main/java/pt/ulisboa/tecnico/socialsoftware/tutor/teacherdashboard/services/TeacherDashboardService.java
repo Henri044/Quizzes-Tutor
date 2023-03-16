@@ -80,35 +80,25 @@ public class TeacherDashboardService {
 
     private TeacherDashboardDto createAndReturnTeacherDashboardDto(CourseExecution courseExecution, Teacher teacher) {
         TeacherDashboard teacherDashboard = new TeacherDashboard(courseExecution, teacher);
-        //teacherDashboardRepository.save(teacherDashboard);
         List<CourseExecution> threelastCourseexecutions = courseExecution.getCourse().getCourseExecutions().stream()
                 .filter(ce -> ce.getEndDate() != null)
                 .sorted(Comparator.comparing(CourseExecution::getEndDate)).limit(3)
                 .collect(Collectors.toList());
-        for (int i = 0;i<=2;i++){
+        for (int i = 0;i<threelastCourseexecutions.size();i++){
             QuizStats quizStats1 = new QuizStats(teacherDashboard, threelastCourseexecutions.get(i));
-            teacherDashboard.addQuizStats(quizStats1);
+            quizStatsRepository.save(quizStats1);
         }
-        for (int i = 0;i<=2;i++){
+        for (int i = 0;i<threelastCourseexecutions.size();i++){
             QuestionStats questionStats1 = new QuestionStats(teacherDashboard, threelastCourseexecutions.get(i));
-            teacherDashboard.addQuestionStats(questionStats1);
+            questionStatsRepository.save(questionStats1);
         }
-        for (int i = 0;i<=2;i++){
+        for (int i = 0;i<threelastCourseexecutions.size();i++){
             StudentStats studentStats1 = new StudentStats(teacherDashboard, threelastCourseexecutions.get(i));
-            teacherDashboard.addStudentStats(studentStats1);
+            studentStatsRepository.save(studentStats1);
         }
         teacherDashboard.update();
-        teacherDashboardRepository.save(teacherDashboard);
-        for (int i = 0;i<=2;i++){
-            quizStatsRepository.save(teacherDashboard.getQuizStats().get(i));
-        }
-        for (int i = 0;i<=2;i++){
-            questionStatsRepository.save(teacherDashboard.getQuestionStats().get(i));
-        }
-        for (int i = 0;i<=2;i++){
-            studentStatsRepository.save(teacherDashboard.getStudentStats().get(i));
-        }
 
+        teacherDashboardRepository.save(teacherDashboard);
         return new TeacherDashboardDto(teacherDashboard);
     }
 

@@ -88,11 +88,7 @@ public class TeacherDashboardService {
 
         TeacherDashboard teacherDashboard = teacherDashboardRepository.findById(dashboardId).orElseThrow(() -> new TutorException(DASHBOARD_NOT_FOUND, dashboardId));
         studentStatsRepository.deleteAll(teacherDashboard.getStudentStats());
-        List<QuestionStats> questionStats = teacherDashboard.getQuestionStats();
-        for (QuestionStats stats: questionStats) {
-            stats.remove();
-            questionStatsRepository.delete(stats);
-        }
+        questionStatsRepository.deleteAll(teacherDashboard.getQuestionStats());
         teacherDashboard.remove();
         teacherDashboardRepository.delete(teacherDashboard);
     }
@@ -100,6 +96,11 @@ public class TeacherDashboardService {
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public void updateAllTeacherDashboards() {
         List<TeacherDashboard> allTeacherDashboards = teacherDashboardRepository.findAll();
+
+        if (allTeacherDashboards.isEmpty()) {
+            throw new TutorException(NO_DASHBOARDS_AVAILABLE, -1);
+        }
+
         allTeacherDashboards.forEach(teacherDashboard -> {
             teacherDashboard.update();
             teacherDashboardRepository.save(teacherDashboard);

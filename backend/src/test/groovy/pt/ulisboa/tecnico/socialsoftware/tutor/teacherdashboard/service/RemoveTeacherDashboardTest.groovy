@@ -6,6 +6,7 @@ import pt.ulisboa.tecnico.socialsoftware.tutor.BeanConfiguration
 import pt.ulisboa.tecnico.socialsoftware.tutor.SpockTest
 import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.StudentStats
 import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.TeacherDashboard
+import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.QuestionStats
 import pt.ulisboa.tecnico.socialsoftware.tutor.exceptions.ErrorMessage
 import pt.ulisboa.tecnico.socialsoftware.tutor.exceptions.TutorException
 import pt.ulisboa.tecnico.socialsoftware.tutor.user.domain.Teacher
@@ -71,18 +72,26 @@ class RemoveTeacherDashboardTest extends SpockTest {
         given: "dashboard with a studentStat"
         def dashboard = createTeacherDashboard()
         def studentStats = createStudentStats(dashboard)
+        def questionStats = createQuestionStats(dashboard)
 
         when: "the user removes the dashboard"
         teacherDashboardService.removeTeacherDashboard(dashboard.getId())
 
         then: "the studentStat is also removed"
         studentStatsRepository.findAll().size() == 0L
+        questionStatsRepository.findAll().size() == 0L
     }
 
     def createStudentStats(TeacherDashboard teacherDashboard) {
         def studentStats = new StudentStats(teacherDashboard, externalCourseExecution)
         StudentStatsRepository.save(studentStats)
         return studentStats
+    }
+
+    def createQuestionStats(TeacherDashboard teacherDashboard) {
+        def questionStats = new QuestionStats(teacherDashboard, externalCourseExecution)
+        QuestionStatsRepository.save(questionStats)
+        return questionStats
     }
 
     @TestConfiguration

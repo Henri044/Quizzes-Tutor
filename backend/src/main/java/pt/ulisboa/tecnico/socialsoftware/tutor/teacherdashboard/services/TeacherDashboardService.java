@@ -7,9 +7,11 @@ import org.springframework.transaction.annotation.Transactional;
 import pt.ulisboa.tecnico.socialsoftware.tutor.exceptions.TutorException;
 import pt.ulisboa.tecnico.socialsoftware.tutor.execution.domain.CourseExecution;
 import pt.ulisboa.tecnico.socialsoftware.tutor.execution.repository.CourseExecutionRepository;
+import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.QuestionStats;
 import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.StudentStats;
 import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.TeacherDashboard;
 import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.dto.TeacherDashboardDto;
+import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.repository.QuestionStatsRepository;
 import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.repository.StudentStatsRepository;
 import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.repository.TeacherDashboardRepository;
 import pt.ulisboa.tecnico.socialsoftware.tutor.user.domain.Teacher;
@@ -30,6 +32,9 @@ public class TeacherDashboardService {
 
     @Autowired
     private TeacherDashboardRepository teacherDashboardRepository;
+
+    @Autowired
+    private QuestionStatsRepository questionStatsRepository;
 
     @Autowired
     private StudentStatsRepository studentStatsRepository;
@@ -83,8 +88,22 @@ public class TeacherDashboardService {
 
         TeacherDashboard teacherDashboard = teacherDashboardRepository.findById(dashboardId).orElseThrow(() -> new TutorException(DASHBOARD_NOT_FOUND, dashboardId));
         studentStatsRepository.deleteAll(teacherDashboard.getStudentStats());
+        List<QuestionStats> questionStats = teacherDashboard.getQuestionStats();
+        for (QuestionStats stats: questionStats) {
+            stats.remove();
+            questionStatsRepository.delete(stats);
+        }
         teacherDashboard.remove();
         teacherDashboardRepository.delete(teacherDashboard);
+    }
+
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    public void updateAllTeacherDashboards() {
+        List<TeacherDashboard> allTeacherDashboards = teacherDashboardRepository.findAll();
+        allTeacherDashboards.forEach(teacherDashboard -> {
+            teacherDashboard.update();
+            teacherDashboardRepository.save(teacherDashboard);
+        });
     }
 
     @Transactional(isolation = Isolation.READ_COMMITTED)

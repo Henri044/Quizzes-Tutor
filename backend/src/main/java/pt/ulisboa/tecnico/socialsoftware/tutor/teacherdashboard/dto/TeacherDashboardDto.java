@@ -1,5 +1,7 @@
 package pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.dto;
 
+import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.QuestionStats;
+import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.QuizStats;
 import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.StudentStats;
 import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.TeacherDashboard;
 
@@ -10,6 +12,8 @@ public class TeacherDashboardDto {
     private Integer id;
     private Integer numberOfStudents;
 
+    private List<QuestionStatsDto> questionStatsDtoList = new ArrayList<>();
+
     private List<StudentStatsDto> studentStats = new ArrayList<>();
 
     public TeacherDashboardDto() {
@@ -19,6 +23,10 @@ public class TeacherDashboardDto {
         this.id = teacherDashboard.getId();
         // For the number of students, we consider only active students
         this.numberOfStudents = teacherDashboard.getCourseExecution().getNumberOfActiveStudents();
+        List<QuestionStats> auxQuestionStats = teacherDashboard.getQuestionStats();
+        for(QuestionStats x: auxQuestionStats) {
+            this.questionStatsDtoList.add(new QuestionStatsDto(x));
+        }
         List<StudentStats> aux_studentStats = teacherDashboard.getStudentStats();
         for(StudentStats x : aux_studentStats){
             this.studentStats.add(new StudentStatsDto(x));
@@ -39,6 +47,14 @@ public class TeacherDashboardDto {
 
     public void setNumberOfStudents(Integer numberOfStudents) {
         this.numberOfStudents = numberOfStudents;
+    }
+
+    public List<QuestionStatsDto> getQuestionStats() {
+        return questionStatsDtoList;
+    }
+
+    public void setQuestionStats(List<QuestionStatsDto> stats) {
+        this.questionStatsDtoList = stats;
     }
 
     public List<StudentStatsDto> getStudentStats() {

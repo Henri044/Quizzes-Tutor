@@ -4,6 +4,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.context.TestConfiguration
 import pt.ulisboa.tecnico.socialsoftware.tutor.BeanConfiguration
 import pt.ulisboa.tecnico.socialsoftware.tutor.SpockTest
+import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.StudentStats
 import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.TeacherDashboard
 import pt.ulisboa.tecnico.socialsoftware.tutor.exceptions.ErrorMessage
 import pt.ulisboa.tecnico.socialsoftware.tutor.exceptions.TutorException
@@ -64,6 +65,24 @@ class RemoveTeacherDashboardTest extends SpockTest {
 
         where:
         dashboardId << [null, 10, -1]
+    }
+
+    def "testing the removal of a dashboard that has associated statistics"(){
+        given: "dashboard with a studentStat"
+        def dashboard = createTeacherDashboard()
+        def studentStats = createStudentStats(dashboard)
+
+        when: "the user removes the dashboard"
+        teacherDashboardService.removeTeacherDashboard(dashboard.getId())
+
+        then: "the studentStat is also removed"
+        studentStatsRepository.findAll().size() == 0L
+    }
+
+    def createStudentStats(TeacherDashboard teacherDashboard) {
+        def studentStats = new StudentStats(teacherDashboard, externalCourseExecution)
+        StudentStatsRepository.save(studentStats)
+        return studentStats
     }
 
     @TestConfiguration

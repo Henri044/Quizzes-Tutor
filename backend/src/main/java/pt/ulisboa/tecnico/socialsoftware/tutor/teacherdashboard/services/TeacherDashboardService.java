@@ -82,11 +82,7 @@ public class TeacherDashboardService {
             throw new TutorException(DASHBOARD_NOT_FOUND, -1);
 
         TeacherDashboard teacherDashboard = teacherDashboardRepository.findById(dashboardId).orElseThrow(() -> new TutorException(DASHBOARD_NOT_FOUND, dashboardId));
-        List<StudentStats> studentStats = teacherDashboard.getStudentStats();
-        for (StudentStats x : studentStats){
-            x.remove();
-            studentStatsRepository.delete(x);
-        }
+        studentStatsRepository.deleteAll(teacherDashboard.getStudentStats());
         teacherDashboard.remove();
         teacherDashboardRepository.delete(teacherDashboard);
     }

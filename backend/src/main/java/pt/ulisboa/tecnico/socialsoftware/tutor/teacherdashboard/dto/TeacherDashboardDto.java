@@ -65,8 +65,6 @@ public class TeacherDashboardDto {
         this.courseExecutionQuizStats = courseExecutionQuizStats;
     }
 
-  @Override
-  public String toString() {
     public List<QuestionStatsDto> getQuestionStats() {
         return questionStatsDtoList;
     }

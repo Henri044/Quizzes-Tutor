@@ -6,6 +6,8 @@ import pt.ulisboa.tecnico.socialsoftware.tutor.BeanConfiguration
 import pt.ulisboa.tecnico.socialsoftware.tutor.SpockTest
 import pt.ulisboa.tecnico.socialsoftware.tutor.exceptions.ErrorMessage
 import pt.ulisboa.tecnico.socialsoftware.tutor.exceptions.TutorException
+import pt.ulisboa.tecnico.socialsoftware.tutor.execution.domain.CourseExecution
+import pt.ulisboa.tecnico.socialsoftware.tutor.question.domain.Course
 import pt.ulisboa.tecnico.socialsoftware.tutor.user.domain.Teacher
 import spock.lang.Unroll
 
@@ -18,6 +20,7 @@ import spock.lang.Unroll
 
         teacher = new Teacher(USER_1_NAME, false)
         userRepository.save(teacher)
+
     }
 
     def "create an empty dashboard"() {
@@ -37,6 +40,45 @@ import spock.lang.Unroll
         and: "the teacher has a reference for the dashboard"
         teacher.getDashboards().size() == 1
         teacher.getDashboards().contains(result)
+    }
+
+    def "Check if quiz, questions and student stats repository have the saved information from externalCourseExecution"() {
+        given: "a teacher in a course execution"
+        teacher.addCourse(externalCourseExecution)
+
+        when: "a dashboard is created"
+        teacherDashboardService.getTeacherDashboard(externalCourseExecution.getId(), teacher.getId())
+
+        then: "an empty dashboard is created"
+        teacherDashboardRepository.count() == 1L
+        quizStatsRepository.count() == 1L
+        questionStatsRepository.count() == 1L
+        studentStatsRepository.count() == 1L
+        def result = teacherDashboardRepository.findAll().get(0)
+        result.getId() != 0
+        result.getCourseExecution().getId() == externalCourseExecution.getId()
+        result.getTeacher().getId() == teacher.getId()
+
+        and: "the teacher has a reference for the dashboard"
+        teacher.getDashboards().size() == 1
+        teacher.getDashboards().contains(result)
+
+        def result1 = quizStatsRepository.findAll().get(0)
+        result1.getId() != 0
+        result1.getCourseExecution().getId() == externalCourseExecution.getId()
+
+        def result2 = questionStatsRepository.findAll().get(0)
+        result2.getId() != 0
+        result2.getCourseExecution().getId() == externalCourseExecution.getId()
+
+        def result3 = studentStatsRepository.findAll().get(0)
+        result1.getId() != 0
+        result1.getCourseExecution().getId() == externalCourseExecution.getId()
+
+        and: "the teacher has a reference for the dashboard"
+        teacher.getDashboards().size() == 1
+        teacher.getDashboards().contains(result)
+
     }
 
     def "cannot create multiple dashboards for a teacher on a course execution"() {

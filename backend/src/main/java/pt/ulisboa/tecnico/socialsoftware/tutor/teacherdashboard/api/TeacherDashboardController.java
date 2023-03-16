@@ -43,10 +43,9 @@ public class TeacherDashboardController {
         this.teacherDashboardService.updateAllTeacherDashboards();
     }
 
-    @PutMapping("/teachers/dashboards/update-teacherdashboard")
-    @PreAuthorize("hasRole('ROLE_TEACHER')")
-    public void updateTeacherDashboard(Principal principal) {
-        int teacherId = ((AuthUser) ((Authentication) principal).getPrincipal()).getUser().getId();
-        teacherDashboardService.updateTeacherDashboard(teacherId);
+    @PutMapping("/teachers/dashboards/{dashboardId}")
+    @PreAuthorize("hasRole('ROLE_TEACHER') and hasPermission(#dashboardId, 'ESPECIFICTEACHER.ACCESS')")
+    public void updateTeacherDashboard(@PathVariable Integer dashboardId) {
+        teacherDashboardService.updateTeacherDashboard(dashboardId);
     }
 }

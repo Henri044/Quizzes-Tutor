@@ -40,6 +40,7 @@ public class TeacherDashboardService {
     private QuizStatsRepository quizStatsRepository;
     @Autowired
     private QuestionStatsRepository questionStatsRepository;
+
     @Autowired
     private StudentStatsRepository studentStatsRepository;
 
@@ -99,6 +100,7 @@ public class TeacherDashboardService {
         teacherDashboard.update();
 
         teacherDashboardRepository.save(teacherDashboard);
+
         return new TeacherDashboardDto(teacherDashboard);
     }
 
@@ -108,19 +110,9 @@ public class TeacherDashboardService {
             throw new TutorException(DASHBOARD_NOT_FOUND, -1);
 
         TeacherDashboard teacherDashboard = teacherDashboardRepository.findById(dashboardId).orElseThrow(() -> new TutorException(DASHBOARD_NOT_FOUND, dashboardId));
-
         quizStatsRepository.deleteAll(teacherDashboard.getQuizStats());
-
-        List<QuestionStats> questionStats = teacherDashboard.getQuestionStats();
-        for (QuestionStats stats: questionStats) {
-            stats.remove();
-            questionStatsRepository.delete(stats);
-        }
-        List<StudentStats> studentStats = teacherDashboard.getStudentStats();
-        for (StudentStats x : studentStats){
-            x.remove();
-            studentStatsRepository.delete(x);
-        }
+        studentStatsRepository.deleteAll(teacherDashboard.getStudentStats());
+        questionStatsRepository.deleteAll(teacherDashboard.getQuestionStats());
         teacherDashboard.remove();
         teacherDashboardRepository.delete(teacherDashboard);
     }
@@ -128,6 +120,11 @@ public class TeacherDashboardService {
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public void updateAllTeacherDashboards() {
         List<TeacherDashboard> allTeacherDashboards = teacherDashboardRepository.findAll();
+
+        if (allTeacherDashboards.isEmpty()) {
+            throw new TutorException(NO_DASHBOARDS_AVAILABLE, -1);
+        }
+
         allTeacherDashboards.forEach(teacherDashboard -> {
             teacherDashboard.update();
             teacherDashboardRepository.save(teacherDashboard);

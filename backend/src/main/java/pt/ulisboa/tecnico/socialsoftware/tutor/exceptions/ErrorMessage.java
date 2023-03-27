@@ -174,8 +174,7 @@ public enum ErrorMessage {
     FAILED_ANSWER_NOT_FOUND("Failed answer not found"),
     FAILED_ANSWER_ALREADY_CREATED("Failed answer already created"),
     CANNOT_CREATE_FAILED_ANSWER("Cannot create failed answer"),
-    CANNOT_REMOVE_FAILED_ANSWER("Cannot remove failed answer"),
-    NO_DASHBOARDS_AVAILABLE("No dashboards available");
+    CANNOT_REMOVE_FAILED_ANSWER("Cannot remove failed answer");
 
     public final String label;
 

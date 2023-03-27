@@ -66,7 +66,7 @@ public class CourseExecution implements DomainEntity {
     private Status status;
 
     @Column(name = "end_date")
-    private LocalDateTime endDate  ;
+    private LocalDateTime endDate;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "course_id")

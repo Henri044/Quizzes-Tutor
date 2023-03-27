@@ -8,19 +8,19 @@ import pt.ulisboa.tecnico.socialsoftware.tutor.exceptions.TutorException;
 import pt.ulisboa.tecnico.socialsoftware.tutor.execution.domain.CourseExecution;
 import pt.ulisboa.tecnico.socialsoftware.tutor.execution.repository.CourseExecutionRepository;
 import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.QuestionStats;
+import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.QuizStats;
 import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.StudentStats;
 import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.TeacherDashboard;
-import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.QuizStats;
 import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.dto.TeacherDashboardDto;
 import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.repository.QuestionStatsRepository;
+import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.repository.QuizStatsRepository;
 import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.repository.StudentStatsRepository;
 import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.repository.TeacherDashboardRepository;
-import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.repository.QuizStatsRepository;
 import pt.ulisboa.tecnico.socialsoftware.tutor.user.domain.Teacher;
 import pt.ulisboa.tecnico.socialsoftware.tutor.user.repository.TeacherRepository;
 
-
-import java.util.*;import java.util.stream.Collectors;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static pt.ulisboa.tecnico.socialsoftware.tutor.exceptions.ErrorMessage.*;
 
@@ -37,12 +37,13 @@ public class TeacherDashboardService {
     private TeacherDashboardRepository teacherDashboardRepository;
 
     @Autowired
-    private QuizStatsRepository quizStatsRepository;
-    @Autowired
-    private QuestionStatsRepository questionStatsRepository;
+    private StudentStatsRepository studentStatsRepository;
 
     @Autowired
-    private StudentStatsRepository studentStatsRepository;
+    private QuizStatsRepository quizStatsRepository;
+
+    @Autowired
+    private QuestionStatsRepository questionStatsRepository;
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public TeacherDashboardDto getTeacherDashboard(int courseExecutionId, int teacherId) {
@@ -58,9 +59,8 @@ public class TeacherDashboardService {
                 .filter(dashboard -> dashboard.getCourseExecution().getId().equals(courseExecutionId))
                 .findAny();
 
-        return dashboardOptional.
-                map(TeacherDashboardDto::new).
-                orElseGet(() -> createAndReturnTeacherDashboardDto(courseExecution, teacher));
+        return dashboardOptional.map(TeacherDashboardDto::new)
+                .orElseGet(() -> createAndReturnTeacherDashboardDto(courseExecution, teacher));
     }
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
@@ -70,7 +70,8 @@ public class TeacherDashboardService {
         Teacher teacher = teacherRepository.findById(teacherId)
                 .orElseThrow(() -> new TutorException(USER_NOT_FOUND, teacherId));
 
-        if (teacher.getDashboards().stream().anyMatch(dashboard -> dashboard.getCourseExecution().equals(courseExecution)))
+        if (teacher.getDashboards().stream()
+                .anyMatch(dashboard -> dashboard.getCourseExecution().equals(courseExecution)))
             throw new TutorException(TEACHER_ALREADY_HAS_DASHBOARD);
 
         if (!teacher.getCourseExecutions().contains(courseExecution))
@@ -79,28 +80,12 @@ public class TeacherDashboardService {
         return createAndReturnTeacherDashboardDto(courseExecution, teacher);
     }
 
-    private TeacherDashboardDto createAndReturnTeacherDashboardDto(CourseExecution courseExecution, Teacher teacher) {
+    private TeacherDashboardDto createAndReturnTeacherDashboardDto(CourseExecution courseExecution,
+            Teacher teacher) {
         TeacherDashboard teacherDashboard = new TeacherDashboard(courseExecution, teacher);
-        List<CourseExecution> threelastCourseexecutions = courseExecution.getCourse().getCourseExecutions().stream()
-                .filter(ce -> ce.getEndDate() != null)
-                .sorted(Comparator.comparing(CourseExecution::getEndDate)).limit(3)
-                .collect(Collectors.toList());
-        for (int i = 0;i<threelastCourseexecutions.size();i++){
-            QuizStats quizStats1 = new QuizStats(teacherDashboard, threelastCourseexecutions.get(i));
-            quizStatsRepository.save(quizStats1);
-        }
-        for (int i = 0;i<threelastCourseexecutions.size();i++){
-            QuestionStats questionStats1 = new QuestionStats(teacherDashboard, threelastCourseexecutions.get(i));
-            questionStatsRepository.save(questionStats1);
-        }
-        for (int i = 0;i<threelastCourseexecutions.size();i++){
-            StudentStats studentStats1 = new StudentStats(teacherDashboard, threelastCourseexecutions.get(i));
-            studentStatsRepository.save(studentStats1);
-        }
+        addStatisticsToTeacherDashboard(teacherDashboard);
         teacherDashboard.update();
-
         teacherDashboardRepository.save(teacherDashboard);
-
         return new TeacherDashboardDto(teacherDashboard);
     }
 
@@ -109,26 +94,10 @@ public class TeacherDashboardService {
         if (dashboardId == null)
             throw new TutorException(DASHBOARD_NOT_FOUND, -1);
 
-        TeacherDashboard teacherDashboard = teacherDashboardRepository.findById(dashboardId).orElseThrow(() -> new TutorException(DASHBOARD_NOT_FOUND, dashboardId));
-        quizStatsRepository.deleteAll(teacherDashboard.getQuizStats());
-        studentStatsRepository.deleteAll(teacherDashboard.getStudentStats());
-        questionStatsRepository.deleteAll(teacherDashboard.getQuestionStats());
-        teacherDashboard.remove();
+        TeacherDashboard teacherDashboard = teacherDashboardRepository.findById(dashboardId)
+                .orElseThrow(() -> new TutorException(DASHBOARD_NOT_FOUND, dashboardId));
         teacherDashboardRepository.delete(teacherDashboard);
-    }
-
-    @Transactional(isolation = Isolation.READ_COMMITTED)
-    public void updateAllTeacherDashboards() {
-        List<TeacherDashboard> allTeacherDashboards = teacherDashboardRepository.findAll();
-
-        if (allTeacherDashboards.isEmpty()) {
-            throw new TutorException(NO_DASHBOARDS_AVAILABLE, -1);
-        }
-
-        allTeacherDashboards.forEach(teacherDashboard -> {
-            teacherDashboard.update();
-            teacherDashboardRepository.save(teacherDashboard);
-        });
+        teacherDashboard.remove();
     }
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
@@ -136,8 +105,89 @@ public class TeacherDashboardService {
         if (dashboardId == null)
             throw new TutorException(DASHBOARD_NOT_FOUND, -1);
 
-        TeacherDashboard teacherDashboard = teacherDashboardRepository.findById(dashboardId).orElseThrow(() -> new TutorException(DASHBOARD_NOT_FOUND, dashboardId));
-        teacherDashboard.update();
-        teacherDashboardRepository.save(teacherDashboard);
+        TeacherDashboard teacherDashboard = teacherDashboardRepository
+                .findById(dashboardId)
+                .orElseThrow(() -> new TutorException(DASHBOARD_NOT_FOUND, dashboardId));
+
+        addStatisticsToTeacherDashboard(teacherDashboard);
+    }
+
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    public void updateAllTeacherDashboards() {
+        teacherRepository.findAll()
+                .forEach(teacher -> teacher.getCourseExecutions().stream()
+                        .filter(this::noExceptionGetYear)
+                        .forEach(courseExecution -> Optional
+                                .ofNullable(teacher.getCourseExecutionDashboard(
+                                        courseExecution))
+                                .ifPresentOrElse(
+                                        teacherDashboard -> updateTeacherDashboard(
+                                                teacherDashboard.getId()),
+                                        () -> createTeacherDashboard(
+                                                courseExecution.getId(),
+                                                teacher.getId()))));
+    }
+
+    private List<CourseExecution> getNPreviousExecutions(int n, CourseExecution courseExecution) {
+        // A course execution may not have the academic term string well-formed.
+        // We return here a more specific exception.
+        if (!noExceptionGetYear(courseExecution)) {
+            throw new TutorException(INVALID_ACADEMIC_TERM_FOR_COURSE_EXECUTION);
+        }
+        // get a list of the n previous executions of the same course (including the
+        // given courseExecution)
+        return courseExecution.getCourse().getCourseExecutions().stream()
+                .filter(this::noExceptionGetYear)
+                .filter(ce -> ce.getYear() <= courseExecution.getYear())
+                .sorted(Comparator.comparing(CourseExecution::getYear).reversed())
+                .limit(n)
+                .collect(Collectors.toList());
+    }
+
+    private boolean noExceptionGetYear(CourseExecution courseExecution) {
+        try {
+            courseExecution.getYear();
+            return true;
+        } catch (IllegalStateException ex) {
+            return false;
+        }
+    }
+
+    private StudentStats createAndSaveNewStudentStats(TeacherDashboard teacherDashboard,
+            CourseExecution courseExecution) {
+        StudentStats studentStats = new StudentStats(teacherDashboard, courseExecution);
+        studentStats.update();
+        studentStatsRepository.save(studentStats);
+        return studentStats;
+    }
+
+    private QuizStats createAndSaveNewQuizStats(TeacherDashboard teacherDashboard,
+            CourseExecution courseExecution) {
+        QuizStats quizStats = new QuizStats(teacherDashboard, courseExecution);
+        quizStats.update();
+        quizStatsRepository.save(quizStats);
+        return quizStats;
+    }
+
+    private QuestionStats createAndSaveNewQuestionStats(TeacherDashboard teacherDashboard,
+            CourseExecution courseExecution) {
+        QuestionStats questionStats = new QuestionStats(teacherDashboard, courseExecution);
+        questionStats.update();
+        questionStatsRepository.save(questionStats);
+        return questionStats;
+    }
+
+    private void addStatisticsToTeacherDashboard(TeacherDashboard teacherDashboard) {
+        List<CourseExecution> lastThreeCourseExecutions = this.getNPreviousExecutions(3,
+                teacherDashboard.getCourseExecution());
+
+        teacherDashboard.getStudentStats().clear();
+        teacherDashboard.getQuizStats().clear();
+        teacherDashboard.getQuestionStats().clear();
+        lastThreeCourseExecutions.stream().forEach(execution -> {
+            createAndSaveNewStudentStats(teacherDashboard, execution);
+            createAndSaveNewQuizStats(teacherDashboard, execution);
+            createAndSaveNewQuestionStats(teacherDashboard, execution);
+        });
     }
 }

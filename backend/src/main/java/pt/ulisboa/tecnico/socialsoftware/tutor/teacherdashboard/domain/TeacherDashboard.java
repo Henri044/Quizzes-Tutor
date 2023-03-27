@@ -1,7 +1,5 @@
 package pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain;
 
-import java.util.*;
-
 import pt.ulisboa.tecnico.socialsoftware.tutor.execution.domain.CourseExecution;
 import pt.ulisboa.tecnico.socialsoftware.tutor.impexp.domain.DomainEntity;
 import pt.ulisboa.tecnico.socialsoftware.tutor.impexp.domain.Visitor;
@@ -24,13 +22,13 @@ public class TeacherDashboard implements DomainEntity {
     @ManyToOne
     private Teacher teacher;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<QuizStats> quizStats = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "teacherDashboard", orphanRemoval = true)
     private List<StudentStats> studentStats = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<QuestionStats> questionStats = new ArrayList<>();
 
     public TeacherDashboard() {
@@ -86,7 +84,7 @@ public class TeacherDashboard implements DomainEntity {
         this.studentStats.add(studentStat);
     }
 
-    public List<QuestionStats> getQuestionStats () {
+    public List<QuestionStats> getQuestionStats() {
         return questionStats;
     }
 
@@ -103,12 +101,12 @@ public class TeacherDashboard implements DomainEntity {
         this.studentStats.forEach(StudentStats::update);
         this.questionStats.forEach(QuestionStats::update);
     }
+
     public void remove() {
         teacher.getDashboards().remove(this);
         teacher = null;
-        quizStats = null;
+        new ArrayList<>(studentStats).forEach(StudentStats::remove);
         studentStats = null;
-        questionStats = null;
     }
 
     public void accept(Visitor visitor) {

@@ -16,6 +16,8 @@ import pt.ulisboa.tecnico.socialsoftware.tutor.studentdashboard.repository.Stude
 import pt.ulisboa.tecnico.socialsoftware.tutor.studentdashboard.repository.DifficultQuestionRepository;
 import pt.ulisboa.tecnico.socialsoftware.tutor.studentdashboard.repository.FailedAnswerRepository;
 import pt.ulisboa.tecnico.socialsoftware.tutor.studentdashboard.repository.WeeklyScoreRepository;
+import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.TeacherDashboard;
+import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.repository.TeacherDashboardRepository;
 import pt.ulisboa.tecnico.socialsoftware.tutor.discussion.domain.Discussion;
 import pt.ulisboa.tecnico.socialsoftware.tutor.discussion.domain.Reply;
 import pt.ulisboa.tecnico.socialsoftware.tutor.discussion.repository.DiscussionRepository;
@@ -35,8 +37,6 @@ import pt.ulisboa.tecnico.socialsoftware.tutor.tournament.domain.Tournament;
 import pt.ulisboa.tecnico.socialsoftware.tutor.tournament.repository.TournamentRepository;
 import pt.ulisboa.tecnico.socialsoftware.tutor.user.domain.User;
 import pt.ulisboa.tecnico.socialsoftware.tutor.user.repository.UserRepository;
-import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.repository.TeacherDashboardRepository;
-import pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain.TeacherDashboard;
 
 import java.io.Serializable;
 
@@ -82,6 +82,9 @@ public class TutorPermissionEvaluator implements PermissionEvaluator {
     private StudentDashboardRepository studentDashboardRepository;
 
     @Autowired
+    private TeacherDashboardRepository teacherDashboardRepository;
+
+    @Autowired
     private WeeklyScoreRepository weeklyScoreRepository;
 
     @Autowired
@@ -89,9 +92,6 @@ public class TutorPermissionEvaluator implements PermissionEvaluator {
 
     @Autowired
     private DifficultQuestionRepository difficultQuestionRepository;
-
-    @Autowired
-    private TeacherDashboardRepository teacherDashboardRepository;
 
     @Override
     public boolean hasPermission(Authentication authentication, Object targetDomainObject, Object permission) {
@@ -186,6 +186,9 @@ public class TutorPermissionEvaluator implements PermissionEvaluator {
                 case "DASHBOARD.ACCESS":
                     StudentDashboard studentDashboard = studentDashboardRepository.findById(id).orElse(null);
                     return studentDashboard != null && studentDashboard.getStudent().getId().equals(userId);
+                case "TEACHER.DASHBOARD.ACCESS":
+                    TeacherDashboard teacherDashboard = teacherDashboardRepository.findById(id).orElse(null);
+                    return teacherDashboard != null && teacherDashboard.getTeacher().getId().equals(userId);
                 case "WEEKLYSCORE.ACCESS":
                     WeeklyScore weeklyScore = weeklyScoreRepository.findById(id).orElse(null);
                     return weeklyScore != null && weeklyScore.getDashboard().getStudent().getId().equals(userId);
@@ -195,9 +198,6 @@ public class TutorPermissionEvaluator implements PermissionEvaluator {
                 case "DIFFICULTQUESTION.ACCESS":
                     DifficultQuestion difficultQuestion = difficultQuestionRepository.findById(id).orElse(null);
                     return difficultQuestion != null && userHasThisExecution(authUser, difficultQuestion.getCourseExecution().getId());
-                case "ESPECIFICTEACHER.ACCESS":
-                    TeacherDashboard teacherDashboard = teacherDashboardRepository.findById(id).orElse(null);
-                    return teacherDashboard != null && teacherDashboard.getTeacher().equals(authUser);
                 default:
                     return false;
             }

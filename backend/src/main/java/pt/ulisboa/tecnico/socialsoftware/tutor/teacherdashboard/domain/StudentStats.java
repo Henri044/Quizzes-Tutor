@@ -3,21 +3,15 @@ package pt.ulisboa.tecnico.socialsoftware.tutor.teacherdashboard.domain;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
-import pt.ulisboa.tecnico.socialsoftware.tutor.impexp.domain.Visitor;
 import pt.ulisboa.tecnico.socialsoftware.tutor.answer.domain.QuizAnswer;
 import pt.ulisboa.tecnico.socialsoftware.tutor.execution.domain.CourseExecution;
 import pt.ulisboa.tecnico.socialsoftware.tutor.user.domain.Student;
+import pt.ulisboa.tecnico.socialsoftware.tutor.impexp.domain.*;
 
 @Entity
-public class StudentStats {
+public class StudentStats implements DomainEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -107,11 +101,15 @@ public class StudentStats {
         numStudents = students.size();
 
         numMore75CorrectQuestions = (int) students.stream()
-        .filter(student -> getCompletedQuizAnswersForCourse(student, courseExecution)
-                .mapToLong(QuizAnswer::getNumberOfCorrectAnswers)
-                .sum() / (double) getCompletedQuizAnswersForCourse(student, courseExecution)
-                .mapToInt(quizAnswer -> quizAnswer.getQuiz().getQuizQuestionsNumber())
-                .sum() > 0.75)
+        .filter(student ->
+            { long numCorrectAnswers = getCompletedQuizAnswersForCourse(student, courseExecution)
+                    .mapToLong(QuizAnswer::getNumberOfCorrectAnswers)
+                    .sum();
+                long numQuestions = getCompletedQuizAnswersForCourse(student, courseExecution)
+                    .mapToInt(quizAnswer -> quizAnswer.getQuiz().getQuizQuestionsNumber())
+                    .sum();
+                return (numQuestions > 0 ? numCorrectAnswers / (double) numQuestions : 0) > 0.75;
+            })
         .count();
 
         numAtLeast3Quizzes = (int) students.stream()
@@ -126,6 +124,7 @@ public class StudentStats {
         // only used for XML generation
     }
 
+    @Override
     public String toString() {
         return "StudentStats{" +
                 "id=" + id +

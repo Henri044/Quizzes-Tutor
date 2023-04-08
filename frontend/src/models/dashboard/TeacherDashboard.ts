@@ -1,11 +1,16 @@
+import QuestionStats from "@/models/dashboard/QuestionStats";
 export default class TeacherDashboard {
   id!: number;
-  numberOfStudents!: number;
+  questionStats: QuestionStats[] = [];
 
   constructor(jsonObj?: TeacherDashboard) {
     if (jsonObj) {
       this.id = jsonObj.id;
-      this.numberOfStudents = jsonObj.numberOfStudents;
+      this.questionStats = jsonObj.questionStats.map(
+          (questionStats: QuestionStats)=>{
+            return new QuestionStats(questionStats);
+          }
+      )
     }
   }
 }

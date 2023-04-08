@@ -1,17 +1,33 @@
 <template>
-  <div class="container">
+  <div class="stats-container">
     <h2>Statistics for this course execution</h2>
     <div v-if="teacherDashboard != null" class="stats-container">
       <div class="items">
         <div ref="totalStudents" class="icon-wrapper">
-          <animated-number :number="teacherDashboard.numberOfStudents" />
+          <animated-number :number= 0 />
         </div>
         <div class="project-name">
-          <p>Number of Students</p>
+          <p>Number of Questions</p>
+        </div>
+      </div>
+      <div class="items">
+        <div ref="totalStudents" class="icon-wrapper">
+          <animated-number :number=0 />
+        </div>
+        <div class="project-name">
+          <p>Number of Questions Solved (Unique)</p>
+        </div>
+      </div>
+      <div class="items">
+        <div ref="totalStudents" class="icon-wrapper">
+          <animated-number :number=0 />
+        </div>
+        <div class="project-name">
+          <p>Number of Questions Correctly Solved (Unique, Average Per Student)</p>
         </div>
       </div>
     </div>
-</div>
+  </div>
 </template>
 
 <script lang="ts">

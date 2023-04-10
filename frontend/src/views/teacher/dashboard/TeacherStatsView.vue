@@ -1,17 +1,34 @@
 <template>
-  <div class="container">
+  <div class="stats-container">
     <h2>Statistics for this course execution</h2>
     <div v-if="teacherDashboard != null" class="stats-container">
-      <div class="items">
-        <div ref="totalStudents" class="icon-wrapper">
-          <animated-number :number="teacherDashboard.numberOfStudents" />
-        </div>
-        <div class="project-name">
-          <p>Number of Students</p>
-        </div>
+    <div class="items">
+      <div ref="totalStudents" class="icon-wrapper">
+        <animated-number :number= "teacherDashboard.studentStats[0].numStudents" />
+      </div>
+      <div class="project-name">
+        <p>Number of Students</p>
       </div>
     </div>
-</div>
+    <!-- Repeat the "items" div 8 more times to create 9 boxes in total -->
+    <div class="items">
+      <div ref="totalStudents" class="icon-wrapper">
+        <animated-number :number= "teacherDashboard.studentStats[0].numMore75CorrectQuestions" />
+      </div>
+      <div class="project-name">
+        <p>Number of Students who Solved >= 75% Questions</p>
+      </div>
+    </div>
+    <div class="items">
+      <div ref="totalStudents" class="icon-wrapper">
+        <animated-number :number= "teacherDashboard.studentStats[0].numAtLeast3Quizzes" />
+      </div>
+      <div class="project-name">
+        <p>Number of Students who Solved >= 3 Quizzes</p>
+      </div>
+    </div>
+  </div>
+  </div>
 </template>
 
 <script lang="ts">

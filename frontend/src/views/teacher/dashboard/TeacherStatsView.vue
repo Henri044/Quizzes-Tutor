@@ -4,10 +4,26 @@
     <div v-if="teacherDashboard != null" class="stats-container">
       <div class="items">
         <div ref="totalStudents" class="icon-wrapper">
-          <animated-number :number="teacherDashboard.numberOfStudents" />
+          <animated-number :number="teacherDashboard.quizStats[0].numQuizzes" />
         </div>
         <div class="project-name">
-          <p>Number of Students</p>
+          <p>Number of Quizzes</p>
+        </div>
+      </div>
+      <div class="items">
+        <div ref="totalStudents" class="icon-wrapper">
+          <animated-number :number="teacherDashboard.quizStats[0].numUniqueAnsweredQuizzes" />
+        </div>
+        <div class="project-name">
+          <p>Number of Quizzes Solved (Unique)</p>
+        </div>
+      </div>
+      <div class="items">
+        <div ref="totalStudents" class="icon-wrapper">
+          <animated-number :number=teacherDashboard.quizStats[0].averageQuizzesSolved />
+        </div>
+        <div class="project-name">
+          <p>Number of Quizzes Solved (Unique, Average Per Student)</p>
         </div>
       </div>
     </div>

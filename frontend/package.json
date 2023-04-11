@@ -16,6 +16,8 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "~6.1.1",
     "axios": "~0.27.2",
+    "canvas": "^2.11.2",
+    "chart.js": "^3.9.1",
     "glob-all": "^3.3.0",
     "material-design-icons-iconfont": "~6.7.0",
     "pg": "~8.7.3",
@@ -25,6 +27,7 @@
     "showdown": "~2.1.0",
     "typeface-roboto": "~1.1.13",
     "vue": "~2.6.14",
+    "vue-chartjs": "^4.1.2",
     "vue-class-component": "~7.2.6",
     "vue-codemirror": "~4.0.6",
     "vue-ctk-date-time-picker": "~2.5.0",
@@ -75,7 +78,7 @@
     "vue-cli-plugin-vuetify": "~2.4.8",
     "vue-template-compiler": "~2.6.14",
     "vuetify-loader": "~1.7.2",
-    "webpack": "~5.75.0",
+    "webpack": "^5.77.0",
     "webpack-bundle-analyzer": "~4.7.0"
   },
   "eslintConfig": {
@@ -136,7 +139,7 @@
       "^.+\\.tsx?$": "ts-jest"
     },
     "transformIgnorePatterns": [
-      "node_modules/(?!(showdown|vue-underscore|vue-ctk-date-time-picker|codemirror|vue-qrcode-reader|vue-qrcode)/)"
+      "node_modules/(?!(showdown|vue-underscore|vue-ctk-date-time-picker|codemirror|vue-qrcode-reader|vue-qrcode|vue-chartjs)/)"
     ]
   },
   "engines": {

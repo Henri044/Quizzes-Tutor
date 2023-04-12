@@ -4,9 +4,7 @@
     <div v-if="teacherDashboard != null" class="stats-container">
       <div class="items">
         <div ref="totalStudents" class="icon-wrapper">
-          <animated-number
-              :number="teacherDashboard.quizStats[0].numQuizzes"
-          />
+          <animated-number :number="teacherDashboard.quizStats[0].numQuizzes" />
         </div>
         <div class="project-name">
           <p>Number of Quizzes</p>
@@ -15,7 +13,7 @@
       <div class="items">
         <div ref="totalStudents" class="icon-wrapper">
           <animated-number
-              :number="teacherDashboard.quizStats[0].numUniqueAnsweredQuizzes"
+            :number="teacherDashboard.quizStats[0].numUniqueAnsweredQuizzes"
           />
         </div>
         <div class="project-name">
@@ -25,23 +23,21 @@
       <div class="items">
         <div ref="totalStudents" class="icon-wrapper">
           <animated-number
-              :number="teacherDashboard.quizStats[0].averageQuizzesSolved"
+            :number="teacherDashboard.quizStats[0].averageQuizzesSolved"
           />
         </div>
         <div class="project-name">
-          <p>
-            Number of Quizzes Solved (Unique, Average Per Student)
-          </p>
+          <p>Number of Quizzes Solved (Unique, Average Per Student)</p>
         </div>
       </div>
     </div>
     <div v-if="teacherDashboard != null" class="stats-container">
       <div ref="barchart" class="chart-container">
-        <bar-chart
-            :labels="labels()"
-            :numQuizzes="numQuizzes()"
-            :numUniqueAnsweredQuizzes="numUniqueAnsweredQuizzes()"
-            :averageQuizzesSolved="averageQuizzesSolved()"
+        <bar-chart-quiz-stats
+          :labels="labels()"
+          :numQuizzes="numQuizzes()"
+          :numUniqueAnsweredQuizzes="numUniqueAnsweredQuizzes()"
+          :averageQuizzesSolved="averageQuizzesSolved()"
         />
       </div>
     </div>
@@ -72,7 +68,27 @@ export default class TeacherStatsView extends Vue {
     await this.$store.dispatch('clearLoading');
   }
   labels() {
-    return ['2019', '2022', '2023'];
+    let list = ['', '', ''];
+    if (this.teacherDashboard!.quizStats.length >= 3) {
+      list = [
+        '' + this.teacherDashboard!.quizStats[2].courseExecutionYear,
+        '' + this.teacherDashboard!.quizStats[1].courseExecutionYear,
+        '' + this.teacherDashboard!.quizStats[0].courseExecutionYear,
+      ];
+    } else if (this.teacherDashboard!.quizStats.length == 2) {
+      list = [
+        '',
+        '' + this.teacherDashboard!.quizStats[1].courseExecutionYear,
+        '' + this.teacherDashboard!.quizStats[0].courseExecutionYear,
+      ];
+    } else if (this.teacherDashboard!.quizStats.length == 1) {
+      list = [
+        '',
+        '',
+        '' + this.teacherDashboard!.quizStats[0].courseExecutionYear,
+      ];
+    }
+    return list;
   }
   numQuizzes() {
     let list = [0, 0, 0];
@@ -134,11 +150,7 @@ export default class TeacherStatsView extends Vue {
         this.teacherDashboard!.quizStats[0].averageQuizzesSolved,
       ];
     } else if (this.teacherDashboard!.quizStats.length == 1) {
-      list = [
-        0,
-        0,
-        this.teacherDashboard!.quizStats[0].averageQuizzesSolved,
-      ];
+      list = [0, 0, this.teacherDashboard!.quizStats[0].averageQuizzesSolved];
     }
     return list;
   }

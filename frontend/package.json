@@ -138,7 +138,7 @@
       "^.+\\.tsx?$": "ts-jest"
     },
     "transformIgnorePatterns": [
-      "node_modules/(?!(showdown|vue-underscore|vue-ctk-date-time-picker|codemirror|vue-qrcode-reader|vue-qrcode)/)"
+      "node_modules/(?!(showdown|vue-underscore|vue-ctk-date-time-picker|codemirror|vue-qrcode-reader|vue-qrcode|vue-chartjs)/)"
     ]
   },
   "engines": {

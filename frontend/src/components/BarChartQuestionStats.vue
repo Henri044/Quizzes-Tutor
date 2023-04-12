@@ -27,7 +27,7 @@ ChartJS.register(
 );
 
 @Component({ components: { Bar } })
-export default class BarChart extends Vue {
+export default class BarChartQuestionStats extends Vue {
   @Prop({ type: Array, required: true })
   labels!: string[];
 

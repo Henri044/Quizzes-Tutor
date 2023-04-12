@@ -35,7 +35,7 @@
     </div>
     <div v-if="teacherDashboard != null" class="stats-container">
       <div ref="barchart" class="chart-container">
-        <bar-chart
+        <bar-chart-student-stats
           :labels="labels()"
           :numStudents="numStudents()"
           :numMore75CorrectQuestions="numMore75CorrectQuestions()"
@@ -50,11 +50,11 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import RemoteServices from '@/services/RemoteServices';
 import AnimatedNumber from '@/components/AnimatedNumber.vue';
-import BarChart from '@/components/BarChart.vue';
+import BarChartStudentStats from '@/components/BarChartStudentStats.vue';
 import TeacherDashboard from '@/models/dashboard/TeacherDashboard';
 
 @Component({
-  components: { AnimatedNumber, BarChart },
+  components: { AnimatedNumber, BarChartStudentStats },
 })
 export default class TeacherStatsView extends Vue {
   @Prop() readonly dashboardId!: number;

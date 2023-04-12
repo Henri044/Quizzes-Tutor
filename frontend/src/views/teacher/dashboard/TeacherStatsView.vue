@@ -1,10 +1,12 @@
 <template>
-  <div class="container">
+  <div class="stats-container">
     <h2>Statistics for this course execution</h2>
     <div v-if="teacherDashboard != null" class="stats-container">
       <div class="items">
         <div ref="totalStudents" class="icon-wrapper">
-          <animated-number :number="teacherDashboard.quizStats[0].numQuizzes" />
+          <animated-number
+              :number="teacherDashboard.quizStats[0].numQuizzes"
+          />
         </div>
         <div class="project-name">
           <p>Number of Quizzes</p>
@@ -12,7 +14,9 @@
       </div>
       <div class="items">
         <div ref="totalStudents" class="icon-wrapper">
-          <animated-number :number="teacherDashboard.quizStats[0].numUniqueAnsweredQuizzes" />
+          <animated-number
+              :number="teacherDashboard.quizStats[0].numUniqueAnsweredQuizzes"
+          />
         </div>
         <div class="project-name">
           <p>Number of Quizzes Solved (Unique)</p>
@@ -20,26 +24,40 @@
       </div>
       <div class="items">
         <div ref="totalStudents" class="icon-wrapper">
-          <animated-number :number=teacherDashboard.quizStats[0].averageQuizzesSolved />
+          <animated-number
+              :number="teacherDashboard.quizStats[0].averageQuizzesSolved"
+          />
         </div>
         <div class="project-name">
-          <p>Number of Quizzes Solved (Unique, Average Per Student)</p>
+          <p>
+            Number of Quizzes Solved (Unique, Average Per Student)
+          </p>
         </div>
       </div>
     </div>
-</div>
+    <div v-if="teacherDashboard != null" class="stats-container">
+      <div ref="barchart" class="chart-container">
+        <bar-chart
+            :labels="labels()"
+            :numQuizzes="numQuizzes()"
+            :numUniqueAnsweredQuizzes="numUniqueAnsweredQuizzes()"
+            :averageQuizzesSolved="averageQuizzesSolved()"
+        />
+      </div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import RemoteServices from '@/services/RemoteServices';
 import AnimatedNumber from '@/components/AnimatedNumber.vue';
+import BarChartQuizStats from '@/components/BarChartQuizStats.vue';
 import TeacherDashboard from '@/models/dashboard/TeacherDashboard';
 
 @Component({
-  components: { AnimatedNumber },
+  components: { BarChartQuizStats, AnimatedNumber },
 })
-
 export default class TeacherStatsView extends Vue {
   @Prop() readonly dashboardId!: number;
   teacherDashboard: TeacherDashboard | null = null;
@@ -53,8 +71,78 @@ export default class TeacherStatsView extends Vue {
     }
     await this.$store.dispatch('clearLoading');
   }
+  labels() {
+    return ['2019', '2022', '2023'];
+  }
+  numQuizzes() {
+    let list = [0, 0, 0];
+    // POPULAR A LISTA
+    if (this.teacherDashboard!.quizStats.length >= 3) {
+      list = [
+        this.teacherDashboard!.quizStats[2].numQuizzes,
+        this.teacherDashboard!.quizStats[1].numQuizzes,
+        this.teacherDashboard!.quizStats[0].numQuizzes,
+      ];
+    } else if (this.teacherDashboard!.quizStats.length == 2) {
+      list = [
+        0,
+        this.teacherDashboard!.quizStats[1].numQuizzes,
+        this.teacherDashboard!.quizStats[0].numQuizzes,
+      ];
+    } else if (this.teacherDashboard!.quizStats.length == 1) {
+      list = [0, 0, this.teacherDashboard!.quizStats[0].numQuizzes];
+    }
+    return list;
+  }
+  numUniqueAnsweredQuizzes() {
+    let list = [0, 0, 0];
+    // POPULAR A LISTA
+    if (this.teacherDashboard!.quizStats.length >= 3) {
+      list = [
+        this.teacherDashboard!.quizStats[2].numUniqueAnsweredQuizzes,
+        this.teacherDashboard!.quizStats[1].numUniqueAnsweredQuizzes,
+        this.teacherDashboard!.quizStats[0].numUniqueAnsweredQuizzes,
+      ];
+    } else if (this.teacherDashboard!.quizStats.length == 2) {
+      list = [
+        0,
+        this.teacherDashboard!.quizStats[1].numUniqueAnsweredQuizzes,
+        this.teacherDashboard!.quizStats[0].numUniqueAnsweredQuizzes,
+      ];
+    } else if (this.teacherDashboard!.quizStats.length == 1) {
+      list = [
+        0,
+        0,
+        this.teacherDashboard!.quizStats[0].numUniqueAnsweredQuizzes,
+      ];
+    }
+    return list;
+  }
+  averageQuizzesSolved() {
+    let list = [0, 0, 0];
+    // POPULAR A LISTA
+    if (this.teacherDashboard!.quizStats.length >= 3) {
+      list = [
+        this.teacherDashboard!.quizStats[2].averageQuizzesSolved,
+        this.teacherDashboard!.quizStats[1].averageQuizzesSolved,
+        this.teacherDashboard!.quizStats[0].averageQuizzesSolved,
+      ];
+    } else if (this.teacherDashboard!.quizStats.length == 2) {
+      list = [
+        0,
+        this.teacherDashboard!.quizStats[1].averageQuizzesSolved,
+        this.teacherDashboard!.quizStats[0].averageQuizzesSolved,
+      ];
+    } else if (this.teacherDashboard!.quizStats.length == 1) {
+      list = [
+        0,
+        0,
+        this.teacherDashboard!.quizStats[0].averageQuizzesSolved,
+      ];
+    }
+    return list;
+  }
 }
-
 </script>
 
 <style lang="scss" scoped>
@@ -78,7 +166,7 @@ export default class TeacherStatsView extends Vue {
   }
 
   .bar-chart {
-    background-color: rgba(255, 255, 255, 0.90);
+    background-color: rgba(255, 255, 255, 0.9);
     height: 400px;
   }
 }
@@ -122,5 +210,13 @@ export default class TeacherStatsView extends Vue {
   & .icon-wrapper i {
     transform: translateY(5px);
   }
+}
+
+.chart-container {
+  background-color: white;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 10px;
 }
 </style>

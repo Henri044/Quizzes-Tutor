@@ -11,7 +11,7 @@ public class DemoUtils {
 
     public static final String COURSE_ACRONYM = "DemoCourse";
 
-    public static final String COURSE_ACADEMIC_TERM = "1st Semester";
+    public static final String COURSE_ACADEMIC_TERM = "1st Semester 2020/2021";
 
     public static final String STUDENT_USERNAME = "demo-student";
 

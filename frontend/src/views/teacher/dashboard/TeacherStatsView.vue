@@ -33,7 +33,12 @@
         </div>
       </div>
     </div>
-    <div v-if="teacherDashboard != null" class="stats-container">
+    <div
+      v-if="
+        teacherDashboard != null && teacherDashboard.studentStats.length > 1
+      "
+      class="stats-container"
+    >
       <div ref="barchart" class="chart-container">
         <bar-chart-student-stats
           :labels="labels()"
@@ -71,7 +76,22 @@ export default class TeacherStatsView extends Vue {
   }
 
   labels() {
-    return ['2019', '2022', '2023'];
+    let list = ['', '', ''];
+    // POPULAR A LISTA
+    if (this.teacherDashboard!.studentStats.length >= 3) {
+      list = [
+        '' + this.teacherDashboard!.studentStats[2].courseExecutionYear,
+        '' + this.teacherDashboard!.studentStats[1].courseExecutionYear,
+        '' + this.teacherDashboard!.studentStats[0].courseExecutionYear,
+      ];
+    } else if (this.teacherDashboard!.studentStats.length == 2) {
+      list = [
+        '',
+        '' + this.teacherDashboard!.studentStats[1].courseExecutionYear,
+        '' + this.teacherDashboard!.studentStats[0].courseExecutionYear,
+      ];
+    }
+    return list;
   }
   numStudents() {
     let list = [0, 0, 0];
@@ -88,8 +108,6 @@ export default class TeacherStatsView extends Vue {
         this.teacherDashboard!.studentStats[1].numStudents,
         this.teacherDashboard!.studentStats[0].numStudents,
       ];
-    } else if (this.teacherDashboard!.studentStats.length == 1) {
-      list = [0, 0, this.teacherDashboard!.studentStats[0].numStudents];
     }
     return list;
   }
@@ -106,12 +124,6 @@ export default class TeacherStatsView extends Vue {
       list = [
         0,
         this.teacherDashboard!.studentStats[1].numMore75CorrectQuestions,
-        this.teacherDashboard!.studentStats[0].numMore75CorrectQuestions,
-      ];
-    } else if (this.teacherDashboard!.studentStats.length == 1) {
-      list = [
-        0,
-        0,
         this.teacherDashboard!.studentStats[0].numMore75CorrectQuestions,
       ];
     }
@@ -132,8 +144,6 @@ export default class TeacherStatsView extends Vue {
         this.teacherDashboard!.studentStats[1].numAtLeast3Quizzes,
         this.teacherDashboard!.studentStats[0].numAtLeast3Quizzes,
       ];
-    } else if (this.teacherDashboard!.studentStats.length == 1) {
-      list = [0, 0, this.teacherDashboard!.studentStats[0].numAtLeast3Quizzes];
     }
     return list;
   }

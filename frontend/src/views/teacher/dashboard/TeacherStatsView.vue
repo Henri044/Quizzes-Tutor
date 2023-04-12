@@ -35,7 +35,7 @@
         </div>
       </div>
     </div>
-    <div v-if="teacherDashboard != null" class="stats-container">
+    <div v-if="teacherDashboard != null && teacherDashboard.questionStats.length > 1" class="stats-container">
       <div ref="barchart" class="chart-container">
         <bar-chart-question-stats
           :labels="labels()"
@@ -72,11 +72,30 @@ export default class TeacherStatsView extends Vue {
     await this.$store.dispatch('clearLoading');
   }
   labels() {
-    return ['2019', '2022', '2023'];
+    let list = ['', '', ''];
+    if (this.teacherDashboard!.questionStats.length >= 3) {
+      list = [
+        '' + this.teacherDashboard!.questionStats[2].courseExecutionYear,
+        '' + this.teacherDashboard!.questionStats[1].courseExecutionYear,
+        '' + this.teacherDashboard!.questionStats[0].courseExecutionYear,
+      ];
+    } else if (this.teacherDashboard!.questionStats.length == 2) {
+      list = [
+        '',
+        '' + this.teacherDashboard!.questionStats[1].courseExecutionYear,
+        '' + this.teacherDashboard!.questionStats[0].courseExecutionYear,
+      ];
+    } else if (this.teacherDashboard!.questionStats.length == 1) {
+      list = [
+        '',
+        '',
+        '' + this.teacherDashboard!.questionStats[0].courseExecutionYear,
+      ];
+    }
+    return list;
   }
   numAvailable() {
     let list = [0, 0, 0];
-    // POPULAR A LISTA
     if (this.teacherDashboard!.questionStats.length >= 3) {
       list = [
         this.teacherDashboard!.questionStats[2].numAvailable,
@@ -96,7 +115,6 @@ export default class TeacherStatsView extends Vue {
   }
   answeredQuestionsUnique() {
     let list = [0, 0, 0];
-    // POPULAR A LISTA
     if (this.teacherDashboard!.questionStats.length >= 3) {
       list = [
         this.teacherDashboard!.questionStats[2].answeredQuestionsUnique,
@@ -120,7 +138,6 @@ export default class TeacherStatsView extends Vue {
   }
   averageQuestionsAnswered() {
     let list = [0, 0, 0];
-    // POPULAR A LISTA
     if (this.teacherDashboard!.questionStats.length >= 3) {
       list = [
         this.teacherDashboard!.questionStats[2].averageQuestionsAnswered,

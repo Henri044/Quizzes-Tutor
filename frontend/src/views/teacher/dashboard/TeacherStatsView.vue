@@ -60,8 +60,6 @@
           <p>Number of Quizzes Solved (Unique, Average Per Student)</p>
         </div>
       </div>
-    </div>
-
       <div class="items">
         <div ref="totalStudents" class="icon-wrapper">
           <animated-number
@@ -95,33 +93,29 @@
         </div>
       </div>
     </div>
-    </div>
-  <div v-if="teacherDashboard != null" class="stats-container">
-    <div ref="barchart" class="chart-container">
-      <bar-chart-quiz-stats
-        :labels="labels()"
-        :numQuizzes="numQuizzes()"
-        :numUniqueAnsweredQuizzes="numUniqueAnsweredQuizzes()"
-        :averageQuizzesSolved="averageQuizzesSolved()"
-      />
-    </div>
-  </div>
-  <div
-    v-if="
+    <h2>Comparison with previous course executions</h2>
+    <div
+      v-if="
         teacherDashboard != null && teacherDashboard.studentStats.length > 1
       "
-    class="stats-container"
-  >
-    <div ref="barchart" class="chart-container">
-      <bar-chart-student-stats
-        :labels="labels()"
-        :numStudents="numStudents()"
-        :numMore75CorrectQuestions="numMore75CorrectQuestions()"
-        :numAtLeast3Quizzes="numAtLeast3Quizzes()"
-      />
-    </div>
-  </div>
-    <div v-if="teacherDashboard != null && teacherDashboard.questionStats.length > 1" class="stats-container">
+      class="stats-container"
+    >
+      <div ref="barchart" class="chart-container">
+        <bar-chart-student-stats
+          :labels="labels()"
+          :numStudents="numStudents()"
+          :numMore75CorrectQuestions="numMore75CorrectQuestions()"
+          :numAtLeast3Quizzes="numAtLeast3Quizzes()"
+        />
+      </div>
+      <div ref="barchart" class="chart-container">
+        <bar-chart-quiz-stats
+          :labels="labels()"
+          :numQuizzes="numQuizzes()"
+          :numUniqueAnsweredQuizzes="numUniqueAnsweredQuizzes()"
+          :averageQuizzesSolved="averageQuizzesSolved()"
+        />
+      </div>
       <div ref="barchart" class="chart-container">
         <bar-chart-question-stats
           :labels="labels()"
@@ -144,9 +138,13 @@ import TeacherDashboard from '@/models/dashboard/TeacherDashboard';
 import BarChartQuestionStats from '@/components/BarChartQuestionStats.vue';
 
 @Component({
-  components: { BarChartQuestionStats, AnimatedNumber, BarChartQuizStats, BarChartStudentStats },
+  components: {
+    BarChartStudentStats,
+    BarChartQuizStats,
+    BarChartQuestionStats,
+    AnimatedNumber,
+  },
 })
-
 export default class TeacherStatsView extends Vue {
   @Prop() readonly dashboardId!: number;
   teacherDashboard: TeacherDashboard | null = null;
@@ -162,25 +160,23 @@ export default class TeacherStatsView extends Vue {
   }
   labels() {
     let list = ['', '', ''];
-    // POPULAR A LISTA
     if (this.teacherDashboard!.studentStats.length >= 3) {
       list = [
         '' + this.teacherDashboard!.studentStats[2].courseExecutionYear,
         '' + this.teacherDashboard!.studentStats[1].courseExecutionYear,
-        '' + this.teacherDashboard!.studentStats[0].courseExecutionYear,
+        '' + this.teacherDashboard!.studentStats[0].courseExecutionYear + '(current)',
       ];
     } else if (this.teacherDashboard!.studentStats.length == 2) {
       list = [
         '',
         '' + this.teacherDashboard!.studentStats[1].courseExecutionYear,
-        '' + this.teacherDashboard!.studentStats[0].courseExecutionYear,
+        '' + this.teacherDashboard!.studentStats[0].courseExecutionYear + '(current)',
       ];
     }
     return list;
   }
   numStudents() {
     let list = [0, 0, 0];
-    // POPULAR A LISTA
     if (this.teacherDashboard!.studentStats.length >= 3) {
       list = [
         this.teacherDashboard!.studentStats[2].numStudents,
@@ -198,7 +194,6 @@ export default class TeacherStatsView extends Vue {
   }
   numMore75CorrectQuestions() {
     let list = [0, 0, 0];
-    // POPULAR A LISTA
     if (this.teacherDashboard!.studentStats.length >= 3) {
       list = [
         this.teacherDashboard!.studentStats[2].numMore75CorrectQuestions,
@@ -216,7 +211,6 @@ export default class TeacherStatsView extends Vue {
   }
   numAtLeast3Quizzes() {
     let list = [0, 0, 0];
-    // POPULAR A LISTA
     if (this.teacherDashboard!.studentStats.length >= 3) {
       list = [
         this.teacherDashboard!.studentStats[2].numAtLeast3Quizzes,
@@ -234,7 +228,6 @@ export default class TeacherStatsView extends Vue {
   }
   numQuizzes() {
     let list = [0, 0, 0];
-    // POPULAR A LISTA
     if (this.teacherDashboard!.quizStats.length >= 3) {
       list = [
         this.teacherDashboard!.quizStats[2].numQuizzes,
@@ -254,7 +247,6 @@ export default class TeacherStatsView extends Vue {
   }
   numUniqueAnsweredQuizzes() {
     let list = [0, 0, 0];
-    // POPULAR A LISTA
     if (this.teacherDashboard!.quizStats.length >= 3) {
       list = [
         this.teacherDashboard!.quizStats[2].numUniqueAnsweredQuizzes,
@@ -278,7 +270,6 @@ export default class TeacherStatsView extends Vue {
   }
   averageQuizzesSolved() {
     let list = [0, 0, 0];
-    // POPULAR A LISTA
     if (this.teacherDashboard!.quizStats.length >= 3) {
       list = [
         this.teacherDashboard!.quizStats[2].averageQuizzesSolved,
@@ -362,7 +353,6 @@ export default class TeacherStatsView extends Vue {
     return list;
   }
 }
-
 </script>
 
 <style lang="scss" scoped>
@@ -386,7 +376,7 @@ export default class TeacherStatsView extends Vue {
   }
 
   .bar-chart {
-    background-color: rgba(255, 255, 255, 0.90);
+    background-color: rgba(255, 255, 255, 0.9);
     height: 400px;
   }
 }

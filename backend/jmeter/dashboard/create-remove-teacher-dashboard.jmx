@@ -288,7 +288,7 @@
           </elementProp>
           <elementProp name="number_of_dashboards" elementType="Argument">
             <stringProp name="Argument.name">number_of_dashboards</stringProp>
-            <stringProp name="Argument.value">1000</stringProp>
+            <stringProp name="Argument.value">10</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
